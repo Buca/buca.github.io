@@ -1,0 +1,124 @@
+html, body, #head, .page {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background-color: #e5ded4;
+  font-family: Roboto;
+}
+
+#head {
+  width: 100%;
+  height: 100%;
+  background-color: #e5ded4;
+  box-shadow: inset 0 10px 185px 10px rgba(23, 26, 27, 0.65);
+}
+
+.page {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.page button {
+  appearance: none;
+  font-size: 0.8em;
+  transform: translateY(320px);
+  z-index: 40;
+  position: relative;
+  padding: 0.6em 1em;
+  border: none;
+  border-bottom: 0.5em solid #5d5d69;
+  border-top: 0em solid #abab65;
+  color: #e2e3e2;
+  background-color: #6d6d7d;
+  text-shadow: 0 0.15em #5d5d69;
+  border-radius: 2px 2px 0 0;
+  transition: border .2s;
+}
+
+.page button:focus {
+  border-bottom: 0em solid #5d5d69;
+  border-top: 0.5em solid #abab65;
+}
+
+/* LOGO/FRONT PAGE */
+#logo-page {
+  text-align: center;
+}
+
+#bh-title {
+  position: relative;
+  text-align: center;
+  font-family: Roboto;
+  font-weight: 100;
+  margin: 3em 0 0 0;
+  z-index: 30;
+  color: #3f4554;
+}
+
+#bh-title h1 {
+  font-size: 3em;
+  border-bottom: 0.05em solid #90a517;
+  display: inline-block;
+  text-shadow: 0 0.025em #90a517, 0 0.05em #1f3834, 0 -0.015em #eadfb7;
+  box-shadow: 0 0.02em 0 #47543f;
+  animation: rotateRightToVisible 1.7s;
+  transform: rotateY(0deg);
+  opacity: 1;
+}
+
+#bh-title h2 {
+  font-size: 2em;
+  letter-spacing: 0.2em;
+  margin: 0 0 0 0.3em;
+  font-weight: bold;
+  text-shadow: 0 0.05em #90a517, 0 0.1em #1f3834, 0 -0.03em #eadfb7;
+  animation: rotateLeftToVisible 2s;
+  transform: rotateY(0deg);
+  opacity: 1;
+}
+
+@keyframes rotateRightToVisible {
+  0%    { transform: rotateY(-45deg);
+          opacity: 0}
+  50%    { transform: rotateY(-45deg);
+          opacity: 0}
+  80%    { transform: rotateY(10deg);
+           opacity: 0.95}
+  100%  { transform: rotateY(0deg);
+          opacity: 1}
+}
+
+@keyframes rotateLeftToVisible {
+  0%    { transform: rotateY(45deg);
+          opacity: 0}
+  50%    { transform: rotateY(45deg);
+          opacity: 0}
+  100%  { transform: rotateY(0deg);
+          opacity: 1}
+}
+
+.page button {
+  appearance: none;
+  font-size: 0.8em;
+  transform: translateY(320px);
+  z-index: 40;
+  position: relative;
+  padding: 0.6em 1em;
+  border: none;
+  border-bottom: 0.5em solid #5d5d69;
+  border-top: 0em solid #abab65;
+  color: #e2e3e2;
+  background-color: #6d6d7d;
+  text-shadow: 0 0.15em #5d5d69;
+  border-radius: 2px 2px 0 0;
+  transition: border .2s;
+}
+
+.page button:focus {
+  border-bottom: 0em solid #5d5d69;
+  border-top: 0.5em solid #abab65;
+}
