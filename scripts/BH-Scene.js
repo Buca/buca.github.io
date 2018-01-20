@@ -189,6 +189,4 @@ window.addEventListener('resize', function() {
   logoPageWidth = document.getElementById('logo-page').offsetWidth;
 });
 
-setTimeout(function() {
-  turn(-50);
-}, 1100);
+mainCamera.addEventListener("animationend", turn(-50));
