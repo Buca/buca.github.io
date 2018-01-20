@@ -5,6 +5,7 @@
 }
 
 #scene {
+  top: calc(50% - 168px);
   left: 50%;
 }
 
