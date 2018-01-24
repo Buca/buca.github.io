@@ -58,7 +58,7 @@ function grassParticle(h, x, z) {
 generateGrass(1, 50);
 
 function generateCloud() {
-
+  if(document.getElementById('logo-page').classList.contains('hide') !== true) {
   var htmlArr = [],
       htmlArr1 = [],
       elemW = logoPageWidth,
@@ -128,7 +128,7 @@ function generateCloud() {
     insideCloud.parentNode.removeChild(insideCloud);
     outsideCloud.parentNode.removeChild(outsideCloud);
   }, calcNew * 1000 + 1000);
-
+  }
 };
 
 generateCloud();

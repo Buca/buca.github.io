@@ -954,12 +954,14 @@
 
 .smoke-particle-1 .face,
 .smoke-particle-2 .face,
-.smoke-particle-3 .face {
+.smoke-particle-3 .face,
+.smoke-particle-4 .face {
   width: 4px;
   height: 4px;
   -webkit-transform: translateX(-2px) translateZ(2px);
   -ms-transform: translateX(-2px) translateZ(2px);
   transform: translateX(-2px) translateZ(2px);
+  backface-visibility: hidden;
 }
 
 .smoke-particle-1 .face {
@@ -1082,6 +1084,7 @@
   border-radius: 178px;
   overflow: hidden;
   background-color: #6c8692;
+  z-index: 3;
   animation: skyFadeIn 1.3s;
 }
 
@@ -1089,15 +1092,16 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  background-image: url('../assets/img/noise-small-min.png');
+  background-image: url('../assets/img/noise-min.png');
   animation: skyNoiseFadeIn 1.3s, skyNoise .5s infinite step-end;
-  opacity: 0.04;
+  opacity: 0.05;
+  z-index: 2;
 }
 
 @keyframes skyNoiseFadeIn {
   0%    { opacity: 0; }
   50%   { opacity: 0; }
-  100%  { opacity: 0.04; }
+  100%  { opacity: 0.05; }
 }
 
 @keyframes skyNoise {
@@ -1121,6 +1125,7 @@
 .cloud {
   position: absolute;
   transition-timing-function: linear;
+  z-index: 1;
 }
 
 .cloud div {
