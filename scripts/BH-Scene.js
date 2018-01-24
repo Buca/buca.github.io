@@ -5,6 +5,10 @@ var grassContainer = document.getElementById('grass'),
     mainCamera = document.getElementById('main-camera'),
     logoShadow = document.getElementById('logo-shadow'),
     logoPageWidth = document.getElementById('logo-page').offsetWidth,
+    logoPageHeight = document.getElementById('logo-page').offsetHeight,
+    scrollPosY = 0,
+    ticking = false,
+    sceneAnimationEnded = false,
     cameraRot = 0;
 
 function generateGrass(patches, grassPerPatch) {
@@ -58,7 +62,7 @@ function grassParticle(h, x, z) {
 generateGrass(1, 50);
 
 function generateCloud() {
-  if(document.getElementById('logo-page').classList.contains('hide') !== true) {
+  if(document.getElementById('logo-page').classList.contains('hide') !== true || document.getElementById('scene').style.display !== 'none') {
   var htmlArr = [],
       htmlArr1 = [],
       elemW = logoPageWidth,
@@ -187,10 +191,53 @@ document.body.addEventListener('keydown', function(e) {
 
 window.addEventListener('resize', function() {
   logoPageWidth = document.getElementById('logo-page').offsetWidth;
+  logoPageHeight = document.getElementById('logo-page').offsetHeight;
+});
+
+window.addEventListener('scroll', function(e) {
+  scrollPosY = window.scrollY;
+
+  if (!ticking) {
+
+    window.requestAnimationFrame(function() {
+
+    var calc = ((1/2) * (logoPageHeight) - scrollPosY)/(logoPageHeight/4);
+    if (calc < 0 ) {
+      calc = 0;
+    }
+    else if(calc > 1 ) {
+      calc = 1;
+    }
+
+    if(calc >= 0 && calc <= 1) {
+      document.getElementById('scene').style.opacity = ((1/2) * (logoPageHeight) - scrollPosY)/(logoPageHeight/4);
+    }
+
+    if(calc > 0) {
+      document.getElementById('scene').style.display = 'block';
+    }
+    else if(calc <= 0) {
+      if(document.getElementById('scene').style.display === 'block') {
+        document.getElementById('scene').style.display = 'none';
+        if(sceneAnimationEnded === true) {
+          turn(46);
+          sceneAnimationEnded = true;
+        }
+      }
+    }
+
+      ticking = false;
+
+    });
+
+    ticking = true;
+
+  }
 });
 
 mainCamera.addEventListener("animationend", function() {
   setTimeout(function() {
     turn(-46);
+    sceneAnimationEnded = true;
   }, 1);
 });
