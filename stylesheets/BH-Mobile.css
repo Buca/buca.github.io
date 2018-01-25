@@ -66,7 +66,7 @@ button:focus {
 #bh-title h1 {
   font-size: 7.5em;
   display: inline-block;
-  text-shadow: 0 0.025em #c1c5ac, 0 0.05em #1f3834, 0 0.08em #90a517;
+  text-shadow: 0 0.025em #c1c5ac, 0 0.05em #1f3834, 0 0.08em #68687f, 0 0.12em #abab65;
   animation: rotateRightToVisible 1.7s;
   transform: rotateY(0deg);
   opacity: 1;
