@@ -7,6 +7,7 @@
 #scene {
   top: calc(50% - 168px);
   left: 50%;
+  transition: opacity 0.2s;
 }
 
 .camera {
@@ -163,9 +164,17 @@
   transition: transform 1s;
 }
 
+#logo-shadow.animation-seen {
+  animation: unset;
+}
+
 /* Scene Begin Animation */
 #main-camera {
   animation: islandDown 1s;
+}
+
+#main-camera.animation-seen {
+  animation: unset;
 }
 
 @keyframes islandDown {
@@ -930,6 +939,122 @@
   -webkit-transform: translateY(-16px) translateX(-29px);
   -ms-transform: translateY(-16px) translateX(-29px);
   transform: translateY(-16px) translateX(-29px);
+  /*animation: grassWind 5s infinite;*/
+}
+
+.grass-particle.grass-particle-1 {
+  -webkit-transform: rotateY(0deg);
+  -ms-transform: rotateY(0deg);
+  transform: rotateY(0deg) translateY(0px);
+  animation: grassWind 8s infinite;
+}
+
+.grass-particle.grass-particle-2 {
+  -webkit-transform: rotateY(0deg);
+  -ms-transform: rotateY(0deg);
+  transform: rotateY(0deg) translateY(0px);
+  animation: grassWind 8s infinite;
+}
+
+.grass-particle.grass-particle-1 .rot-north,
+.grass-particle.grass-particle-2 .rot-north,
+.grass-particle.grass-particle-3 .rot-north {
+  -webkit-transform: rotateY(0deg) translateY(0px);
+  -ms-transform: rotateY(0deg) translateY(0px);
+  transform: rotateY(0deg) translateY(0px);
+}
+
+.grass-particle.grass-particle-1 .rot-east,
+.grass-particle.grass-particle-2 .rot-east,
+.grass-particle.grass-particle-3 .rot-east {
+  -webkit-transform: rotateY(-90deg) translateY(0px);
+  -ms-transform: rotateY(-90deg) translateY(0px);
+  transform: rotateY(-90deg) translateY(0px);
+}
+
+.grass-particle.grass-particle-1 .rot-south,
+.grass-particle.grass-particle-2 .rot-south,
+.grass-particle.grass-particle-3 .rot-south {
+  -webkit-transform: rotateY(-180deg) translateY(0px);
+  -ms-transform: rotateY(-180deg) translateY(0px);
+  transform: rotateY(-180deg) translateY(0px);
+}
+
+.grass-particle.grass-particle-1 .rot-west,
+.grass-particle.grass-particle-2 .rot-west,
+.grass-particle.grass-particle-3 .rot-west {
+  -webkit-transform: rotateY(-270deg) translateY(0px);
+  -ms-transform: rotateY(-270deg) translateY(0px);
+  transform: rotateY(-270deg) translateY(0px);
+}
+
+.grass-particle.grass-particle-1 .rot-north,
+.grass-particle.grass-particle-1 .rot-east,
+.grass-particle.grass-particle-1 .rot-south,
+.grass-particle.grass-particle-1 .rot-west {
+  animation: grassWind-north 8.5s infinite;
+}
+
+.grass-particle.grass-particle-2 .rot-north,
+.grass-particle.grass-particle-2 .rot-east,
+.grass-particle.grass-particle-2 .rot-south,
+.grass-particle.grass-particle-2 .rot-west {
+  animation: grassWind-north 7.3s infinite;
+}
+
+.grass-particle.grass-particle-3 .rot-north,
+.grass-particle.grass-particle-3 .rot-east,
+.grass-particle.grass-particle-3 .rot-south,
+.grass-particle.grass-particle-3 .rot-west {
+  animation: grassWind-north 8s infinite;
+}
+
+@keyframes grassWind-north {
+  0%   { -webkit-transform: rotateY(0deg) translateY(0px);
+         -ms-transform: rotateY(0deg) translateY(0px);
+         transform: rotateY(0deg) translateY(0px);}
+  50%  { -webkit-transform: rotateY(0deg) translateY(8px);
+         -ms-transform: rotateY(0deg) translateY(8px);
+         transform: rotateY(0deg) translateY(8px);}
+  100% { -webkit-transform: rotateY(0deg) translateY(0px);
+         -ms-transform: rotateY(0deg) translateY(0px);
+         transform: rotateY(0deg) translateY(0px);}
+}
+
+@keyframes grassWind-east {
+  0%   { -webkit-transform: rotateY(0deg) translateY(0px);
+         -ms-transform: rotateY(0deg) translateY(0px);
+         transform: rotateY(0deg) translateY(0px);}
+  50%  { -webkit-transform: rotateY(0deg) translateY(8px);
+         -ms-transform: rotateY(0deg) translateY(8px);
+         transform: rotateY(0deg) translateY(8px);}
+  100% { -webkit-transform: rotateY(0deg) translateY(0px);
+         -ms-transform: rotateY(0deg) translateY(0px);
+         transform: rotateY(0deg) translateY(0px);}
+}
+
+@keyframes grassWind-south {
+  0%   { -webkit-transform: rotateY(0deg) translateY(0px);
+         -ms-transform: rotateY(0deg) translateY(0px);
+         transform: rotateY(0deg) translateY(0px);}
+  50%  { -webkit-transform: rotateY(0deg) translateY(8px);
+         -ms-transform: rotateY(0deg) translateY(8px);
+         transform: rotateY(0deg) translateY(8px);}
+  100% { -webkit-transform: rotateY(0deg) translateY(0px);
+         -ms-transform: rotateY(0deg) translateY(0px);
+         transform: rotateY(0deg) translateY(0px);}
+}
+
+@keyframes grassWind-west {
+  0%   { -webkit-transform: rotateY(0deg) translateY(0px);
+         -ms-transform: rotateY(0deg) translateY(0px);
+         transform: rotateY(0deg) translateY(0px);}
+  50%  { -webkit-transform: rotateY(0deg) translateY(8px);
+         -ms-transform: rotateY(0deg) translateY(8px);
+         transform: rotateY(0deg) translateY(8px);}
+  100% { -webkit-transform: rotateY(0deg) translateY(0px);
+         -ms-transform: rotateY(0deg) translateY(0px);
+         transform: rotateY(0deg) translateY(0px);}
 }
 
 .grass-particle .face {
@@ -1086,6 +1211,10 @@
   background-color: #6c8692;
   z-index: 3;
   animation: skyFadeIn 1.3s;
+}
+
+#sky-inside.animation-seen {
+  animation: unset;
 }
 
 #sky-noise {

@@ -9,7 +9,9 @@ var grassContainer = document.getElementById('grass'),
     scrollPosY = 0,
     ticking = false,
     sceneAnimationEnded = false,
-    cameraRot = 0;
+    cameraRot = 0,
+    mouseLogoPageStart = 0,
+    grassElements;
 
 function generateGrass(patches, grassPerPatch) {
 
@@ -21,7 +23,7 @@ function generateGrass(patches, grassPerPatch) {
         x = -75 + Math.round(Math.random() * 206),
         z = -100 + Math.round(Math.random() * 200);
 
-    grass += grassParticle(h, x, z);
+    grass += grassParticle(h, x, z, i);
 
   }
 
@@ -29,9 +31,9 @@ function generateGrass(patches, grassPerPatch) {
 
 };
 
-function grassParticle(h, x, z) {
+function grassParticle(h, x, z, id) {
 
-  var particle = ['<div class="object-container grass-particle" ',
+  var particle = ['<div id="grass-' + id + '" class="object-container grass-particle grass-particle-' + ((id % 3) + 1)  + '" ',
                    'style="transform: translateX(' + x + 'px) translateZ(' + z + 'px)">',
                     '<div class="rot-north">',
                       '<div class="face green-bg" ',
@@ -195,49 +197,88 @@ window.addEventListener('resize', function() {
 });
 
 window.addEventListener('scroll', function(e) {
-  scrollPosY = window.scrollY;
 
   if (!ticking) {
 
     window.requestAnimationFrame(function() {
 
-    var calc = ((1/2) * (logoPageHeight) - scrollPosY)/(logoPageHeight/4);
-    if (calc < 0 ) {
-      calc = 0;
-    }
-    else if(calc > 1 ) {
-      calc = 1;
-    }
+      scrollPosY = window.scrollY;
 
-    if(calc >= 0 && calc <= 1) {
-      document.getElementById('scene').style.opacity = ((1/2) * (logoPageHeight) - scrollPosY)/(logoPageHeight/4);
-    }
+      if(scrollPosY < logoPageHeight) {
 
-    if(calc > 0) {
-      document.getElementById('scene').style.display = 'block';
-    }
-    else if(calc <= 0) {
-      if(document.getElementById('scene').style.display === 'block') {
-        document.getElementById('scene').style.display = 'none';
-        if(sceneAnimationEnded === true) {
-          turn(46);
-          sceneAnimationEnded = true;
+        var calc = ((1/2) * (logoPageHeight) - scrollPosY)/(logoPageHeight/4);
+        if (calc < 0 ) {
+          calc = 0;
         }
+        else if(calc > 1 ) {
+          calc = 1;
+        }
+
+        if(calc >= 0 && calc <= 1) {
+          document.getElementById('scene').style.opacity = calc;
+        }
+
+        if(calc > 0) {
+          document.getElementById('scene').style.display = 'block';
+        }
+        else if(calc <= 0) {
+          if(document.getElementById('scene').style.display === 'block') {
+            document.getElementById('scene').style.display = 'none';
+            if(sceneAnimationEnded === true) {
+              sceneAnimationEnded = false;
+            }
+          }
+        }
+
+        ticking = false;
+
       }
-    }
-
-      ticking = false;
-
     });
 
     ticking = true;
 
   }
+
 });
+
 
 mainCamera.addEventListener("animationend", function() {
   setTimeout(function() {
     turn(-46);
+    mainCamera.classList.add('animation-seen');
     sceneAnimationEnded = true;
   }, 1);
+});
+
+document.getElementById('logo-shadow').addEventListener("animationend", function() {
+  setTimeout(function() {
+    document.getElementById('logo-shadow').classList.add('animation-seen');
+  }, 1);
+});
+
+document.getElementById('sky-inside').addEventListener("animationend", function() {
+  setTimeout(function() {
+    document.getElementById('sky-inside').classList.add('animation-seen');
+  }, 1);
+});
+
+
+document.getElementById('logo-page').addEventListener('touchstart' , function(e) {
+  //e.preventDefault();
+  mouseLogoPageStart = e.changedTouches[0].screenX;
+});
+
+document.getElementById('logo-page').addEventListener('mousedown' , function(e) {
+  //e.preventDefault();
+  mouseLogoPageStart = e.screenX;
+});
+
+document.getElementById('logo-page').addEventListener('touchend', function(e) {
+  //e.preventDefault();
+  turn(Math.round(e.changedTouches[0].screenX - mouseLogoPageStart));
+});
+
+document.getElementById('logo-page').addEventListener('mouseup', function(e) {
+  //e.preventDefault();
+  turn(Math.round(e.screenX - mouseLogoPageStart));
 });

@@ -165,7 +165,7 @@
       logoPage.style.overflow = "hidden";
       contactPage.style.overflow = "hidden";
       document.body.style.overflow = "hidden";
-      
+
     }
 
   };
@@ -212,15 +212,12 @@
     '*': openLogoPage
   };
 
-  console.log(routes);
-
   var router = Router(routes);
 
   router.init(['/']);
 
   router.on("/projects/view/?((\w|.)*)", function () {
     openLogoPage();
-    console.log(1);
     projectPage.classList.add('hide');
     document.body.style.overflow = 'visible';
     headPage.scrollIntoView({behavior: "smooth"});
