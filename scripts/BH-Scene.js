@@ -6,6 +6,7 @@ var grassContainer = document.getElementById('grass'),
     logoShadow = document.getElementById('logo-shadow'),
     logoPageWidth = document.getElementById('logo-page').offsetWidth,
     logoPageHeight = document.getElementById('logo-page').offsetHeight,
+    bodyWidth = document.body.offsetWidth,
     scrollPosY = 0,
     ticking = false,
     sceneAnimationEnded = false,
@@ -194,6 +195,7 @@ document.body.addEventListener('keydown', function(e) {
 window.addEventListener('resize', function() {
   logoPageWidth = document.getElementById('logo-page').offsetWidth;
   logoPageHeight = document.getElementById('logo-page').offsetHeight;
+  bodyWidth = document.body.offsetWidth;
 });
 
 window.addEventListener('scroll', function(e) {
@@ -204,7 +206,7 @@ window.addEventListener('scroll', function(e) {
 
       scrollPosY = window.scrollY;
 
-      if(scrollPosY < logoPageHeight) {
+      if(scrollPosY < logoPageHeight && bodyWidth <= 1026) {
 
         var calc = ((1/2) * (logoPageHeight) - scrollPosY)/(logoPageHeight/4);
         if (calc < 0 ) {
@@ -229,10 +231,14 @@ window.addEventListener('scroll', function(e) {
             }
           }
         }
-
-        ticking = false;
-
       }
+
+      if(bodyWidth >= 1026) {
+        document.getElementById('scene').style.opacity = 1;
+        document.getElementById('scene').style.display = 'block';
+      }
+
+      ticking = false;
     });
 
     ticking = true;

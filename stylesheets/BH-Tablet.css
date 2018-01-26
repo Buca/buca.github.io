@@ -1,0 +1,56 @@
+@media screen and (min-width: 732px) {
+
+#head {
+  height: 75%;
+  min-height: 0;
+}
+
+#project-stack {
+  overflow-y: auto;
+  min-height: 25%;
+}
+
+.project-item {
+  width: 48%;
+  padding: 0 1% 0 1%;
+  float: left;
+}
+
+.project-image {
+  margin: 0% 0% 0% -2%;
+  height: 100%;
+  width: 101%;
+}
+
+#project-page {
+  overflow-y: auto;
+  background-color: #000000b3;
+}
+
+#project-page .project-item {
+  float: unset;
+  width: 70%;
+  margin: 0 0 0 -39%;
+  left: 50%;
+  top: 15%;
+  max-height: 60%;
+  overflow-y: visible;
+  padding: 0 3% 0 3%;
+  border-radius: 0.2em;
+  box-shadow: 0 0 0 0.2em #6d6d8633;
+  min-height: 0;
+}
+
+#project-page .project-image {
+  margin: -21% 0 0 -16%;
+}
+
+#project-page .project-title {
+  margin: 1.4em 0 1.5em 0;
+}
+
+.project-menu {
+  padding: 0 0.2em 1.4em;
+}
+
+}

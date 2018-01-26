@@ -9,6 +9,11 @@ body {
   font-family: Roboto;
 }
 
+#master-container {
+  height: 100%;
+  overflow: auto;
+}
+
 #bh-app {
   height: 100%;
   position: relative;
@@ -19,7 +24,7 @@ body {
   width: 100%;
   min-height: 100%;
   background-color: #e5ded4;
-  box-shadow: inset 0 10px 185px 10px rgb(166, 166, 177);
+  box-shadow: inset 0 20px 185px 10px rgb(166, 166, 177);
   overflow-x: hidden;
   overflow-y: visible;
 }
@@ -418,8 +423,9 @@ button:focus {
 .project-menu {
   position: relative;
   bottom: 0;
-  overflow: auto;
+  overflow: visible;
   padding: 0 0.2em 0.8em;
+  margin: 0 0 3.5em 0;
 }
 
 .project-details-button,
