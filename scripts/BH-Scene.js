@@ -282,12 +282,12 @@ document.getElementById('logo-page').addEventListener('mousedown' , function(e) 
 
 document.getElementById('logo-page').addEventListener('touchend', function(e) {
   //e.preventDefault();
-  if(mouseDown_1) {turn(Math.round(e.changedTouches[0].screenX - mouseLogoPageStart))};
+  if(mouseDown_1) {turn(Math.round(e.changedTouches[0].screenX - mouseLogoPageStart)/10)};
 });
 
 document.getElementById('logo-page').addEventListener('mousemove', function(e) {
   //e.preventDefault();
-  if(mouseDown_1){turn(Math.round(e.screenX - mouseLogoPageStart))};
+  if(mouseDown_1){turn(Math.round(e.screenX - mouseLogoPageStart)/10)};
 });
 
 document.getElementById('logo-page').addEventListener('mouseup', function(e) {
