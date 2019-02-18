@@ -268,7 +268,7 @@ document.getElementById('sky-inside').addEventListener("animationend", function(
   }, 1);
 });
 
-
+var mouseDown_1 = false;
 document.getElementById('logo-page').addEventListener('touchstart' , function(e) {
   //e.preventDefault();
   mouseLogoPageStart = e.changedTouches[0].screenX;
@@ -277,14 +277,21 @@ document.getElementById('logo-page').addEventListener('touchstart' , function(e)
 document.getElementById('logo-page').addEventListener('mousedown' , function(e) {
   //e.preventDefault();
   mouseLogoPageStart = e.screenX;
+  mouseDown_1 = true;
 });
 
 document.getElementById('logo-page').addEventListener('touchend', function(e) {
   //e.preventDefault();
-  turn(Math.round(e.changedTouches[0].screenX - mouseLogoPageStart));
+  if(mouseDown_1) {turn(Math.round(e.changedTouches[0].screenX - mouseLogoPageStart))};
 });
 
 document.getElementById('logo-page').addEventListener('mousemove', function(e) {
   //e.preventDefault();
-  turn(Math.round(e.screenX - mouseLogoPageStart));
+  if(mouseDown_1){turn(Math.round(e.screenX - mouseLogoPageStart))};
 });
+
+document.getElementById('logo-page').addEventListener('mouseup', function(e) {
+  //e.preventDefault();
+  mouseDown_1 = false;
+});
+
