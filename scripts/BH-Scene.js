@@ -284,7 +284,7 @@ document.getElementById('logo-page').addEventListener('touchend', function(e) {
   turn(Math.round(e.changedTouches[0].screenX - mouseLogoPageStart));
 });
 
-document.getElementById('logo-page').addEventListener('mouseup', function(e) {
+document.getElementById('logo-page').addEventListener('mousemove', function(e) {
   //e.preventDefault();
   turn(Math.round(e.screenX - mouseLogoPageStart));
 });
