@@ -132,8 +132,8 @@ button:focus {
 .text-bubble-container {
   position: absolute;
   left: 50%;
-  bottom: 0.8em;
-  margin: 0 0 0 -4.45em;
+  bottom: 0.9em;
+  margin: 0 0 0 -4em;
   animation: slideUp 2.5s;
   transform: translateY(0);
 }
