@@ -8,11 +8,6 @@
     <!--TITLE, DESCRIPTION & FAVICON-->
     <title>BH</title>
 
-    <!--FONTS & ICONS-->
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <script defer src="https://use.fontawesome.com/releases/v5.0.4/js/all.js"></script>
-
     <!--STYLESHEET-->
     <link rel="stylesheet" type="text/css" href="stylesheets/reset.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/BH-Scene.css">
@@ -22,23 +17,15 @@
 
   </head>
 
-  <body><!--<div id="master-container">-->
-
-    <section id="head">
-
+  <body>
+    <!--<section id="head">-->
       <!--Logo/Scene Page, Contact Me Button-->
       <section id="logo-page" class="page">
-
-        <!--Title -->
-        <section id="bh-title">
-          <h1></h1>
-        </section>
-
         <!-- Scene -->
         <div id="scene">
           <!-- Camera -->
           <div class="camera" style="perspective: 800px; transform: translateY(0)">
-          <div id="logo-shadow"></div>
+            <div id="logo-shadow"></div>
           </div>
           <div id="main-camera" class="camera north-visible">
 
@@ -400,71 +387,13 @@
             </div>
           </div>
           <!-- Smoke -->
-          <div id="smoke" class="object-container">
-            <div class="smoke-particle-1 object-container">
-              <div class="rot-north">
-                <div class="face white-bg"></div>
-              </div>
-              <div class="rot-east">
-                <div class="face white-bg"></div>
-              </div>
-              <div class="rot-south">
-                <div class="face white-bg"></div>
-              </div>
-              <div class="rot-west">
-                <div class="face white-bg"></div>
-              </div>
-            </div>
-            <div class="smoke-particle-2 object-container">
-              <div class="rot-north">
-                <div class="face white-bg"></div>
-              </div>
-              <div class="rot-east">
-                <div class="face white-bg"></div>
-              </div>
-              <div class="rot-south">
-                <div class="face white-bg"></div>
-              </div>
-              <div class="rot-west">
-                <div class="face white-bg"></div>
-              </div>
-            </div>
-            <div class="smoke-particle-3 object-container">
-              <div class="rot-north">
-                <div class="face white-bg"></div>
-              </div>
-              <div class="rot-east">
-                <div class="face white-bg"></div>
-              </div>
-              <div class="rot-south">
-                <div class="face white-bg"></div>
-              </div>
-              <div class="rot-west">
-                <div class="face white-bg"></div>
-              </div>
-            </div>
-            <div class="smoke-particle-4 object-container">
-              <div class="rot-north">
-                <div class="face white-bg"></div>
-              </div>
-              <div class="rot-east">
-                <div class="face white-bg"></div>
-              </div>
-              <div class="rot-south">
-                <div class="face white-bg"></div>
-              </div>
-              <div class="rot-west">
-                <div class="face white-bg"></div>
-              </div>
-            </div>
-          </div>
+          <div id="smoke" class="object-container"></div>
 
         </div>
           <!-- Sky -->
           <div id="sky">
             <div id="cut-sky-inside">
               <div id="sky-inside">
-                <div style="display: none" id="sky-noise"></div>
               </div>
             </div>
             <div id="sky-outside"></div>
@@ -478,10 +407,9 @@
         </section></a>
 
       </section>
-    </section>
-
-    <script src="scripts/BH-Scene.js"></script>
-    <script src="scripts/BH-Main.js"></script>
+    <!--</section>-->
+    <script src="scripts/BH-Scene-Dev.js"></script>
+    <!--<script src="scripts/BH-Scene.js"></script>-->
 
   <!--</div>--></body>
 
