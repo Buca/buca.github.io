@@ -133,22 +133,24 @@ button:focus {
   position: absolute;
   left: 50%;
   bottom: 0.9em;
-  margin: 0 0 0 -4em;
   animation: slideUp 2.5s;
-  transform: translateY(0);
+  transform: translateY(0) translateX(-4em);
 }
 
 .text-bubble-container p {
   background-color: rgba(126, 113, 113, 0.5);
   color: #e9e9e8;
   text-shadow: 0 0.1em #5c5c68;
-  font-size: 0.8em;
+  font-size: 1em;
   padding: 1.4em 1.2em;
-  margin: 0 0 0 2.85em;
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+  transform: translateX(1.75em);
+  font-family: serif;
+  border-radius: .15em;
+  border-top: 1px solid #8479be;
 }
 
 .text-bubble-container div {
@@ -167,11 +169,11 @@ button:focus {
 }
 
 @keyframes slideUp {
-  0%    { transform: translateY(4.8em);
+  0%    { transform: translateY(4.8em) translateX(-4em);
           opacity: 0;}
-  80%   { transform: translateY(4.8em);
+  80%   { transform: translateY(4.8em) translateX(-4em);
           opacity: 0;}
-  100%  { transform: translateY(0);
+  100%  { transform: translateY(0) translateX(-4em);
           opacity: 1;}
 }
 
