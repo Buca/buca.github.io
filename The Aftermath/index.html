@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="icon" href="icons/64.png">
+		<link rel="manifest" href="manifest.json" />
+
+		<meta name="viewport" 
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+		<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inconsolata:wght@400;500;600;700;800;900&family=Monofett&family=Syne+Mono&display=block" rel="stylesheet">
+		
+		<link rel="stylesheet" href="styles/app.css">
+		<link rel="stylesheet" href="styles/mobile.css">
+		
+		<!-- LIBRARY SCRIPTS -->
+		<script src="scripts/libs/particle.min.js"></script>
+		<script src="scripts/libs/Tone.js"></script>
+		<script src="scripts/libs/compromise.js"></script>
+
+		<!-- APP SETUP -->
+		<script src="scripts/app/Utilities.js"></script>
+		<script src="scripts/app/State.js"></script>
+		<script src="scripts/app/AudioSetup.js"></script>
+		
+		<title>THE AFTERMATH</title>
+	</head>
+
+	<body>
+		<div id="root">
+
+			<div id="noise-large" class="full effect">
+					<svg 
+					  viewBox="0 0 200 200"
+					  xmlns='http://www.w3.org/2000/svg'>
+
+					  <filter id='noiseFilter'>
+					    <feTurbulence 
+					      type='fractalNoise' 
+					      baseFrequency='0.65' 
+					      numOctaves='3' 
+					      stitchTiles='stitch' />
+					  </filter>
+
+					  <rect
+					    width='100%' 
+					    height='100%' 
+					    filter='url(#noiseFilter)' />
+					</svg>
+			</div>
+			<div id="noise-small" class="full effect"></div>
+			<div id="particles" class="full effect"></div>
+
+
+			<div id="title-content" class="full">
+				<div class="hidden" id="initiation-text">PRESS ANYTHING</div>
+				<div id="title-sequence" class="full hidden">
+					<h1>THE</h1>
+					<h2>AFTERMATH</h2>
+					<svg id="filters">
+					    <defs>
+					        <filter id="threshold">
+					            <feColorMatrix in="SourceGraphic" type="matrix" values="
+					            	  1 0 0 0 0
+					                  0 1 0 0 0
+					                  0 0 1 0 0
+					                  0 55 66 255 -252" />
+					        </filter>
+					    </defs>
+					</svg>
+				</div>
+			</div>
+
+			<!-- Page: Game -->
+			<div id="game-content" class="full hidden fade-in">
+
+				<div id="game-top">
+					<div id="scores">
+						<div id="credits" class="score highlight"><span class="label">CREDITS</span><span class="value">0</span><span class="label currency">$</span></div>
+					</div>
+					<button class="option" id="difficulty-game-option">
+						<span class="label">difficulty</span>
+						<span class="value">EASY</span>
+					</button>
+					<button id="category-options" class="option">
+						<span class="label">category</span>
+						<span class="value">RANDOM</span>
+					</button>
+					<button id="open-menu">
+						<i class="gg-menu-round"></i>
+					</button>
+				</div>
+
+				<div id="game-middle" class="row">
+					<div id="feed">
+						<div id="article">
+							<header>
+								<i class="gg-file-document"></i>
+								<h3>XXXXXX</h3>
+								<span class="reward">
+									<span class="value">+XXX</span>
+									<span class="currency">$</span>
+								</span>
+							</header>
+							<content>
+							</content>
+							<footer>
+								<button id="buy-snippet-button" disabled>
+									<i class="gg-add"></i>
+									<span class="label">BUY SNIPPET</span>
+									<span class="price">-XX</span>
+									<span class="currency">$</span>
+								</button>
+								<button id="next-document-button">
+									<span class="label">NEXT DOCUMENT</span>
+									<i class="gg-arrow-right"></i>
+								</button>
+							</footer>
+						</div>
+					</div>
+				</div>
+
+				<div id="game-bottom" class="row">
+					<div id="options">
+						<div class="row" >
+							<button id="choose-option-a" class="invisible">
+								<span class="label">A.</span>
+								<span class="value">XXXXXX</span>
+							</button>
+							<button id="choose-option-b" class="invisible">
+								<span class="label">B.</span>
+								<span class="value">XXXXXX</span>
+							</button>
+						</div>
+						<div class="row">
+							<button id="choose-option-c" class="invisible">
+								<span class="label">C.</span>
+								<span class="value">XXXXXX</span>
+							</button>
+							<button id="choose-option-d" class="invisible">
+								<span class="label">D.</span>
+								<span class="value">XXXXXX</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			
+				<div id="game-sidebar" class="closed hidden">
+
+					<header>
+						<button id="close-sidebar"><i class="gg-close"></i></button>
+						<button class="hidden" id="back-sidebar"><i class="gg-arrow-left"></i></button>
+						<h1>MENU</h1>
+						<h2></h2>
+					</header>
+
+					<div id="menu" class="page">
+						<button class="menu-option" page-id="category-page">
+							<span>CATEGORY</span>
+							<span class="dots"></span>
+							<i class="gg-search"></i>
+						</button>
+						<!--<button class="menu-option" page-id="controls-page">
+							<span>CONTROLS</span>
+							<span class="dots"></span>
+							<i class="gg-games"></i>
+						</button>-->
+						<button class="menu-option" page-id="graphics-page">
+							<span>GRAPHICS</span>
+							<span class="dots"></span>
+							<i class="gg-image"></i>
+						</button>
+						<button class="menu-option" page-id="sound-page">
+							<span>SOUND</span>
+							<span class="dots"></span>
+							<i class="gg-music"></i>
+						</button>
+						<button class="menu-option" page-id="score-stats-page">
+							<span>STATS</span>
+							<span class="dots"></span>
+							<i class="gg-align-bottom"></i>
+						</button>
+						<div class="row">
+							<button id="load-game-button" class="option">LOAD GAME</button>
+							<button id="save-game-button" class="option">NEW GAME</button>
+						</div>
+					</div>
+
+					<!--<div id="controls-page" class="page hidden">
+						<button id="toggle-keyboard-shortcuts" class="option">
+							<span class="label">ENABLE KEYBOARD</span>
+							<span class="value">ON</span>
+						<button>
+						<button id="choose-a" class="option" tabindex="0">
+							<span class="label">SELECT OPTION A</span>
+							<span class="value">1</span>
+						</button>
+						<button id="choose-b" class="option" tabindex="0">
+							<span class="label">SELECT OPTION B</span>
+							<span class="value">2</span>
+						</button>
+						<button id="choose-c" class="option" tabindex="0">
+							<span class="label">SELECT OPTION C</span>
+							<span class="value">3</span>
+						</button>
+						<button id="choose-d" class="option" tabindex="0">
+							<span class="label">SELECT OPTION D</span>
+							<span class="value">4</span>
+						</button>
+						<button id="buy-snippet" class="option" tabindex="0">
+							<span class="label">BUY SNIPPET</span>
+							<span class="value">W</span>
+						</button>
+						<button id="skip-document" class="option" tabindex="0">
+							<span class="label">SKIP DOCUMENT</span>
+							<span class="value">S</span>
+						</button>
+						<button id="toggle-menu" class="option" tabindex="0">
+							<span class="label">TOGGLE MENU</span>
+							<span class="value">ESC</span>
+						</button>
+						<button id="toggle-sound" class="option" tabindex="0">
+							<span class="label">TOGGLE SOUND</span>
+							<span class="value">M</span>
+						</button>
+					</div>
+					-->
+					<!--
+					<div id="graphics-page" class="page hidden">
+						<button id="toggle-noise" class="option">
+							<span class="label">NOISE</span>
+							<span class="value">ON</span>
+						</button>
+						<button id="toggle-nightmode" class="option">
+							<span class="label">NOISE</span>
+							<span class="value">ON</span>
+						</button>
+						<div id="brightness" class="option">
+							<span class="label">BRIGHTNESS</span>
+							<input type="range" min="0" max="10" value="1">
+						</div>
+						<div class="option" id="font-size-setting">
+							<span class="label">FONT SIZE</span>
+							<button id="small-font-size-button" class="small selected">A</button>
+							<button id="medium-font-size-button" class="medium">A</button>
+							<button id="large-font-size-button" class="large">A</button>
+						</div>
+
+					</div>
+					-->
+
+					<div id="sound-page" class="page hidden">
+						<div class="option">
+							<span class="label">MASTER VOLUME</span>
+							<input id="master-volume" type="range" min="0" max="1" value="1" step=".05">
+						</div>
+						<div class="option">
+							<span class="label">MUSIC VOLUME</span>
+							<input id="music-volume" type="range" min="0" max="4" value=".5" step=".2">
+						</div>
+						<div class="option">
+							<span class="label">UI VOLUME</span>
+							<input id="ui-volume" type="range" min="0" max="1" value="1" step=".05">
+						</div>
+						<div class="option">
+							<span class="label">AMBIENT VOLUME</span>
+							<input id="ambient-volume" type="range" min="0" max="1" value=".5" step=".05">
+						</div>
+					</div>
+
+					<div id="score-stats-page" class="page hidden">
+						<div class="option stat" id="credits-menu">
+							<span class="label">CREDITS</span>
+							<span class="dots"></span>
+							<span class="value">0</span>
+						</div>
+						<div class="option stat" id="credits-gathered">
+							<span class="label">CREDITS GATHERED</span>
+							<span class="dots"></span>
+							<span class="value">0</span>
+						</div>
+						<div class="option stat" id="credits-spent">
+							<span class="label">CREDITS SPENT</span>
+							<span class="dots"></span>
+							<span class="value">0</span>
+						</div>
+						<div class="option stat" id="tips-bought">
+							<span class="label">TIPS BOUGHT</span>
+							<span class="dots"></span>
+							<span class="value">0</span>
+						</div>
+						<div class="option stat" id="average-tips-per-document">
+							<span class="label">AVERAGE TIPS PER DOC.</span>
+							<span class="dots"></span>
+							<span class="value">0</span>
+						</div>
+						<div class="option stat" id="documents-skipped">
+							<span class="label">DOCUMENTS SKIPPED</span>
+							<span class="dots"></span>
+							<span class="value">0</span>
+						</div>
+
+						<div class="option stat" id="correct-answers">
+							<span class="label">CORRECT ANSWERS</span>
+							<span class="dots"></span>
+							<span class="value">0</span>
+						</div>
+						<div class="option stat" id="max-consecutive-correct-answers">
+							<span class="label">MAX CONSECUTIVE CORRECT ANSWERS</span>
+							<span class="dots"></span>
+							<span class="value">0</span>
+						</div>
+						<div class="option stat" id="incorrect-answers">
+							<span class="label">INCORRECT ANSWERS</span>
+							<span class="dots"></span>
+							<span class="value">0</span>
+						</div>
+						<div class="option stat" id="max-consecutive-incorrect-answers">
+							<span class="label">MAX CONSECUTIVE INCORRECT ANSWERS</span>
+							<span class="dots"></span> 	
+							<span class="value">0</span>
+						</div>
+						
+					</div>
+
+					<div id="category-page" class="page hidden">
+						<h4 id="category-menu-title">random</h4>
+						<input type="text" id="category-search" class="option">
+						<h3>recently used categories</h3>
+						<div id="recent-categories" class="results">
+							<button class="option result">
+								<span class="label">Random</span>
+							</button>
+							<button class="option result">
+								<span class="label">Actresses Born in the 70s</span>
+							</button>
+						</div>
+						<h3>search results</h3>
+						<div id="search-results" class="results">
+							<button class="option result">
+								<span class="label">Tim Burton's Movies</span>
+								<span class="value">+200 <i></i></span>
+							<button>
+						</div>
+					</div>
+
+				</div>
+
+				<div id="network-status" class="full hidden">
+					<div class="row"><h1></h1></div>
+					<div class="row load-text">RETRYING TO CONNECT</div>
+					<div class="row">
+						<i class="gg-spinner-two-alt"></i>
+					</div>
+				</div>
+
+			</div>
+		
+		<script src="scripts/app/NetworkStatus.js"></script>
+		<script src="scripts/app/app.js"></script>
+
+	</body>
+
+</html>
