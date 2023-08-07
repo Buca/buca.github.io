@@ -991,7 +991,7 @@ async function start() {
 	await showPressAny();
 	await whenPressAny();
 	await hidePressAny();
-	Object.assign( Sound, await import('/scripts/app/AudioSetup.js') );
+	Object.assign( Sound, await import('./scripts/app/AudioSetup.js') );
 	await showIntro();
 	await hideIntro();
 
