@@ -991,7 +991,6 @@ async function start() {
 	await showPressAny();
 	await whenPressAny();
 	await hidePressAny();
-	Object.assign( Sound, await import('./AudioSetup.js') );
 	await showIntro();
 	await hideIntro();
 

@@ -224,7 +224,7 @@ const UISynthZ = new Tone.MonoSynth({
 const UINoiseSynthA = new Tone.NoiseSynth().connect( UIGain );
 const UINoiseSynthB = new Tone.NoiseSynth().connect( UIGain );
 
-export function Win() {
+function Win() {
 
 	const vol = 0.05;
 
@@ -249,7 +249,7 @@ export function Win() {
 
 };
 
-export function Lose() {
+function Lose() {
 
 	const vol = 0.05;
 
@@ -275,7 +275,7 @@ export function Lose() {
 
 };
 
-export function AddCredits() {
+function AddCredits() {
 
 	try {
 
@@ -286,7 +286,7 @@ export function AddCredits() {
 
 };
 
-export function RemoveCredits() {
+function RemoveCredits() {
 
 	try {
 
@@ -297,7 +297,7 @@ export function RemoveCredits() {
 
 };
 
-export function FailClickButton() {
+function FailClickButton() {
 
 	try {
 
@@ -308,7 +308,7 @@ export function FailClickButton() {
 
 };
 
-export function ClickButton() {
+function ClickButton() {
 
 	try {
 
@@ -327,7 +327,7 @@ for( const e of document.querySelectorAll('button') ) e.addEventListener('click'
 
 } );
 
-export function HoverButton() {
+function HoverButton() {
 
 	try {
 
@@ -341,7 +341,7 @@ export function HoverButton() {
 for( const e of document.querySelectorAll('button') ) e.addEventListener('mouseover', HoverButton );
 
 
-export function Fail() {
+function Fail() {
 
 
 	const now = Tone.now();
@@ -350,7 +350,7 @@ export function Fail() {
 
 };
 
-export function TypeWord() {
+function TypeWord() {
 
 	try {
 
@@ -361,7 +361,7 @@ export function TypeWord() {
 
 };
 
-export function TypeLetter() {
+function TypeLetter() {
 
 	try {
 
@@ -373,7 +373,7 @@ export function TypeLetter() {
 
 };
 
-export function RemoveLetter() {
+function RemoveLetter() {
 
 	try {
 
@@ -383,7 +383,7 @@ export function RemoveLetter() {
 
 };
 
-export function OptionOut() {
+function OptionOut() {
 
 	try {
 
@@ -394,7 +394,7 @@ export function OptionOut() {
 
 }
 
-export function OptionIn() {
+function OptionIn() {
 
 	try {
 
@@ -405,7 +405,7 @@ export function OptionIn() {
 	
 }
 
-export function CloseMenu() {
+function CloseMenu() {
 
 	try {
 
@@ -416,7 +416,7 @@ export function CloseMenu() {
 	
 };
 
-export function OpenMenu() {
+function OpenMenu() {
 
 	try {
 
@@ -426,3 +426,15 @@ export function OpenMenu() {
 	} catch ( error ) { console.log( error ); };
 	
 };
+
+Object.assign( Sound, {
+
+	Win, Lose,
+	AddCredits, RemoveCredits,
+	FailClickButton, ClickButton,
+	HoverButton,
+	TypeWord, TypeLetter, RemoveLetter,
+	OptionOut, OptionIn,
+	CloseMenu, OpenMenu
+
+});
