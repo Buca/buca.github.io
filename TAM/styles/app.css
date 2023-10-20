@@ -260,6 +260,7 @@ button {
 
 #particles {
     mix-blend-mode: multiply;
+    opacity: 0.5;
 }
 
 .fade-in {
@@ -782,6 +783,7 @@ font-family: 'Monofett'; font-size: 2rem; margin-left: 0.5rem; color: #faff23; t
     flex: 1;
     align-self: center;
     margin-right: .75rem;
+    color: #ebebeb;
 }
 
 /* width */
