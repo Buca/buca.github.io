@@ -1,6 +1,6 @@
 header, main {
 
-	max-width: 1100px;
+	max-width: 1200px;
 	align-self: center;
 
 }
@@ -247,6 +247,12 @@ main {
 
 }
 
+#content td:nth-child( odd ) {
+
+	text-align: end;
+	
+}
+
 #content tr {
 
 	box-shadow: 0 2px #6f6f6f
@@ -275,6 +281,12 @@ main {
 
 }
 
+#content td:nth-child( odd ) {
+
+	white-space: nowrap;
+
+}
+
 #content p b {
 
 	color: #d7d4d4;
@@ -283,10 +295,26 @@ main {
 
 #content code {
 
-	padding: 6px 10px;
+	padding: 0 10px;
 	background: #54585c;
+	white-space: nowrap;
 
 }
+
+#content pre {
+
+	margin-bottom: 20px;
+
+}
+
+#content pre code {
+
+	padding: 0 30px;
+	background: #54585c;
+	white-space: unset;
+
+}
+
 #viewport {
 
 	border: 0;
