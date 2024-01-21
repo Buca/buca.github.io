@@ -1,0 +1,521 @@
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+    scrollbar-width: 8px;
+    scrollbar-color: #edcf6b transparent;
+    scroll-padding: 5px;
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+  
+    width: 8px;
+  
+  }
+
+  *::-webkit-scrollbar-track {
+  
+    background: transparent;
+  
+  }
+
+  *::-webkit-scrollbar-thumb {
+
+    background-color: #edcf6b;
+    border-radius: 4px;
+    background-clip: padding-box;
+
+  }
+
+html {
+
+	min-height: 100%;
+	height: 100%;
+
+}
+
+*::selection {
+
+	background: #edcf6b;
+	color: #0697df;
+
+}
+
+a {
+
+	text-decoration: none;
+	color: #3e4139;
+
+}
+
+p a {
+
+	font-weight: bold;
+	padding: 2px 8px;
+	font-size: 15px;
+
+}
+
+p a:hover {
+
+	background: #4c444e;
+	font-weight: bold;
+	color: white;
+
+}
+
+b {
+
+	background: #edcf6b;
+    padding: 2px 8px;
+    
+}
+
+body {
+
+	background: #eaece6;
+	background: radial-gradient(circle, rgba(234,236,230,1) 0%, rgba(235,228,227,1) 100%);
+	height: 100%;
+	font-family: 'Roboto Mono';
+	color: #3e4139;
+
+}
+
+.hidden { display: none !important; }
+
+#noise {
+
+	background: url("../images/noise-optimized-2.gif");
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	mix-blend-mode: multiply;
+    opacity: 0.06;
+    pointer-events: none;
+    z-index: 100;
+}
+
+header {
+
+	display: flex;
+	justify-content: flex-end;
+	padding: 22px 0;
+
+}
+
+.nav-link {
+
+	font-family: 'Ubuntu Mono', monospace;
+	font-weight: bold;
+	font-size: 14px;
+	color: #3e4139;
+	text-decoration: none;
+	padding: 2px 10px;
+    position: relative;
+	margin-right: 36px;
+    transition: background .3s;
+
+}
+
+.nav-link:hover, .nav-link:focus {
+
+	background: #4c444e;
+	color: white;
+
+}
+
+.nav-link:active {
+
+	color: #4c444e;
+	background: #edcf6b;;
+
+}
+
+.nav-link:focus {
+	outline: none;
+}
+
+
+.nav-link .text {
+
+	z-index: 2;
+	position: relative;
+
+}
+
+.nav-link .ball {
+
+	opacity: 0;
+	pointer-events: none;
+	position: absolute;
+	top: 12px;
+	left: -5px;
+	background: #edcf6b;
+	width: 24px;
+	height: 24px;
+	border-radius: 12px;
+	z-index: 1;
+	transition: box-shadow .5s, background .2s, opacity .3s;
+
+}
+
+.nav-link.selected .ball {
+
+	opacity: 1;
+
+}
+
+.nav-link:hover .ball, .nav-link:focus .ball {
+
+	background: #4c444e;
+
+}
+
+.nav-link:active .ball {
+
+	background: #edcf6b;
+
+}
+
+main {
+
+	height: calc(100% - 69px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.window {
+
+	width: 100%;
+	height: 100%;
+	margin: 65px 8%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding-bottom: 30px;
+    animation: window-animation .175s;
+    animation-timing-function: ease-in;
+
+}
+
+.window-exit {
+
+	animation: window-exit-animation .075s;
+	animation-timing-function: ease-in;
+
+}
+
+@keyframes window-exit-animation {
+
+	from {
+		opacity: 1;
+		transform: scale(1);
+		filter: blur(0px) saturate(50%);
+	}
+
+	to {
+		opacity: 0;
+		transform: scale(.99);
+		filter: blur(5px) saturate(0%);
+	}
+
+}
+
+@keyframes window-animation {
+
+	from {
+		opacity: 0;
+		transform: scale(0.995);
+		filter: saturate(0%);
+	}
+
+	to {
+		opacity: 1;
+		transform: scale(1);
+		filter: saturate(100%);
+	}
+
+}
+
+.panel {
+
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	max-width: 500px;
+	max-height: 100%;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding: 3px;
+	padding-right: 16px;
+
+}
+
+.panel:first-child {
+
+	margin-right: 80px;
+
+}
+
+#work .panel:first-child {
+
+	flex: 0.65;
+
+}
+
+.panel h1, .panel h2 {
+
+    width: fit-content;
+	color: #3e4139;
+	font-weight: 400;
+	align-self: center;
+	
+}
+
+.panel h1 {
+
+	font-size: 44px;
+    background: #edcf6b;
+    padding: 0 20px;
+    line-height: 23px;
+    margin-top: 10px;
+    margin-bottom: 60px;
+    box-shadow: 0 13px 25px -9px white, 0px 6px #dfdfdf;
+
+}
+
+.panel h2 {
+
+	font-size: 31px;
+    font-weight: 300;
+
+}
+
+.panel p {
+
+	margin-bottom: 16px;
+	text-align: justify;
+	font-size: 14px;
+
+}
+
+#profile-picture {
+
+	width: 260px;
+	height: 260px;
+	border-radius: 130px;
+	background: #4c444e;
+	align-self: center;
+	box-shadow: 0 13px 25px -9px white, 0px 6px #d7d2d2;
+
+}
+
+.panel input, .panel textarea, .panel button, .panel .link-button {
+
+	padding: 14px 18px;
+    margin-bottom: 22px;
+    color: #e8e7e4;
+    background: #4c444e;
+    border: none;
+    font-size: 15px;
+    font-family: 'Ubuntu Mono';
+    border-radius: 2px;
+    box-shadow: 0 13px 25px -9px white, 0px 6px #d7d7d7;
+    transition: outline .2s;
+
+}
+
+.required-missing {
+
+	outline-width: 3px;
+    outline-color: #ffa3b4;
+    outline-offset: 0px;
+    outline-style: solid;
+
+}
+
+.panel button, .panel .link-button {
+
+	width: fit-content;
+    padding: 9px 40px;
+    align-self: end;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background .1s;
+
+}
+
+.panel button:hover, .panel .link-button:hover {
+
+	background: #cfcdcd;
+    color: #4c444e;
+
+}
+
+.panel textarea {
+
+	height: 200px;
+	max-width: 100%;
+    min-width: 100%;
+    min-height: 180px;
+
+}
+
+.panel input::placeholder, 
+.panel textarea::placeholder {
+
+	color: #BBB;
+
+}
+
+.panel input:focus, .panel textarea:focus, .panel button:focus, .panel .link-button:focus {
+
+	outline-width: 2px;
+	outline-color: #edcf6b;
+	outline-offset: 1px;
+	outline-style: solid;
+
+}
+
+.panel .link-button {
+
+	text-decoration: none;
+	margin-bottom: 0;
+
+}
+
+.panel .social-row {
+
+	display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    margin-left: 10px;
+    margin-bottom: 3px;
+    align-items: center;
+
+}
+
+.panel .github-social {
+
+	background: url("../images/github-mark.svg");
+	background-size: contain;
+	height: 30px;
+	width: 30px;
+	margin-top: 2px;
+	border-radius: 15px;
+	transition: box-shadow .1s;
+
+}
+
+.panel .github-social:hover, .panel .github-social:focus {
+
+	box-shadow: 0 0 0 5px #edcf6b;
+
+}
+
+.panel .thumbnail {
+
+	border-radius: 20px;
+	overflow: hidden;
+	width: fit-content;
+    height: fit-content;
+    align-self: center;
+	box-shadow: 0 99px 53px -48px white;
+
+}
+
+.work {
+
+	margin-bottom: 6px;
+    position: relative;
+    padding: 0 12px 3px 12px;
+    transition: background .15s;
+
+}
+
+.work:hover {
+
+	background: #e3e0de;
+
+}
+
+.work:active {
+
+	background: #edcf6b;
+
+}
+
+.work .head {
+
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+}
+
+.work .title {
+
+	font-size: 20px;
+    font-weight: bold;
+    background: #edcf6b;
+    line-height: 0px;
+    height: 6px;
+    padding: 0 8px 0 4px;
+
+}
+
+.work .description {
+
+	text-align: justify;
+    font-size: 14px;
+    font-family: 'Ubuntu Mono';
+    line-height: 18px;
+
+}
+
+.work .view-link {
+
+	font-weight: bold;
+    font-size: x-large;
+    transform: scaleX(0.6);
+    transition: padding .15s;
+
+}
+
+.work:hover .view-link {
+	padding-right: 4px;
+
+}
+
+#file-name {
+
+	background: #4c444e;
+	color: white;
+	font-weight: bold;
+	white-space: nowrap;
+	padding: 2px 8px;
+	
+}
+
+@media only screen and ( max-width: 720px ) {
+
+	main {
+
+		height: auto;
+
+	}
+
+	.window {
+		flex-direction: column;
+		margin: 28px;
+
+	}
+
+	.panel {
+		margin: 25px 0 !important;
+		padding-right: 0 !important;
+	}
+
+}

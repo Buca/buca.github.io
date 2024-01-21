@@ -1,415 +1,48 @@
 <!DOCTYPE html>
 <html>
 
-  <head>
+	<head>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!--TITLE, DESCRIPTION & FAVICON-->
-    <title>BH</title>
+		<!--TITLE, DESCRIPTION & FAVICON-->
+		<title>Buca Hajdini</title>
+		<link rel="icon" type="image/x-icon" href="images/favicon.png">
 
-    <!--STYLESHEET-->
-    <link rel="stylesheet" type="text/css" href="stylesheets/reset.css">
-    <link rel="stylesheet" type="text/css" href="stylesheets/BH-Scene.css">
-    <link rel="stylesheet" type="text/css" href="stylesheets/BH-Mobile.css">
-    <link rel="stylesheet" type="text/css" href="stylesheets/BH-Tablet.css">
-    <link rel="stylesheet" type="text/css" href="stylesheets/BH-Desktop.css">
+		<!-- FONTS -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
 
-  </head>
+		<!-- STYLESHEETS -->
+		<link rel="stylesheet" type="text/css" href="styles/reset.css">
+		<link rel="stylesheet" type="text/css" href="styles/app.css">
 
-  <body>
-    <!--<section id="head">-->
-      <!--Logo/Scene Page, Contact Me Button-->
-      <section id="logo-page" class="page">
-        <!-- Scene -->
-        <div id="scene">
-          <!-- Camera -->
-          <div class="camera" style="perspective: 800px; transform: translateY(0)">
-            <div id="logo-shadow"></div>
-          </div>
-          <div id="main-camera" class="camera north-visible">
+	</head>
 
-          <!-- Dirt/Ground -->
-          <div id="ground-lvl-1" class="object-container">
+	<body>
+		<div id="noise"></div>
+		<header>
+			<a class="nav-link" href="#about-me">
+				<div class="ball"></div>
+				<span class="text">1. ABOUT ME</span>
+			</a>
+			<a class="nav-link" href="#work">
+				<div class="ball"></div>
+				<span class="text">2. WORK</span>
+			</a>
+			<a class="nav-link" href="#contact-me">
+				<div class="ball"></div>
+				<span class="text">3. CONTACT ME</span>
+			</a>
+		</header>
+		<main>
+			<section class="window"></section>
+		</main>
 
-            <div class="rot-north"><div class="face purple-bg"></div></div>
-            <div class="rot-east"><div class="face purple-bg"></div></div>
-            <div class="rot-south"><div class="face purple-bg"></div></div>
-            <div class="rot-west"><div class="face purple-bg"></div></div>
+		<script src="scripts/app.js"></script>
 
-          </div>
-          <div id="ground-lvl-2" class="object-container">
-
-            <div class="rot-north"><div class="face purple-bg"></div></div>
-            <div class="rot-east"><div class="face purple-bg"></div></div>
-            <div class="rot-south"><div class="face purple-bg"></div></div>
-            <div class="rot-west"><div class="face purple-bg"></div></div>
-
-          </div>
-          <div id="ground-lvl-3" class="object-container">
-
-            <div class="rot-north"><div class="face purple-bg"></div></div>
-            <div class="rot-east"><div class="face purple-bg"></div></div>
-            <div class="rot-south"><div class="face purple-bg"></div></div>
-            <div class="rot-west"><div class="face purple-bg"></div></div>
-
-          </div>
-          <div id="ground-lvl-4" class="object-container">
-
-            <div class="rot-north"><div class="face purple-dark-bg"></div></div>
-            <div class="rot-east"><div class="face purple-dark-bg"></div></div>
-            <div class="rot-south"><div class="face purple-dark-bg"></div></div>
-            <div class="rot-west"><div class="face purple-dark-bg"></div></div>
-
-          </div>
-          <!-- Grass/Ground -->
-          <div id="grass-lvl-1" class="object-container">
-
-            <div class="rot-north"><div class="face green-bg"></div></div>
-            <div class="rot-east"><div class="face green-bg"></div></div>
-            <div class="rot-south"><div class="face green-bg"></div></div>
-            <div class="rot-west"><div class="face green-bg"></div></div>
-
-          </div>
-          <div id="grass-lvl-2" class="object-container">
-
-            <div class="rot-north"><div class="face green-bright-bg"></div></div>
-            <div class="rot-east"><div class="face green-bright-bg"></div></div>
-            <div class="rot-south"><div class="face green-bright-bg"></div></div>
-            <div class="rot-west"><div class="face green-bright-bg"></div></div>
-
-          </div>
-          <!-- House -->
-          <div id="house" class="object-container">
-
-            <!-- Ground Level -->
-            <div id="house-lvl-1" class="object-container">
-              <div class="rot-north"><div class="face purple-bg"></div></div>
-              <div class="rot-east"><div class="face purple-bg"></div></div>
-              <div class="rot-south"><div class="face purple-bg"></div></div>
-              <div class="rot-west"><div class="face purple-bg"></div></div>
-            </div>
-            <div id="house-lvl-2" class="object-container">
-              <div class="rot-north"><div class="face purple-bright-bg"></div></div>
-              <div class="rot-east"><div class="face purple-bright-bg"></div></div>
-              <div class="rot-south"><div class="face purple-bright-bg"></div></div>
-              <div class="rot-west"><div class="face purple-bright-bg"></div></div>
-            </div>
-            <div id="house-lvl-3" class="object-container">
-              <div class="rot-north"><div class="face purple-bright-bg"></div></div>
-              <div class="rot-east"><div class="face purple-bright-bg"></div></div>
-              <div class="rot-south"><div class="face purple-bright-bg"></div></div>
-              <div class="rot-west"><div class="face purple-bright-bg"></div></div>
-            </div>
-            <!-- Walls -->
-            <div id="house-lvl-4" class="object-container">
-              <div class="rot-north">
-                <div class="face brown-bg part-1"></div>
-                <div class="face brown-bg part-2"></div>
-                <div class="face brown-bg part-3"></div>
-              </div>
-              <div class="rot-east"><div class="face brown-bg"></div></div>
-              <div class="rot-south"><div class="face brown-bg"></div></div>
-              <div class="rot-west"><div class="face brown-bg"></div></div>
-            </div>
-            <div id="house-lvl-5" class="object-container">
-              <div class="rot-north"><div class="face brown-dark-bg"></div></div>
-              <div class="rot-east"><div class="face brown-dark-bg"></div></div>
-              <div class="rot-south"><div class="face brown-dark-bg"></div></div>
-              <div class="rot-west"><div class="face brown-dark-bg"></div></div>
-            </div>
-            <!-- Roof -->
-            <div id="house-lvl-6" class="object-container">
-              <div class="rot-north"><div class="face purple-bg"></div></div>
-              <div class="rot-east"><div class="face purple-bg"></div></div>
-              <div class="rot-south"><div class="face purple-bg"></div></div>
-              <div class="rot-west"><div class="face purple-bg"></div></div>
-            </div>
-            <div id="house-lvl-7" class="object-container">
-              <div class="rot-north"><div class="face purple-bg"></div></div>
-              <div class="rot-east"><div class="face purple-bg"></div></div>
-              <div class="rot-south"><div class="face purple-bg"></div></div>
-              <div class="rot-west"><div class="face purple-bg"></div></div>
-            </div>
-            <div id="house-lvl-8" class="object-container">
-              <div class="rot-north"><div class="face purple-bright-bg"></div></div>
-              <div class="rot-east"><div class="face purple-bright-bg"></div></div>
-              <div class="rot-south"><div class="face purple-bright-bg"></div></div>
-              <div class="rot-west"><div class="face purple-bright-bg"></div></div>
-            </div>
-            <div id="house-lvl-9" class="object-container">
-              <div class="rot-north"><div class="face purple-bright-bg"></div></div>
-              <div class="rot-east"><div class="face purple-bright-bg"></div></div>
-              <div class="rot-south"><div class="face purple-bright-bg"></div></div>
-              <div class="rot-west"><div class="face purple-bright-bg"></div></div>
-            </div>
-            <div id="house-lvl-10" class="object-container">
-              <div class="rot-north"><div class="face brown-bg"></div></div>
-              <div class="rot-east"><div class="face brown-bg"></div></div>
-              <div class="rot-south"><div class="face brown-bg"></div></div>
-              <div class="rot-west"><div class="face brown-bg"></div></div>
-            </div>
-            <div id="house-lvl-11" class="object-container">
-              <div class="rot-north"><div class="face brown-bg"></div></div>
-              <div class="rot-east"><div class="face brown-bg"></div></div>
-              <div class="rot-south"><div class="face brown-bg"></div></div>
-              <div class="rot-west"><div class="face brown-bg"></div></div>
-            </div>
-            <!-- Chimney -->
-            <div id="chimney" class="object-container">
-
-              <div id="chimney-lvl-1" class="object-container">
-                <div class="rot-north"><div class="face purple-bg"></div></div>
-                <div class="rot-east"><div class="face purple-bg"></div></div>
-                <div class="rot-south"><div class="face purple-bg"></div></div>
-                <div class="rot-west"><div class="face purple-bg"></div></div>
-              </div>
-              <div id="chimney-lvl-2" class="object-container">
-                <div class="rot-north"><div class="face purple-bright-bg"></div></div>
-                <div class="rot-east"><div class="face purple-bright-bg"></div></div>
-                <div class="rot-south"><div class="face purple-bright-bg"></div></div>
-                <div class="rot-west"><div class="face purple-bright-bg"></div></div>
-              </div>
-
-            </div>
-            <!-- Door -->
-            <div id="door" class="object-container">
-
-              <div id="door-front-sides" class="object-container">
-                <div class="rot-north">
-                  <div class="face purple-bg part-1"></div>
-                  <div class="face purple-bg part-2"></div>
-                  <div class="face purple-bright-bg part-3"></div>
-                  <div class="face purple-bg part-4"></div>
-                  <div class="face purple-bright-bg part-5"></div>
-                  <div class="face purple-bg part-6"></div>
-                  <div class="face purple-bg part-7"></div>
-                </div>
-                <div class="rot-east"><div class="face brown-dark-bg"></div></div>
-                <div class="rot-west"><div class="face brown-dark-bg"></div></div>
-              </div>
-
-              <div id="door-window-1" class="object-container">
-                <div class="rot-north"><div class="face sky-blue-bg"></div></div>
-                <div class="rot-east"><div class="face purple-dark-bg"></div></div>
-                <div class="rot-west"><div class="face purple-dark-bg"></div></div>
-              </div>
-
-              <div id="door-window-2" class="object-container">
-                <div class="rot-north"><div class="face sky-blue-bg"></div></div>
-                <div class="rot-east"><div class="face purple-dark-bg"></div></div>
-                <div class="rot-west"><div class="face purple-dark-bg"></div></div>
-              </div>
-
-
-            </div>
-            <!-- Step -->
-            <div id="step-lvl-1" class="object-container">
-              <div class="rot-north"><div class="face purple-bg"></div></div>
-              <div class="rot-east"><div class="face purple-bg"></div></div>
-              <div class="rot-west"><div class="face purple-bg"></div></div>
-            </div>
-            <div id="step-lvl-2" class="object-container">
-              <div class="rot-north"><div class="face purple-bright-bg"></div></div>
-              <div class="rot-east"><div class="face purple-bright-bg"></div></div>
-              <div class="rot-west"><div class="face purple-bright-bg"></div></div>
-            </div>
-          </div>
-          <!-- Tree -->
-          <div id="tree" class="object-container">
-
-            <div id="trunk-lvl-1" class="object-container">
-              <div class="rot-north"><div class="face brown-bg"></div></div>
-              <div class="rot-east"><div class="face brown-bg"></div></div>
-              <div class="rot-south"><div class="face brown-bg"></div></div>
-              <div class="rot-west"><div class="face brown-bg"></div></div>
-            </div>
-            <div id="trunk-lvl-2" class="object-container">
-              <div class="rot-north"><div class="face brown-dark-bg"></div></div>
-              <div class="rot-east"><div class="face brown-dark-bg"></div></div>
-              <div class="rot-south"><div class="face brown-dark-bg"></div></div>
-              <div class="rot-west"><div class="face brown-dark-bg"></div></div>
-            </div>
-            <div id="crown-1-lvl-1" class="object-container">
-              <div class="rot-north"><div class="face green-dark-bg"></div></div>
-              <div class="rot-east"><div class="face green-dark-bg"></div></div>
-              <div class="rot-south"><div class="face green-dark-bg"></div></div>
-              <div class="rot-west"><div class="face green-dark-bg"></div></div>
-            </div>
-            <div id="crown-1-lvl-2" class="object-container">
-              <div class="rot-north"><div class="face green-dark-bg"></div></div>
-              <div class="rot-east"><div class="face green-dark-bg"></div></div>
-              <div class="rot-south"><div class="face green-dark-bg"></div></div>
-              <div class="rot-west"><div class="face green-dark-bg"></div></div>
-            </div>
-            <div id="crown-1-lvl-3" class="object-container">
-              <div class="rot-north"><div class="face green-bg"></div></div>
-              <div class="rot-east"><div class="face green-bg"></div></div>
-              <div class="rot-south"><div class="face green-bg"></div></div>
-              <div class="rot-west"><div class="face green-bg"></div></div>
-            </div>
-            <div id="crown-1-lvl-4" class="object-container">
-              <div class="rot-north"><div class="face green-bright-bg"></div></div>
-              <div class="rot-east"><div class="face green-bright-bg"></div></div>
-              <div class="rot-south"><div class="face green-bright-bg"></div></div>
-              <div class="rot-west"><div class="face green-bright-bg"></div></div>
-            </div>
-            <div id="crown-1-lvl-5" class="object-container">
-              <div class="rot-north"><div class="face green-bright-bg"></div></div>
-              <div class="rot-east"><div class="face green-bright-bg"></div></div>
-              <div class="rot-south"><div class="face green-bright-bg"></div></div>
-              <div class="rot-west"><div class="face green-bright-bg"></div></div>
-            </div>
-
-            <div id="branch-1-seg-1" class="object-container">
-              <div class="rot-north"><div class="face brown-bg"></div></div>
-              <div class="rot-south"><div class="face brown-bg"></div></div>
-              <div class="rot-west"><div class="face brown-bg"></div></div>
-            </div>
-            <div id="branch-1-seg-2" class="object-container">
-              <div class="rot-east"><div class="face brown-bg"></div></div>
-              <div class="rot-west"><div class="face brown-bg"></div></div>
-            </div>
-            <div id="branch-1-seg-3-lvl-1" class="object-container">
-              <div class="rot-north"><div class="face brown-bg"></div></div>
-              <div class="rot-east"><div class="face brown-bg"></div></div>
-              <div class="rot-south"><div class="face brown-bg"></div></div>
-              <div class="rot-west"><div class="face brown-bg"></div></div>
-            </div>
-            <div id="branch-1-seg-3-lvl-2" class="object-container">
-              <div class="rot-north"><div class="face brown-dark-bg"></div></div>
-              <div class="rot-east"><div class="face brown-dark-bg"></div></div>
-              <div class="rot-south"><div class="face brown-dark-bg"></div></div>
-              <div class="rot-west"><div class="face brown-dark-bg"></div></div>
-            </div>
-            <div id="crown-2-lvl-1" class="object-container">
-              <div class="rot-north"><div class="face green-dark-bg"></div></div>
-              <div class="rot-east"><div class="face green-dark-bg"></div></div>
-              <div class="rot-south"><div class="face green-dark-bg"></div></div>
-              <div class="rot-west"><div class="face green-dark-bg"></div></div>
-            </div>
-            <div id="crown-2-lvl-2" class="object-container">
-              <div class="rot-north"><div class="face green-dark-bg"></div></div>
-              <div class="rot-east"><div class="face green-dark-bg"></div></div>
-              <div class="rot-south"><div class="face green-dark-bg"></div></div>
-              <div class="rot-west"><div class="face green-dark-bg"></div></div>
-            </div>
-            <div id="crown-2-lvl-3" class="object-container">
-              <div class="rot-north"><div class="face green-bg"></div></div>
-              <div class="rot-east"><div class="face green-bg"></div></div>
-              <div class="rot-south"><div class="face green-bg"></div></div>
-              <div class="rot-west"><div class="face green-bg"></div></div>
-            </div>
-            <div id="crown-2-lvl-4" class="object-container">
-              <div class="rot-north"><div class="face green-bright-bg"></div></div>
-              <div class="rot-east"><div class="face green-bright-bg"></div></div>
-              <div class="rot-south"><div class="face green-bright-bg"></div></div>
-              <div class="rot-west"><div class="face green-bright-bg"></div></div>
-            </div>
-            <div id="crown-2-lvl-5" class="object-container">
-              <div class="rot-north"><div class="face green-bright-bg"></div></div>
-              <div class="rot-east"><div class="face green-bright-bg"></div></div>
-              <div class="rot-south"><div class="face green-bright-bg"></div></div>
-              <div class="rot-west"><div class="face green-bright-bg"></div></div>
-            </div>
-
-            <div id="branch-2-seg-1" class="object-container">
-              <div class="rot-north"><div class="face brown-bg"></div></div>
-              <div class="rot-south"><div class="face brown-bg"></div></div>
-              <div class="rot-east"><div class="face brown-bg"></div></div>
-            </div>
-            <div id="branch-2-seg-2" class="object-container">
-              <div class="rot-east"><div class="face brown-bg"></div></div>
-              <div class="rot-west"><div class="face brown-bg"></div></div>
-            </div>
-            <div id="branch-2-seg-3-lvl-1" class="object-container">
-              <div class="rot-north"><div class="face brown-bg"></div></div>
-              <div class="rot-east"><div class="face brown-bg"></div></div>
-              <div class="rot-south"><div class="face brown-bg"></div></div>
-              <div class="rot-west"><div class="face brown-bg"></div></div>
-            </div>
-            <div id="branch-2-seg-3-lvl-2" class="object-container">
-              <div class="rot-north"><div class="face brown-dark-bg"></div></div>
-              <div class="rot-east"><div class="face brown-dark-bg"></div></div>
-              <div class="rot-south"><div class="face brown-dark-bg"></div></div>
-              <div class="rot-west"><div class="face brown-dark-bg"></div></div>
-            </div>
-            <div id="crown-3-lvl-1" class="object-container">
-              <div class="rot-north"><div class="face green-dark-bg"></div></div>
-              <div class="rot-east"><div class="face green-dark-bg"></div></div>
-              <div class="rot-south"><div class="face green-dark-bg"></div></div>
-              <div class="rot-west"><div class="face green-dark-bg"></div></div>
-            </div>
-            <div id="crown-3-lvl-2" class="object-container">
-              <div class="rot-north"><div class="face green-dark-bg"></div></div>
-              <div class="rot-east"><div class="face green-dark-bg"></div></div>
-              <div class="rot-south"><div class="face green-dark-bg"></div></div>
-              <div class="rot-west"><div class="face green-dark-bg"></div></div>
-            </div>
-            <div id="crown-3-lvl-3" class="object-container">
-              <div class="rot-north"><div class="face green-bg"></div></div>
-              <div class="rot-east"><div class="face green-bg"></div></div>
-              <div class="rot-south"><div class="face green-bg"></div></div>
-              <div class="rot-west"><div class="face green-bg"></div></div>
-            </div>
-            <div id="crown-3-lvl-4" class="object-container">
-              <div class="rot-north"><div class="face green-bright-bg"></div></div>
-              <div class="rot-east"><div class="face green-bright-bg"></div></div>
-              <div class="rot-south"><div class="face green-bright-bg"></div></div>
-              <div class="rot-west"><div class="face green-bright-bg"></div></div>
-            </div>
-            <div id="crown-3-lvl-5" class="object-container">
-              <div class="rot-north"><div class="face green-bright-bg"></div></div>
-              <div class="rot-east"><div class="face green-bright-bg"></div></div>
-              <div class="rot-south"><div class="face green-bright-bg"></div></div>
-              <div class="rot-west"><div class="face green-bright-bg"></div></div>
-            </div>
-          </div>
-          <!-- Grass -->
-          <div id="grass" class="object-container">
-            <div class="object-container grass-particle">
-              <div class="rot-north">
-                <div class="face green-bg"></div>
-                <div class="face green-bright-bg"></div>
-              </div>
-              <div class="rot-east">
-                <div class="face green-bg"></div>
-                <div class="face green-bright-bg"></div>
-              </div>
-              <div class="rot-south">
-                <div class="face green-bg"></div>
-                <div class="face green-bright-bg"></div>
-              </div>
-              <div class="rot-west">
-                <div class="face green-bg"></div>
-                <div class="face green-bright-bg"></div>
-              </div>
-            </div>
-          </div>
-          <!-- Smoke -->
-          <div id="smoke" class="object-container"></div>
-
-        </div>
-          <!-- Sky -->
-          <div id="sky">
-            <div id="cut-sky-inside">
-              <div id="sky-inside">
-              </div>
-            </div>
-            <div id="sky-outside"></div>
-          </div>
-        </div>
-
-        <!-- Bubble -->
-        <a href="https://github.com/Buca"><section class="text-bubble-container">
-          <p>github</p>
-          <div></div>
-        </section></a>
-
-      </section>
-    <!--</section>-->
-    <script src="scripts/BH-Scene.js"></script>
-
-  <!--</div>--></body>
+	</body>
 
 </html>
