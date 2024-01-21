@@ -85,12 +85,12 @@ body {
 
 #noise {
 
-	background: url("../images/noise-optimized-2.gif");
+	background: url("../images/noise-optimized-3.gif");
 	position: fixed;
 	width: 100%;
 	height: 100%;
 	mix-blend-mode: multiply;
-    opacity: 0.06;
+    opacity: 0.0475;
     pointer-events: none;
     z-index: 100;
 }
