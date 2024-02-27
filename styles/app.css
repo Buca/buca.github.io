@@ -1,31 +1,31 @@
 /* ===== Scrollbar CSS ===== */
-  /* Firefox */
-  * {
-    scrollbar-width: 8px;
-    scrollbar-color: #edcf6b transparent;
-    scroll-padding: 5px;
-  }
+	/* Firefox */
+	* {
+		scrollbar-width: 8px;
+		scrollbar-color: #edcf6b transparent;
+		scroll-padding: 5px;
+	}
 
-  /* Chrome, Edge, and Safari */
-  *::-webkit-scrollbar {
-  
-    width: 8px;
-  
-  }
+	/* Chrome, Edge, and Safari */
+	*::-webkit-scrollbar {
+	
+		width: 8px;
+	
+	}
 
-  *::-webkit-scrollbar-track {
-  
-    background: transparent;
-  
-  }
+	*::-webkit-scrollbar-track {
+	
+		background: transparent;
+	
+	}
 
-  *::-webkit-scrollbar-thumb {
+	*::-webkit-scrollbar-thumb {
 
-    background-color: #edcf6b;
-    border-radius: 4px;
-    background-clip: padding-box;
+		background-color: #edcf6b;
+		border-radius: 4px;
+		background-clip: padding-box;
 
-  }
+	}
 
 html {
 
@@ -67,8 +67,8 @@ p a:hover {
 b {
 
 	background: #edcf6b;
-    padding: 2px 8px;
-    
+		padding: 2px 8px;
+		
 }
 
 body {
@@ -90,9 +90,9 @@ body {
 	width: 100%;
 	height: 100%;
 	mix-blend-mode: multiply;
-    opacity: 0.0475;
-    pointer-events: none;
-    z-index: 100;
+		opacity: 0.0475;
+		pointer-events: none;
+		z-index: 100;
 }
 
 header {
@@ -111,9 +111,10 @@ header {
 	color: #3e4139;
 	text-decoration: none;
 	padding: 2px 10px;
-    position: relative;
+	position: relative;
 	margin-right: 36px;
-    transition: background .3s;
+	transition: background .3s;
+	white-space: nowrap;
 
 }
 
@@ -127,7 +128,7 @@ header {
 .nav-link:active {
 
 	color: #4c444e;
-	background: #edcf6b;;
+	background: #edcf6b;
 
 }
 
@@ -180,10 +181,10 @@ header {
 main {
 
 	height: calc(100% - 69px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
 }
 
 .window {
@@ -191,12 +192,12 @@ main {
 	width: 100%;
 	height: 100%;
 	margin: 65px 8%;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    padding-bottom: 30px;
-    animation: window-animation .175s;
-    animation-timing-function: ease-in;
+		display: flex;
+		align-items: center;
+		justify-content: space-evenly;
+		padding-bottom: 30px;
+		animation: window-animation .175s;
+		animation-timing-function: ease-in;
 
 }
 
@@ -267,7 +268,7 @@ main {
 
 .panel h1, .panel h2 {
 
-    width: fit-content;
+		width: fit-content;
 	color: #3e4139;
 	font-weight: 400;
 	align-self: center;
@@ -277,19 +278,19 @@ main {
 .panel h1 {
 
 	font-size: 44px;
-    background: #edcf6b;
-    padding: 0 20px;
-    line-height: 23px;
-    margin-top: 10px;
-    margin-bottom: 60px;
-    box-shadow: 0 13px 25px -9px white, 0px 6px #dfdfdf;
+		background: #edcf6b;
+		padding: 0 20px;
+		line-height: 23px;
+		margin-top: 10px;
+		margin-bottom: 60px;
+		box-shadow: 0 13px 25px -9px white, 0px 6px #dfdfdf;
 
 }
 
 .panel h2 {
 
 	font-size: 31px;
-    font-weight: 300;
+		font-weight: 300;
 
 }
 
@@ -315,42 +316,42 @@ main {
 .panel input, .panel textarea, .panel button, .panel .link-button {
 
 	padding: 14px 18px;
-    margin-bottom: 22px;
-    color: #e8e7e4;
-    background: #4c444e;
-    border: none;
-    font-size: 15px;
-    font-family: 'Ubuntu Mono';
-    border-radius: 2px;
-    box-shadow: 0 13px 25px -9px white, 0px 6px #d7d7d7;
-    transition: outline .2s;
+		margin-bottom: 22px;
+		color: #e8e7e4;
+		background: #4c444e;
+		border: none;
+		font-size: 15px;
+		font-family: 'Ubuntu Mono';
+		border-radius: 2px;
+		box-shadow: 0 13px 25px -9px white, 0px 6px #d7d7d7;
+		transition: outline .2s;
 
 }
 
 .required-missing {
 
 	outline-width: 3px;
-    outline-color: #ffa3b4;
-    outline-offset: 0px;
-    outline-style: solid;
+		outline-color: #ffa3b4;
+		outline-offset: 0px;
+		outline-style: solid;
 
 }
 
 .panel button, .panel .link-button {
 
 	width: fit-content;
-    padding: 9px 40px;
-    align-self: end;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background .1s;
+		padding: 9px 40px;
+		align-self: end;
+		font-weight: bold;
+		cursor: pointer;
+		transition: background .1s;
 
 }
 
 .panel button:hover, .panel .link-button:hover {
 
 	background: #cfcdcd;
-    color: #4c444e;
+		color: #4c444e;
 
 }
 
@@ -358,8 +359,8 @@ main {
 
 	height: 200px;
 	max-width: 100%;
-    min-width: 100%;
-    min-height: 180px;
+		min-width: 100%;
+		min-height: 180px;
 
 }
 
@@ -389,11 +390,11 @@ main {
 .panel .social-row {
 
 	display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-    margin-left: 10px;
-    margin-bottom: 3px;
-    align-items: center;
+		justify-content: space-between;
+		margin-top: 20px;
+		margin-left: 10px;
+		margin-bottom: 3px;
+		align-items: center;
 
 }
 
@@ -420,8 +421,8 @@ main {
 	border-radius: 20px;
 	overflow: hidden;
 	width: fit-content;
-    height: fit-content;
-    align-self: center;
+		height: fit-content;
+		align-self: center;
 	box-shadow: 0 99px 53px -48px white;
 
 }
@@ -429,9 +430,9 @@ main {
 .work {
 
 	margin-bottom: 6px;
-    position: relative;
-    padding: 0 12px 3px 12px;
-    transition: background .15s;
+		position: relative;
+		padding: 0 12px 3px 12px;
+		transition: background .15s;
 
 }
 
@@ -458,33 +459,34 @@ main {
 .work .title {
 
 	font-size: 20px;
-    font-weight: bold;
-    background: #edcf6b;
-    line-height: 0px;
-    height: 6px;
-    padding: 0 8px 0 4px;
+		font-weight: bold;
+		background: #edcf6b;
+		line-height: 0px;
+		height: 6px;
+		padding: 0 8px 0 4px;
 
 }
 
 .work .description {
 
 	text-align: justify;
-    font-size: 14px;
-    font-family: 'Ubuntu Mono';
-    line-height: 18px;
+		font-size: 14px;
+		font-family: 'Ubuntu Mono';
+		line-height: 18px;
 
 }
 
 .work .view-link {
 
 	font-weight: bold;
-    font-size: x-large;
-    transform: scaleX(0.6);
-    transition: padding .15s;
+	font-size: x-large;
+	transform: scaleX(0.6);
+	transition: padding .15s;
 
 }
 
 .work:hover .view-link {
+
 	padding-right: 4px;
 
 }
@@ -499,6 +501,57 @@ main {
 	
 }
 
+.loader-container  {
+
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	position: absolute;
+
+}
+
+.loader {
+
+	width: 40px;
+	aspect-ratio: 1;
+	display: flex;
+
+}
+
+.loader:before,
+.loader:after {
+
+	content: "";
+	flex: 1;
+	background: #4c444e;
+	animation: loading-animation 1.5s infinite;
+	border-radius: 100px 0 0 100px;
+	transform-origin: top right;
+	transform: translateY(calc(var(--s,1)*0%)) rotate(0);
+
+}
+
+.loader:after {
+
+	transform-origin: bottom left;
+	border-radius: 0 100px 100px 0;
+	background: #edcf6b;
+	--s:-1;
+
+}
+
+@keyframes loading-animation {
+
+	0%  {transform: translate(1,calc(var(--s,1)*5%)) rotate(0)}
+	20%  {transform: translate(0,calc(var(--s,1)*50%)) rotate(-90deg)}
+	40% {transform: translate(calc(var(--s,1)*-150%), calc(var(--s,1)*50%))  rotate(-90deg)}
+
+	60%  {transform: translate(calc(var(--s,1)*-150%), calc(var(--s,1)*50%))  rotate(-90deg)}
+	80%  {transform: translate(-1,calc(var(--s,1)*50%)) rotate(90deg)}
+	100% {transform: translate(1,calc(var(--s,1)*5%))  rotate(0)}
+
+}
+
 @media only screen and ( max-width: 720px ) {
 
 	main {
@@ -508,14 +561,29 @@ main {
 	}
 
 	.window {
+
 		flex-direction: column;
 		margin: 28px;
 
 	}
 
+	header {
+
+		justify-content: center !important;
+
+	}
+
+	.nav-link {
+
+		margin: 0 18px !important;
+
+	}
+
 	.panel {
+
 		margin: 25px 0 !important;
 		padding-right: 0 !important;
+	
 	}
 
 }

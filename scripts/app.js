@@ -45,7 +45,7 @@ async function getHTMLFromURL( url ) {
 		html = stringToHTML( text ).querySelector('.window');
 
 		if ( !status ) html.querySelector('#file-name').append( url );
-		
+
 	} catch ( e ) {
 	    
 		response = await fetch('../not-found.html');
@@ -117,6 +117,10 @@ async function init() {
 
 async function retrieveAndDisplayPage( href ) {
 
+	const loading = document.querySelector('.loading-container');
+
+	loading.classList.remove('hidden');
+
 	let element = await getHTMLFromURL( href + '.html' );
 
 	if ( !document.querySelector('.window') ) {
@@ -138,6 +142,8 @@ async function retrieveAndDisplayPage( href ) {
 
 			if ( re ) re.replaceWith( e ); 
 			else document.body.append(e);
+
+			loading.classList.add('hidden');
 
 		}
 
@@ -168,6 +174,8 @@ async function retrieveAndDisplayPage( href ) {
 
 				if ( re ) re.replaceWith( e ); 
 				document.body.append(e);
+
+				loading.classList.add('hidden');
 
 			}
 
