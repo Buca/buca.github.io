@@ -122,6 +122,8 @@ async function retrieveAndDisplayPage( href ) {
 	loading.classList.remove('hidden');
 
 	let element = await getHTMLFromURL( href + '.html' );
+	
+	loading.classList.add('hidden');
 
 	if ( !document.querySelector('.window') ) {
 
@@ -143,7 +145,6 @@ async function retrieveAndDisplayPage( href ) {
 			if ( re ) re.replaceWith( e ); 
 			else document.body.append(e);
 
-			loading.classList.add('hidden');
 
 		}
 
@@ -174,8 +175,6 @@ async function retrieveAndDisplayPage( href ) {
 
 				if ( re ) re.replaceWith( e ); 
 				document.body.append(e);
-
-				loading.classList.add('hidden');
 
 			}
 
