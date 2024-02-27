@@ -118,10 +118,18 @@ async function init() {
 async function retrieveAndDisplayPage( href ) {
 
 	const loading = document.querySelector('.loader-container');
+	const w = document.querySelector('.window');
+	if ( w ) {
+
+		w.style.filter = 'blur(2px)';
+		w.style.transform = 'scale(.9975)';
+
+	}
 
 	loading.style.opacity = 1;
 
 	let element = await getHTMLFromURL( href + '.html' );
+	await new Promise(r => setTimeout(r, 300));
 	
 	loading.style.opacity = 0;
 
