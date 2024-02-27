@@ -119,11 +119,11 @@ async function retrieveAndDisplayPage( href ) {
 
 	const loading = document.querySelector('.loader-container');
 
-	loading.classList.remove('hidden');
+	loading.style.opacity = 1;
 
 	let element = await getHTMLFromURL( href + '.html' );
 	
-	loading.classList.add('hidden');
+	loading.style.opacity = 0;
 
 	if ( !document.querySelector('.window') ) {
 
@@ -134,7 +134,7 @@ async function retrieveAndDisplayPage( href ) {
 		const scripts = element.querySelectorAll('script');
 		for ( script of scripts ) {
 
-
+e
 			const e = document.createElement('script');
 			e.src = script.src;
 
