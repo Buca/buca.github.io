@@ -117,7 +117,7 @@ async function init() {
 
 async function retrieveAndDisplayPage( href ) {
 
-	const loading = document.querySelector('.loading-container');
+	const loading = document.querySelector('.loader-container');
 
 	loading.classList.remove('hidden');
 
