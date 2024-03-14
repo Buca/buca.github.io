@@ -142,7 +142,6 @@ async function retrieveAndDisplayPage( href ) {
 		const scripts = element.querySelectorAll('script');
 		for ( script of scripts ) {
 
-e
 			const e = document.createElement('script');
 			e.src = script.src;
 
