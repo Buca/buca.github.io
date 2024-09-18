@@ -1,0 +1,277 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+*:not(input) {
+	user-select: none;
+}
+
+body {
+	display: block;
+	width: 100%;
+	height: 100vh;
+	background: #232323;
+	overflow: hidden;
+	font-family: monospace;
+}
+
+canvas {
+	width: 100%;
+	height: 100vh;
+}
+
+#noise {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	background: url(noise.gif);
+	mix-blend-mode: overlay;
+	opacity: 0.15;
+	pointer-events: none;
+	z-index: 1;
+}
+
+@keyframes example {
+	0% {outline-width: 2px;}
+	50% {outline-width: 6px;}
+	100% {outline-width: 2px;}
+}
+
+#menu {
+
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	background: rgb(169 169 169 / 20%);;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	z-index: 2;
+
+	h1 {
+		font-size: 50px;
+		text-shadow: 0 2px 0px rgba(255, 255, 255, 0.2);
+		color: #f0f8ff;
+		letter-spacing: 6px;
+	}
+
+	.row {
+		margin-top: 22px;
+		display: flex;
+		letter-spacing: 3px;
+		width: -webkit-fill-available;
+		justify-content: space-between;
+		align-items: center;
+
+		.action, .keys {
+			color: white;
+			padding: 8px 12px;
+		}
+
+		.action {
+			background: rgb(88 142 124 / 28%);
+		}
+		.keys {
+			background: rgb(97 255 202 / 28%);
+		}
+
+	}
+
+	button, input {
+		padding: 10px 19px;
+		/*outline: 4px solid #66b59ab3;*/
+		outline-offset: 3px;
+		font-size: 15px;
+		text-transform: uppercase;
+		font-weight: 900;
+		background: #66b59ab3;
+		border: none;
+		color: aliceblue;
+		width: 100%;
+		font-family: monospace;
+		letter-spacing: 1px;
+		transition: background .4s, color .3s, letter-spacing .3s;
+	}
+
+	button:focus, input:focus {
+
+		outline: 4px solid #6fffd0;
+		font-weight: 900;
+		letter-spacing: 2px;
+		animation-name: example;
+		animation-duration: 2s;
+		animation-iteration-count: infinite;
+		animation-timing-function: ease-in-out;
+	}
+
+	button:hover {
+		background: #6fffd0;
+		color: black;
+	}
+
+	button:active {
+		outline-width: 5px;
+		animation-name: none;
+	}
+
+	input, input:focus {
+		background: aliceblue;
+		color: black;
+		letter-spacing: 2px;
+		text-align: center;
+		padding: 16px 12px;
+	}
+}
+
+#leaderboard-scores {
+
+	width: 100%;
+	max-height: calc(100% - 200px);
+	overflow-y: overlay;
+	scrollbar-color: #66b59ab3 transparent;
+	scrollbar-width: thin;
+	margin-top: 10px;
+	padding: 0 10px;
+}
+
+#leaderboard-scores .row div {
+
+	flex: 1;
+	text-align: center;
+	text-transform: uppercase;
+
+}
+
+#leaderboard-scores .row:first-of-type div {
+	background: #588e7c;
+	margin: 0px 14px;
+	padding: 12px 0;
+	color: aliceblue;
+	font-weight: bold;
+}
+
+#leaderboard-scores .row:not(:first-of-type) {
+	padding: 6px 0;
+	margin: 12px 0px;
+}
+
+#leaderboard-scores .row:not(:first-of-type):nth-of-type(even) {
+	background: #e3e2e2;
+}
+
+#leaderboard-scores .row:not(:first-of-type):nth-of-type(odd) {
+	background: #588e7c;
+	color: aliceblue;
+}
+
+#stats {
+	position: absolute;
+	display: flex;
+	font-size: 34px;
+	width: 100%;
+	padding: 32px 42px;
+	color: aliceblue;
+	text-shadow: 0 0 50px aliceblue;
+	z-index: 1;
+}
+
+#health {
+	display: flex;
+	flex-direction: row;
+}
+
+.heart, .heart::before, .heart:after {
+	width: 20px;
+	height: 20px;
+	background: #6fffd0;
+	box-shadow: 0 0 60px 0 #6fffd070;
+}
+
+.heart {
+	transform: rotate(45deg) translate(14px, 14px);
+	margin: 0 18px;
+	scale: 0.8;
+}
+
+.heart::before, .heart::after {
+	content: '';
+	display: block;
+}
+.heart::after {
+	transform: translate(0px,-40px);
+}
+.heart::before {
+	transform: translate(-20px,0px);
+}
+
+#kills {
+	margin-left: auto;
+}
+
+#time {
+	margin-left: 36px;
+}
+
+#score-submission-form button:nth-of-type(1) {
+	margin-right: 12px;
+}
+#score-submission-form button:nth-of-type(2) {
+	margin-left: 12px;
+}
+
+#score-submission-form button small {
+
+	background: #222222;
+	color: aliceblue;
+	padding: 4px;
+	border-radius: 3px;
+	float: right;
+	font-size: 10px;
+	letter-spacing: 0px;
+
+}
+
+#score-submission-form button:focus small {
+	letter-spacing: 0px;
+}
+
+#score .kills, #score .time {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#score .value {
+	margin-top: 12px;
+	font-size: 22px;
+	color: aliceblue;
+}
+
+#score {
+	justify-content: space-evenly !important;
+}
+
+.menu-container {
+	max-width: 600px;
+	min-width: 400px;
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	justify-content: center;
+}
+
+.hidden {
+	display: none !important;
+}
+
+canvas {
+	z-index: 1;
+}
+
+#glow-bullets {
+	position: absolute;
+}

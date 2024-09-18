@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Top-Down Game</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body data="menu">
+	<div id="noise"></div>
+	<div id="menu">
+		<div id="start-menu" class="hidden menu-container">
+			<h1>BOX BANDIT</h1>
+			<div class="row">
+				<button id="new-game-button" tabindex="0">new game</button>
+			</div>
+			<div class="row">
+				<button class="leaderboard-button" tabindex="0">leaderboard</button>
+			</div>
+			<div class="row instruction">
+				<div class="action">
+					MOVE:
+				</div>
+				<div class="keys">
+					WASD
+				</div>
+			</div>
+			<div class="row instruction">
+				<div class="action">
+					AIM:
+				</div>
+				<div class="keys">
+					MOUSE
+				</div>
+			</div>
+			<div class="row instruction">
+				<div class="action">
+					SHOOT:
+				</div>
+				<div class="keys">
+					LEFT-CLICK
+				</div>
+			</div>
+			<div class="row instruction">
+				<div class="action">
+					PAUSE:
+				</div>
+				<div class="keys">
+					ESC
+				</div>
+			</div>
+		</div>
+		<div id="pause-menu" class="hidden menu-container">
+			<h1>PAUSED</h1>
+			<div class="row">
+				<button id="continue-button" tabindex="0">continue
+				</button>
+			</div>
+			<div class="row">
+				<button id="quit-button" tabindex="0">quit</button>
+			</div>
+			<div class="row instruction">
+				<div class="action">
+					MOVE:
+				</div>
+				<div class="keys">
+					WASD
+				</div>
+			</div>
+			<div class="row instruction">
+				<div class="action">
+					AIM:
+				</div>
+				<div class="keys">
+					MOUSE
+				</div>
+			</div>
+			<div class="row instruction">
+				<div class="action">
+					SHOOT:
+				</div>
+				<div class="keys">
+					LEFT-CLICK
+				</div>
+			</div>
+			<div class="row instruction">
+				<div class="action">
+					PAUSE:
+				</div>
+				<div class="keys">
+					ESC
+				</div>
+			</div>
+		</div>
+		<div id="leaderboard" class="hidden menu-container">
+			<h1>LEADERBOARDS</h1>
+			<div class="row">
+				<button id="go-back-button" tabindex="0">back
+				</button>
+			</div>
+			<div id="leaderboard-scores">
+			  <div class="row">
+				<div>NAME</div>
+				<div>KILLS</div>
+				<div>TIME</div>
+			  </div>
+			</div>
+		</div>
+		<div id="score-submission-form" class="hidden menu-container">
+			<h1>GAME OVER!</h1>
+			<div class="row" id="score">
+				<div class="kills">
+					<svg width="22" height="22">       
+						<image xlink:href="skull-solid.svg" width="22" height="22"/>
+					</svg>
+					<div class="value">00:00</div>
+				</div>
+				<div class="time">
+					<svg width="22" height="22">       
+						<image xlink:href="stopwatch-solid.svg" width="22" height="22"/>
+					</svg>
+					<div class="value">0</div>
+				</div>
+			</div>
+			<div class="row">
+				<input focused type="text" name="name" placeholder="ENTER NAME">
+			</div>
+			<div class="row">
+				<button id="submit-score" tabindex="0">submit</button>
+				<button id="restart-game" tabindex="0">restart <small>ESC</small></button>
+			</div>
+		</div>
+	</div>
+	<div id="stats">
+		<div id="health">
+		</div>
+		<div id="kills">
+			<svg width="22" height="22">       
+				<image xlink:href="skull-solid.svg" width="22" height="22"/>
+			</svg>
+			<span class="value">0</span>
+		</div>
+		<div id="time">
+			<svg width="22" height="22">       
+				<image xlink:href="stopwatch-solid.svg" width="22" height="22"/>
+			</svg>
+			<span class="value">00:00</span>
+		</div>
+	</div>
+	<canvas id="glow-bullets"></canvas>
+	<canvas id="game"></canvas>
+	<script src="script.js"></script>
+</body>
+</html>
