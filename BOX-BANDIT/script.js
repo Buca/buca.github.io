@@ -450,8 +450,8 @@ function shootBullet() {
 		const bulletSpeed = 7;
 		const r = Math.random()*Math.PI/16 - Math.PI/32;
 		bullets.push({
-			x: player.x + width/2 + width/2*Math.cos(angle),
-			y: player.y + height/2 + height/2*Math.sin(angle),
+			x: player.x + width + (width+5)*Math.cos(angle),
+			y: player.y + height + (height+5)*Math.sin(angle),
 			width: 5,
 			height: 5,
 			dx: Math.cos(angle + r) * bulletSpeed,
