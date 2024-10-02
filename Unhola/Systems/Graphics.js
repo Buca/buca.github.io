@@ -46,12 +46,13 @@ export class Graphics {
 		// Setup renderer:
 		this.renderer = new THREE.WebGLRenderer({
 			powerPreference: "high-performance",
+			precision: "lowp",
 			antialias: false	
 		});
 		this.renderer.debug.checkShaderErrors = false;
 		this.renderer.compile( this.scene );
 
-		this.renderer.setSize( window.innerWidth/4, window.innerHeight/4, false );
+		this.renderer.setSize( window.innerWidth, window.innerHeight );
 		this.renderer.toneMapping = THREE.ReinhardToneMapping;
 		this.renderer.shadowMap.enabled = true;
 		this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;

@@ -67,7 +67,7 @@ export class Enemy {
 				this.deathSound.play();
 				const index = graphics.updateHandlers.indexOf( updateHandler );
 				graphics.updateHandlers.splice( index, 1 );
-				enemy.visible = false;
+				enemy.position.y = -100000; //.visible = false;
 				return;
 			
 			}
