@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<!--<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>BOXIO</title>
+	<link rel="stylesheet" href="style.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+	<script type="module" src="app.js"></script>
+</head>
+<body>
+	<div id="noise" class="overlay"></div>
+	<div id="ui" class="overlay">
+		<div id="menu">
+			<div id="loading" class="page">
+				LOADING ASSETS
+			</div>
+			<div id="click-anywhere" class="page hidden">
+				CLICK ANYWHERE
+			</div>
+			<div id="start-menu" class="page column hidden">
+				<h1>BOXIO</h1>
+				<button class="start-game-button">START</button>
+			</div>
+			<div id="pause-menu" class="page column hidden">
+				<h2>PAUSED</h2>
+				<button class="resume-game-button">RESUME</button>
+				<button class="restart-game-button">RESTART</button>
+				<button class="quit-game-button">QUIT<</button>
+			</div>
+			<div id="game-over-menu" class="page column hidden">
+				<h2>GAME OVER</h2>
+				<div class="overlay row stats">
+					<div class="kills">0</div>
+					<div class="meters">0m</div>
+					<div class="time">00:00</div>
+				</div>
+				<button class="restart-game-button">RESTART</button>
+				<button class="quit-game-button">QUIT</button>
+			</div>
+		</div>
+		<div class="stats overlay">
+			<div class="kills">0</div>
+			<div class="meters">0m</div>
+			<div class="time">00:00</div>
+		</div>
+	</div>
+	<canvas id="game"></canvas>
+
+</body>
+</html>-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2D/3D Platformer with Multiple Platforms</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script>
+        // Scene, Camera, Renderer
+        const scene = new THREE.Scene();
+
+        // Orthographic Camera (2D view, but in a 3D space)
+        const aspect = window.innerWidth / window.innerHeight;
+        const cameraSize = 10;
+        const camera = new THREE.OrthographicCamera(
+            -cameraSize * aspect, cameraSize * aspect,  // left, right
+            cameraSize, -cameraSize,                    // top, bottom
+            0.1, 1000                                   // near, far
+        );
+        camera.position.set(0, 0, 20);  // Move camera to see the scene
+        camera.lookAt(0, 0, 0);
+
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Create platforms
+        const platforms = [];
+        const platformMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+
+        function createPlatform(x, y, width) {
+            const platformGeometry = new THREE.BoxGeometry(width, 1, 1);
+            const platform = new THREE.Mesh(platformGeometry, platformMaterial);
+            platform.position.set(x, y, 0);
+            scene.add(platform);
+            platforms.push(platform);
+        }
+
+        // Add multiple platforms at different positions
+        createPlatform(0, -5, 20);   // Ground platform (special case)
+        createPlatform(-6, -2, 4);    // Mid-air platform
+        createPlatform(6, 2, 6);     // Higher platform
+        createPlatform(0, 4, 8);     // Highest platform
+
+        // Create player (Cube)
+        const playerGeometry = new THREE.BoxGeometry(1, 1, 1);
+        const playerMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        const player = new THREE.Mesh(playerGeometry, playerMaterial);
+        player.position.y = 0;
+        scene.add(player);
+
+        // Variables for movement
+        const speed = 0.1;
+        const gravity = -0.02;
+        let velocityY = 0;
+        const jumpForce = 0.4;
+        let canJump = false;
+
+        const keys = {
+            left: false,
+            right: false,
+            up: false,
+        };
+
+        // Event listeners for movement
+        window.addEventListener('keydown', (event) => {
+            if (event.code === 'ArrowLeft') keys.left = true;
+            if (event.code === 'ArrowRight') keys.right = true;
+            if (event.code === 'Space') keys.up = true;
+        });
+
+        window.addEventListener('keyup', (event) => {
+            if (event.code === 'ArrowLeft') keys.left = false;
+            if (event.code === 'ArrowRight') keys.right = false;
+            if (event.code === 'Space') keys.up = false;
+        });
+
+        // Collision detection function (with special handling for ground)
+        function detectCollision() {
+            let collided = false;
+
+            platforms.forEach(platform => {
+                const platformTop = platform.position.y + 0.5; // Top of platform
+                const platformLeft = platform.position.x - platform.geometry.parameters.width / 2;
+                const platformRight = platform.position.x + platform.geometry.parameters.width / 2;
+
+                // Special handling for the ground (allow collision from above and below)
+                if (platform.position.y === -5) {  // Ground platform is at y = -5
+                    if (
+                        player.position.x + 0.5 > platformLeft &&  // Player inside platform's X range
+                        player.position.x - 0.5 < platformRight && 
+                        player.position.y + velocityY <= platformTop // Player touches or goes below ground
+                    ) {
+                        player.position.y = platformTop;  // Set player on the ground
+                        velocityY = 0;  // Stop downward velocity
+                        canJump = true;  // Allow jumping again
+                        collided = true;
+                    }
+                }
+                // For other platforms, only allow collision when falling from above
+                else {
+                    if (
+                        velocityY < 0 &&  // Only when player is falling
+                        player.position.x + 0.5 > platformLeft &&  // Right side of player is past the left side of platform
+                        player.position.x - 0.5 < platformRight && // Left side of player is past the right side of platform
+                        player.position.y > platformTop &&         // Ensure player is above platform
+                        player.position.y + velocityY <= platformTop // Player is moving downward toward platform
+                    ) {
+                        player.position.y = platformTop;  // Set player on top of the platform
+                        velocityY = 0;  // Stop downward velocity
+                        canJump = true;  // Allow the player to jump
+                        collided = true;
+                    }
+                }
+            });
+
+            // If not collided, apply gravity
+            if (!collided) {
+                canJump = false;
+            }
+        }
+
+        // Game loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Player movement (left and right)
+            if (keys.left) player.position.x -= speed;
+            if (keys.right) player.position.x += speed;
+
+            // Jumping and gravity
+            if (keys.up && canJump) {
+                velocityY = jumpForce;
+                canJump = false;
+            }
+
+            velocityY += gravity;  // Apply gravity
+            player.position.y += velocityY;
+
+            // Collision detection with platforms
+            detectCollision();
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Resize the renderer on window resize
+        window.addEventListener('resize', () => {
+            const aspect = window.innerWidth / window.innerHeight;
+            camera.left = -cameraSize * aspect;
+            camera.right = cameraSize * aspect;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
