@@ -306,6 +306,15 @@ button .text {
 .entries-container .entry .entry-image {
 
 	background-color: #afafaf;
+	position: relative;
+	width: 100%;
+	height: 100%;
+
+	img {
+
+		width: 100%;
+		height: 100%;
+	}
 
 }
 
@@ -599,6 +608,24 @@ footer .logo {
 	#slide-show a {
 
 		scale: 1.2;
+
+	}
+
+	.entries-container .entry {
+
+		width: 225px;
+		height: 126px;
+		position: relative;
+		flex-grow: 0;
+		flex-shrink: 0;
+		transition: scale 0.1s;
+
+	}
+
+	.entries-container.music .entry {
+
+		width: 150px;
+		height: 150px;
 
 	}
 
