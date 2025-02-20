@@ -1,0 +1,154 @@
+:root {
+	--dark-blue: #14111a;
+	--white: white;
+	--light-grey: #AAA;
+	--blue: #252340;
+}
+
+* {
+
+	box-sizing: border-box;
+
+}
+
+body {
+
+	background-color: var(--dark-blue);
+	color: var(--white);
+	font-family: "Roboto", serif;
+
+}
+
+a, button {
+
+	align-items: center;
+	font-weight: bold;
+	gap: 8px;
+	color: var(--white);
+	text-decoration: none;
+	fill: var(--white);
+
+}
+
+button svg {
+
+	fill: var(--white);
+
+}
+
+button {
+
+	font-size: 16px;
+	font-family: "Roboto", serif;
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+
+}
+
+.columns, .rows {
+
+	display: flex;
+
+}
+
+.columns {
+
+	flex-direction: row;
+
+}
+
+.rows {
+
+	flex-direction: column;
+
+}
+
+.align-left {
+
+	margin-left: auto;
+
+}
+
+.gap {
+
+	gap: 22px;
+
+}
+
+.small-icon {
+
+	height: 16px;
+	width: 16px;
+
+	svg {
+
+		height: 16px;
+		width: 16px;
+
+	}
+
+}
+
+.med-icon {
+
+	height: 32px;
+	width: 32px;
+	
+	svg {
+
+		height: 32px;
+		width: 32px;
+
+	}
+
+}
+
+.big-icon {
+
+	height: 48px;
+	width: 48px;
+	
+	svg {
+
+		height: 48px;
+		width: 48px;
+
+	}
+
+}
+
+.search-icon {
+
+	background-image: url(../images/search-icon.svg);
+
+}
+
+.label {
+
+	font-weight: bold;
+    letter-spacing: 1px;
+    font-size: 14px;
+    background: #7548cf;
+    width: fit-content;
+    padding: 6px 8px 4px 9px;
+    text-shadow: 2px 2px #3e276a;
+    user-select: none;
+    border-radius: 7px 7px 7px 0px;
+
+}
+
+ul {
+
+	list-style: none;
+	padding: 0;
+	margin: 0;
+
+}
+
+li {
+
+	margin: 0;
+	padding: 0;
+
+}
