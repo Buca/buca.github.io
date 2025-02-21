@@ -1,6 +1,6 @@
 body {
 
-	min-width: 500px;
+	/*min-width: 500px;*/
 
 }
 
@@ -235,7 +235,7 @@ button .text {
 	height: 100%;
 	background: linear-gradient(90deg, rgba(234,236,230,0) 65%, var(--dark-blue) 100%);
 	pointer-events: none;
-	z-index: 1;
+	z-index: 2;
 	opacity: 0.95;
 
 }
@@ -244,7 +244,7 @@ button .text {
 
 	position: absolute;
     right: 0;
-    z-index: 2;
+    z-index: 3;
     height: 100%;
     width: 20px;
     padding-right: 60px;
@@ -491,6 +491,7 @@ footer .navigation-links li {
 
 #policy-links {
 
+	text-align: center;
 	justify-content: space-around;
     font-size: 13px;
     margin-top: 32px;
@@ -652,5 +653,60 @@ footer .logo {
 	    top: 60%;
 	
 	}
+
+}
+
+@media only screen and (max-width: 400px) {
+
+
+	#slide-show .image-container {
+
+		height: 180px;
+
+	}
+
+	#slide-show .details-container .description {
+
+		margin-top: 4px;
+
+	}
+
+	#slide-show .label {
+
+		display: none;
+
+	}
+
+	#slide-show .details-container {
+
+		margin-top: 3%;
+		width: 50%;
+
+	}
+
+	#slide-show .details-container h2 {
+	    font-family: "Bebas Neue", serif;
+	    font-size: 48px;
+	    user-select: none;
+	}
+
+	.entries-container .entry {
+
+		width: 225px;
+		height: 126px;
+
+	}
+
+	.entries-container.music .entry {
+
+		width: 150px;
+		height: 150px;
+
+	}
+
+	.label {
+		scale: 0.8;
+	}
+
 
 }
