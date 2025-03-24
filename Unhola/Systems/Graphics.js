@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { BlendFunction, BrightnessContrastEffect, BloomEffect, EffectComposer, EffectPass, RenderPass, SelectiveBloomEffect, VignetteEffect } from 'https://cdn.jsdelivr.net/npm/postprocessing@6.36.3/+esm';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 function removeObject3D(object3D) {
 
     // for better memory management and performance
@@ -17,6 +18,7 @@ function removeObject3D(object3D) {
     }
     object3D.removeFromParent(); // the parent might be the scene or another Object3D, but it is sure to be removed this way
     return true;
+
 };
 
 export class Graphics {
@@ -38,6 +40,7 @@ export class Graphics {
 
 		// Setup camera:
 		this.camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, -10, 1000 );
+		this.camera.add( this.game.sound.listener );
 		this.camera.zoom = 45;
 		this.scene.add( this.camera );
 		this.scene.background = new THREE.Color( 0xe3ccd5 );
@@ -69,9 +72,6 @@ export class Graphics {
 		const brightnessContrastEffect = new BrightnessContrastEffect();
 
 		this.brightnessContrastEffect = brightnessContrastEffect;
-
-		/*brightnessContrastEffect.uniforms.get("brightness").value = 0.02;
-		brightnessContrastEffect.uniforms.get("contrast").value = 0.09;*/
 
 		const vignetteEffect = new VignetteEffect();
 		vignetteEffect.blendMode.opacity.value = 0.05;
@@ -142,32 +142,50 @@ export class Graphics {
 
 		this.resizeHandler();
 
-		// create an AudioListener and add it to the camera
-		this.listener = new THREE.AudioListener();
-		this.camera.add( this.listener );
+	};
 
-		// create a global audio source
-		const windSound = new THREE.Audio( this.listener );
+	async load() {
 
-		this.game.sound.loader.load( 'sounds/Wind.ogg', ( buffer ) => {
-			windSound.setBuffer( buffer );
-			windSound.setLoop( true );
-			windSound.setVolume( 0.5 );
-			windSound.play();
-		});
+		const loader = new GLTFLoader();
+		const models = [
+			'Pine', 'Polypody', 'Bush', 'Well',
+			'Red Clover', 'Crooked Mushroom',
+			'Birch', 'Dead Tree', 'Wheat', 'Red Mushroom', 'Bush Tree', 'Red Flower', 'Mushroom Brown', 'Moon Flower',
+			'Character', 'TREE1', 'TREE2', 'TREE3', 'FUNGI1', 'ROCK', 'Goal', 'Enemy'
+		]; 
+		const promises = [];
 
+		this.assets = {};
+		this.instances = {};
 
-		const birdSound = new THREE.Audio( this.listener );
+		for ( const name of models ) {
 
-		this.game.sound.loader.load( 'sounds/Distant Birds.ogg', ( buffer ) => {
-			birdSound.setBuffer( buffer );
-			birdSound.setLoop( true );
-			birdSound.setVolume( 0.25 );
-			birdSound.play();
-		});
+			promises.push( new Promise( ( resolve ) => {
 
-		//this.scene.add( windSound, birdSound );
+				loader.load( `Models/${name}.glb`, ( model ) => {
+					this.assets[ name ] = model.scene;
 
+					model.scene.traverse( function ( child ) {
+
+						if ( child.isMesh ) {
+						
+							child.castShadow = true;
+							child.receiveShadow = true;
+							child.material.shadowSide = THREE.FrontSide;
+						
+						}
+
+					});
+					
+					resolve();
+
+				});
+
+			}));
+
+		}
+
+		await Promise.all( promises );
 
 	};
 

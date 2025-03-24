@@ -1,96 +1,76 @@
 import * as THREE from 'three';
+import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { XORShift } from 'https://cdn.jsdelivr.net/npm/random-seedable@1.0.8/+esm';
 
 function samplePositions( 
 
-	random, count, 
-	x, y, z, w, h, d, 
-	min, max, exponent,
-	output, offset = 0
+    random, count, 
+    x, y, z, w, h, d, 
+    min, max, exponent,
+    output, offset = 0
 
 ) {
 
-	const size = 4*count;
-	output = output || Array( size );
-	let index = 0;
+    const size = 4 * count;
+    output = output || new Array(size);
+    let index = 0;
 
-	while ( index < size ) {
+    while (index < size) {
+        const rx = random.float() * w + (x - w / 2);
+        const rz = random.float() * d + (z - d / 2);
+        const distance = Math.hypot(rx - x, rz - z); // Fixed distance calculation
+        const ratio = Math.max(0, Math.min(1, (distance - min) / (max - min)));
 
-		const rx = random.float()*w + (x - w/2);
-		const rz = random.float()*d + (z - d/2);
-		const distance = Math.hypot( rx, rz );
-		const ratio = Math.max( 0, Math.min( 1, (distance - min)/(max - min))); 
+        if (random.float() ** exponent > ratio) {
+            output[offset + index++] = rx;
+            output[offset + index++] = y + h / 2;
+            output[offset + index++] = rz;
+            output[offset + index++] = 2 * Math.PI * random.float();
+        }
+    }
 
-		const r = random.float();
-
-		if ( r**exponent > ratio ) {
-
-			output[ offset + (index ++) ] = rx;
-			output[ offset + (index ++) ] = y + h/2;
-			output[ offset + (index ++) ] = rz;
-			output[ offset + (index ++) ] = 2*Math.PI*random.float();
-		
-		}
-
-	}
-
-	return output;
-
-};
-
-function sampleGeometries( 
-
-	random, count, 
-	x, y, z, w, h, d, 
-	minW, minH, minD, maxW, maxH, maxD, 
-	min, max, exponent,
-	output, offset = 0
-
-) {
-
-	// Generate positions and dimensions that become denser and larger closer to the center
-	// and more sparse and smaller away from the center.
-	
-	const stride = 6;
-	const size = stride*count;
-
-	output = output || Array( size ).fill( 0 );
-
-	let index = 0;
-
-	while ( index < count ) {
-
-		const rx = random.float()*w + (x - w/2);
-		const rz = random.float()*d + (z - d/2);
-		const distance = Math.hypot( rx, rz );
-		const ratio = Math.max( 0, Math.min( 1, (distance - min)/(max - min))); 
-
-		const r = random.float();
-
-		if ( r**exponent > ratio ) {
-
-			const rw = ratio*random.float()*(maxW - minW) + minW;
-			const rh = ratio*random.float()*(maxH - minH) + minH;
-			const rd = ratio*random.float()*(maxD - minD) + minD;
-			
-			output[ offset + 6*index + 0 ] = rx;
-			output[ offset + 6*index + 1 ] = y + rh/2;
-			output[ offset + 6*index + 2 ] = rz;
-
-			output[ offset + 6*index + 3 ] = rw;
-			output[ offset + 6*index + 4 ] = rh;
-			output[ offset + 6*index + 5 ] = rd;
-
-			index ++;
-		
-		}
-
-	}
-
-	return output;
-
+    return output;
 }
+
+function sampleGeometries(  
+    random, count, 
+    x, y, z, w, h, d, 
+    minW, minH, minD, maxW, maxH, maxD, 
+    min, max, exponent,
+    output, offset = 0
+) {
+
+    const stride = 6;
+    const size = stride * count;
+    output = output || new Array(size).fill(0);
+    let index = 0, pos = offset;
+
+    while (index < count) {
+        const rx = (random.float() * w) + (x - w / 2);
+        const rz = (random.float() * d) + (z - d / 2);
+        const distance = Math.hypot(rx - x, rz - z);
+        const ratio = Math.max(0, Math.min(1, (distance - min) / (max - min)));
+
+        if (random.float() ** exponent > ratio) {
+            const rw = ratio * (random.float() * (maxW - minW)) + minW;
+            const rh = ratio * (random.float() * (maxH - minH)) + minH;
+            const rd = ratio * (random.float() * (maxD - minD)) + minD;
+
+            output[pos++] = rx;
+            output[pos++] = y + rh / 2;
+            output[pos++] = rz;
+            output[pos++] = rw;
+            output[pos++] = rh;
+            output[pos++] = rd;
+
+            index++;
+        }
+    }
+
+    return output;
+}
+
 
 function createInstancedMeshFromModel( model, positions, random ) {
 
@@ -147,8 +127,6 @@ function createInstancedMeshFromModel( model, positions, random ) {
 
 	return meshes;
 
-
-
 };
 
 function createInstancedMeshFromGeometry( geometries, material ) {
@@ -179,7 +157,7 @@ function createInstancedMeshFromGeometry( geometries, material ) {
 
 };
 
-export class World {
+export class Generator {
 
 	constructor( game ) {
 
@@ -257,11 +235,11 @@ export class World {
 
 	};
 
-	generate( sections ) {
+	create( sections ) {
 
 		const fixed = this.game.fixed;
-		const seed = this.game.random.int();
-		const random = new XORShift( seed );
+		const seed = this.game.seed;
+		const random = new XORShift( seed + this.game.level );
 
 		const platformIndices = this.generatePlatforms( sections, random );
 		const material = this.game.graphics.materials.stone;

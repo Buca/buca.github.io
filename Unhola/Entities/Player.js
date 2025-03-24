@@ -7,14 +7,58 @@ export class Player {
 		this.game = game;
 		this.name = "Player";
 		this.game.player = this;
-		this.dynamic = game.dynamic.create( r, y, 0.5, 0.65, 0.5, 0, 0 );
+		this.dynamic = game.dynamic.create( r, y, 0.5, 0.95, 0.5, 0, 0 );
+
 		this.movingLeft = false;
 		this.movingRight = false;
 		this.jumping = false;
 
+		this.sound = {};
+
+	};
+
+	get r() {
+
+		return this.game.dynamic.getR( this.dynamic );
+
+	};
+
+	set r( value ) {
+
+		return this.game.dynamic.setR( this.dynamic, value );
+
+	};
+
+	get y() {
+
+		return this.game.dynamic.getY( this.dynamic );
+
+	};
+
+	set y( value ) {
+
+		return this.game.dynamic.setY( this.dynamic, value );
+
+	};
+
+	toJSON() {
+
+		const dynamic = this.game.dynamic;
+		const index = this.dynamic;
+
+		return {
+
+			"r": dynamic.getR( index ),
+			"y": dynamic.getY( index )
+
+		};
+
+	};
+
+	init() {
+
 		this.initPhysics();
 		this.initGraphics();
-		this.initControls();
 
 	};
 
@@ -40,10 +84,22 @@ export class Player {
 
 	initGraphics() {
 
+		const dynamic = this.game.dynamic;
+		const index = this.dynamic;
 		const player = new THREE.Object3D();
 		player.name = "Player";
 
-		this.mesh = player;
+		this.mesh = new THREE.Object3D();
+
+		// HITBOX for debugging
+		/*const w = dynamic.getW(index);
+		const h = dynamic.getH(index);
+		const d = dynamic.getD(index);
+		const geometry = new THREE.BoxGeometry( w, h, d ); 
+		const material = new THREE.MeshBasicMaterial( {color: 0xff0000} ); 
+		material.opacity = 0.1;
+		const cube = new THREE.Mesh( geometry, material ); 
+		this.game.graphics.scene.add( cube );*/
 
 		const model = this.game.graphics.assets['Character'].clone();
 
@@ -69,13 +125,14 @@ export class Player {
 		player.receiveShadow = true; //default
 
 		this.mesh.light = light;
-		player.position.y = -0.375;
-		player.add( light );
-		this.game.graphics.scene.add( player );
+		player.position.y = -0.6;
+		this.mesh.add( light, player );
+		this.game.graphics.scene.add( this.mesh );
 		
 		const root = player.children[0];
 		const body = root.children[0];
 		const head = root.children[1];
+		body.position.y = 0.2
 		let headBobbingAnimationSwitchTS = Date.now();
 		let headBobbingState = 0;
 		let walkingAnimationSwitchTS = Date.now();
@@ -83,26 +140,31 @@ export class Player {
 
 		this.game.graphics.updateHandlers.push(() => {
 
-			const dynamic = this.game.dynamic;
 			const index = this.dynamic;
 
 			const r = dynamic.getR( index );
 			const x = dynamic.getX( index );
-			const y = dynamic.getY( index ) - 0.375;
+			const y = dynamic.getY( index );
 			const z = dynamic.getZ( index );
 			const w = dynamic.getW( index );
 			const h = dynamic.getH( index );
 			const d = dynamic.getD( index );
 			const vy = dynamic.getVY( index );
 
-			player.position.set( x, y, z );
+			//cube.position.set( x, y, z );
 
-			player.rotation.y = -2*Math.PI*r - Math.PI/2;
+			this.mesh.position.set( x, y, z );
+
+			this.mesh.rotation.y = -2*Math.PI*r - Math.PI/2;
 			
 			if ( this.movingRight ) {
+
 				root.scale.x = -1;
+			
 			} else if ( this.movingLeft ) {
+			
 				root.scale.x = 1;
+			
 			}
 
 			if ( this.movingLeft || this.movingRight ) {
@@ -128,54 +190,52 @@ export class Player {
 			if ( floorQuery.length === 0 ) {
 
 				walkingAnimationSwitchTS = now;
-				body.position.y = 0.05;
+				body.position.y = 0.05 - 0.1;
 				root.position.y = 0.15;
-				this.walkingSound.pause();
+				this.sound.walk.pause();
 
 			} else if ( now < walkingAnimationSwitchTS + 250 && (this.movingRight || this.movingLeft) ) {
 
-				body.position.y = 0.05 * walkingState;
+				body.position.y = 0.05 * walkingState - 0.1;
 				root.position.y = 0.15 * walkingState;
-				this.walkingSound.setLoop(true);
-				this.walkingSound.detune = Math.random()*10 - 5;
-				this.walkingSound.play();
+				this.sound.walk.setLoop(true);
+				this.sound.walk.detune = Math.random()*10 - 5;
+				this.sound.walk.pause();
+				this.sound.walk.play();
 
 			} else if ( this.movingRight || this.movingLeft ) {
 
 				walkingAnimationSwitchTS = now;
 				walkingState = (walkingState + 1) % 2;
-				this.walkingSound.setLoop(true);
-				this.walkingSound.detune = Math.random()*10 - 5;
-				this.walkingSound.play();
+				this.sound.walk.setLoop(true);
+				this.sound.walk.pause();
+				this.sound.walk.detune = Math.random()*10 - 5;
+				this.sound.walk.play();
 			
 			} else {
 
 				walkingAnimationSwitchTS = now;
 				body.position.y = 0;
 				root.position.y = 0;
-				this.walkingSound.pause();
+				this.sound.walk.pause();
 
 			}
 
 		});
 
-		this.jumpSound = new THREE.PositionalAudio( this.game.graphics.listener );
-		this.jumpSound.setBuffer( this.game.sound.buffers.get('Jump 1') );
+		const listener = this.game.sound.listener;
 
-		this.landSound = new THREE.PositionalAudio( this.game.graphics.listener );
-		this.landSound.setBuffer( this.game.sound.buffers.get('Land 1') );
+		this.sound.jump = this.game.sound.create('Jump 1', 'sfx', this.mesh);
+		this.sound.land = this.game.sound.create('Land 1', 'sfx', this.mesh);
+		this.sound.walk = this.game.sound.create('Walking', 'sfx', this.mesh);
+		this.sound.reset = this.game.sound.create('Player Death', 'sfx', this.mesh);
 
-		this.walkingSound = new THREE.PositionalAudio( this.game.graphics.listener );
-		this.walkingSound.setBuffer( this.game.sound.buffers.get('Walking') );
-
-		this.resetSound = new THREE.PositionalAudio( this.game.graphics.listener );
-		this.resetSound.setBuffer( this.game.sound.buffers.get('Player Death') ); 
-
-		player.add( this.jumpSound, this.landSound, this.walkingSound, this.resetSound );
+		this.sound.jump.setVolume(0.3);
 
 	};
 
 	initPhysics() {
+
 
 		const index = this.dynamic;
 
@@ -191,7 +251,7 @@ export class Player {
 		let actuallyJumping = false;
 
 		// Check state ( moving, jumping )
-		this.game.physics.beforeTick.push(() => {
+		this.game.physics.beforeTick.push((dt) => {
 
 			const r = dynamic.getR( index );
 			const x = dynamic.getX( index );
@@ -204,23 +264,25 @@ export class Player {
 
 			if ( this.jumping ) {
 
-				const query = this.game.fixed.query( x, y - 0.05, z, w, h, d );
+				const query = this.game.fixed.query( x, y - 0.001*dt, z, w, h, d );
 				
 				if ( query.length > 0 ) {
 
-					dynamic.setVY( index, -1.2*this.game.gravity );
-					//this.jumpSound.setVolume(1);
-					this.jumpSound.play();
+					dynamic.setVY( index, -1.3*this.game.gravity );
+					
+					this.sound.jump.pause();
+					this.sound.jump.play();
 					actuallyJumping = true;
 				
 				} else actuallyJumping = false;
 			
 			}
 
-			if ( this.game.fixed.query( x, y - 0.1, z, w, h, d ).length > 0 && !touchingTheFloor && !actuallyJumping ) {
+			if ( this.game.fixed.query( x, y - 0.001*dt, z, w, h, d ).length > 0 && !touchingTheFloor && !actuallyJumping ) {
 
 				touchingTheFloor = true;
-				this.landSound.play();
+				this.sound.land.pause();
+				this.sound.land.play();
 
 			} else if ( Math.abs(Math.abs(vy) - Math.abs(this.game.gravity) + 0.00005) > 0.002 ) {
 
@@ -233,11 +295,8 @@ export class Player {
 			if ( this.movingLeft ) dynamic.addVR( index, -0.000014 );
 
 			if ( ( this.movingRight || this.movingLeft ) ) {
-
-					this.walkingSound.setLoop( true );
-					this.walkingSound.play();
-
-					const query = this.game.fixed.query( x, y-0.1, z, w+0.2, h - 0.2, d+0.2 );
+					
+					const query = this.game.fixed.query( x, y-0.001*dt, z, w+0.002*dt, h - 0.002*dt, d+0.002*dt );
 					
 					let goAhead = false;
 					let delta = Infinity;
@@ -262,12 +321,14 @@ export class Player {
 					if ( goAhead ) dynamic.addVY( index, 0.008*delta );
 
 			} else {
-				this.walkingSound.pause();
+
+				this.sound.walk.pause();
+			
 			}
 
 			if ( !touchingTheFloor && vy + this.game.gravity < 0 ) {
 
-				const enemies = dynamic.query( x, y-0.1, z, w - 0.05, h+0.1, d - 0.05 );
+				const enemies = dynamic.query( x, y-0.001*dt, z, w - 0.0005*dt, h+0.001*dt, d - 0.0005*dt );
 				enemies.splice( enemies.indexOf( index ), 1 );
 				
 				for ( const enemy of enemies ) {
@@ -286,43 +347,23 @@ export class Player {
 			
 			}
 
-			const deathQuery = dynamic.query( x, y + 0.1, z, w, h - 0.1, d );
+			const deathQuery = dynamic.query( x, y + 0.001*dt, z, w, h - 0.001*dt, d );
 			deathQuery.splice( deathQuery.indexOf( index ), 1 );
 
-			if ( deathQuery.length > 0 ) {
-				this.resetSound.play();
-				this.reset();
-			}
+			if ( deathQuery.length > 0 || this.y < - 10 ) {
+			
+				this.kill();
 
-			if ( y < -10 ) {
-				this.resetSound.play();
-				this.reset();
 			}
 
 		});
 
 	};
 
-	initControls() {
+	kill() {
 
-		this.game.player = this;
-
-		// setup and gather user inputs
-		document.addEventListener("keydown", ( event ) => {
-
-			if ( event.code === 'KeyA' ) this.movingRight = true;
-			if ( event.code === 'KeyD' ) this.movingLeft = true;
-			if ( event.code === 'Space' ) this.jumping = true;
-
-		});
-
-		document.addEventListener("keyup", ( event ) => {
-
-			if ( event.code === 'KeyA' ) this.movingRight = false;
-			if ( event.code === 'KeyD' ) this.movingLeft = false
-			if ( event.code === 'Space' ) this.jumping = false;
-
-		});
+		this.sound.reset.play();
+		this.reset();
 
 	};
 

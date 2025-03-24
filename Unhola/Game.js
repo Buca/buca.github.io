@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+import { isVersionCompatible } from './Utilities.js';
+
 import { Dynamic } from './Components/Dynamic.js';
 import { Fixed } from './Components/Fixed.js';
 
@@ -8,21 +10,24 @@ import { Entity } from './Systems/Entity.js';
 import { Physics } from './Systems/Physics.js';
 import { Graphics } from './Systems/Graphics.js';
 import { Sound } from './Systems/Sound.js';
-import { UI } from './Systems/UI.js';
-import { World } from './Systems/World.js';
+import { Menu } from './Systems/Menu.js';
+import { Generator } from './Systems/Generator.js';
+import { Controls } from './Systems/Controls.js';
+
 import { XORShift } from 'https://cdn.jsdelivr.net/npm/random-seedable@1.0.8/+esm';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
 import { Player } from './Entities/Player.js';
 import { Enemy } from './Entities/Enemy.js';
 import { Goal } from './Entities/Goal.js';
 
 export class Game {
 
-	constructor({ seed = 62832, gravity = -0.053, radius = { min: 8, max: 16 } }) {
-		
-		this.random = new XORShift( seed );
+	constructor({ version = "1.1.0", seed = 62832, gravity = -0.053, radius = { min: 4, max: 20 } }) {
 
-		this.level = 1;
+		this.version = version;
+		this.compatability = "^1.1.0";
+
+		this.seed = seed;
 
 		// Game settings:
 		this.gravity = gravity;
@@ -30,7 +35,14 @@ export class Game {
 
 		Object.defineProperty( this.radius, 'center', {
 
-			get: () => 0.5*(this.radius.max - this.radius.min) + this.radius.min
+			get: () => {
+
+				const min = this.radius.min;
+				const max = this.radius.max;
+
+				return (max - min)/2 + min;
+
+			}
 
 		});
 
@@ -42,97 +54,55 @@ export class Game {
 		this.fixed = new Fixed();
 
 		// Systems
-
+		this.events = new EventTarget();
 		this.sound = new Sound( this );
 		this.graphics = new Graphics( this );
 		this.physics = new Physics( this );
 
-		this.ui = new UI( this, document.body );
-		this.world = new World( this ); //TODO: change name to generator
+		this.menu = new Menu( this );
+		this.generator = new Generator( this ); //TODO: change name to generator
+		this.controls = new Controls( this );
 
+		// Entities
 		this.enemies = [];
+		this.player = undefined; 
 
+		// Game properties
+		this.started = false;
 		this.paused = true;
-		let time = Date.now();
+		this.level = 1;
+
+		this.FIXED_DT = 16.67;
+		let accumulatedTime = 0;
+
+		this.lastTS = Date.now();
+
 		const update = () => {
+		    
+		    const currentTS = Date.now();
+		    let delta = currentTS - this.lastTS;
+		    this.lastTS = Date.now();
 
-			let delta = Date.now() - time;
-			time = Date.now();
+		    requestAnimationFrame(update);
 
-			requestAnimationFrame( update );
+		    if (!this.paused) {
+		    
+		        accumulatedTime += delta;
 
-			if ( !this.paused ) { 
+		        while (accumulatedTime >= this.FIXED_DT) {
 
-				this.physics.update( 32 );
-				this.graphics.update();
+		            this.physics.update( this.FIXED_DT );
+		            accumulatedTime -= this.FIXED_DT;
+		        
+		        }
 
-			}
+		        this.graphics.update();
+		    
+		    }
 
 		};
 
 		update();
-
-		document.addEventListener( 'keydown', ( event ) => {
-
-			if ( event.code === 'Escape' ) {
-
-				//this.new({sections: this.level });
-				
-				if ( this.paused ) this.start();
-				else this.pause();
-
-			} else if ( event.code === 'Enter' ) {
-
-				this.new({ sections: this.level })
-
-			}
-
-		})
-
-	};
-
-	async retrieveModels() {
-
-		const loader = new GLTFLoader();
-		const models = [
-			'Pine', 'Polypody', 'Bush', 'Well',
-			'Red Clover', 'Crooked Mushroom',
-			'Birch', 'Dead Tree', 'Wheat', 'Red Mushroom', 'Bush Tree', 'Red Flower', 'Mushroom Brown', 'Moon Flower',
-			'Character', 'TREE1', 'TREE2', 'TREE3', 'FUNGI1', 'ROCK', 'Goal', 'Enemy'
-		]; 
-		const promises = [];
-
-		this.graphics.assets = {};
-		this.graphics.instances = {};
-
-		for ( const name of models ) {
-
-			promises.push( new Promise( ( resolve ) => {
-
-				loader.load( `Models/${name}.glb`, ( model ) => {
-					this.graphics.assets[ name ] = model.scene;
-
-					model.scene.traverse( function ( child ) {
-
-						if ( child.isMesh ) {
-						
-							child.castShadow = true;
-							child.receiveShadow = true;
-							child.material.shadowSide = THREE.FrontSide;
-						
-						}
-
-					});
-					
-					resolve();
-
-				});
-
-			}));
-
-		}
-
-		await Promise.all( promises );
 
 	};
 
@@ -150,98 +120,226 @@ export class Game {
 			'Enemy Voice 3',
 			'Enemy Voice 4',
 			'Land 1',
-			'Player Death'
+			'Player Death',
+			'Start',
+			'Click',
+			'Close'
 		]);
 
-		await this.retrieveModels();
+		await this.graphics.load();
 
-		document
-			.getElementById('loading-page')
-			.classList.add('hidden');
-
-		document
-			.getElementById('press-screen-page')
-			.classList.remove('hidden');
+		this.events.dispatchEvent(new Event('loaded'));
 
 	};
 
-	new({ sections }) {
+	save() {
+		
+		const game = {
 
-		this.pause();
+			"version": this.version,
+			"seed": this.seed,
+			"level": this.level,
+			"player": this.player.toJSON(),
+			"goal": this.goal.toJSON(),
+			"enemies": []
 
-		this.random = new XORShift( Math.round(Math.random()*1000) );
+		};
 
-		for ( const enemy of this.enemies ) enemy.dispose();
+		for ( const enemy of this.enemies ) {
 
-		this.graphics.reset();
-		this.fixed.reset();
-	
-		this.world.generate( sections );
-
-		if ( !this.player ) {
-
-			this.player = new Player({
-
-				game: this,
-				r: this.spawn.r,
-				y: this.spawn.y,
-				controls: true
-
-			});
-
-		} else this.player.reset();
-
-		for ( let i = 0; i < 7*sections; i ++ ) {
-
-			this.enemies.push( new Enemy({
-
-				game: this,
-				r: this.spawn.r - i*1.45 - 0.6,
-				y: this.spawn.y + i*1.45 + 8.25
-
-			}));
+			game.enemies.push( enemy.toJSON() );
 
 		}
 
-		if ( !this.goal ) {
-
-			this.goal = new Goal({
-
-				game: this,
-				r: this.win.r,
-				y: this.win.y
-
-			});
-
-		} else this.goal.reset();
-
-		this.start();
+		localStorage.setItem(`Unhola`, JSON.stringify( game ));
 
 	};
 
-	start() { 
-		
-		document
-			.getElementById('paused-page')
-			.classList.add('hidden');
+	continue() {
 
-		this.graphics.renderer.domElement
-			.classList.remove('blurred');
+		const saveStringified = localStorage.getItem('Unhola');
 
-		this.paused = false; 
-	
-	};
+		if ( !saveStringified ) return;
 
-	pause() { 
 
-		document
-			.getElementById('paused-page')
+		const game = JSON.parse( saveStringified );
+
+		if ( isVersionCompatible( game.version, this.compatability ) ) {
+
+			document
+			.getElementById('ingame-loader')
 			.classList.remove('hidden');
 
-		this.graphics.renderer.domElement
-			.classList.add('blurred');
+			setTimeout( () => {
 
-		this.paused = true; 
+				this.seed = game.seed;
+				this.level = game.level;
+
+				this.graphics.reset();
+				this.fixed.reset();
+			
+				this.generator.create( this.level );
+
+				this.goal.r = game.goal.r;
+				this.goal.y = game.goal.y;
+
+				this.player.r = game.player.r;
+				this.player.y = game.player.y;
+
+				for ( let i = this.enemies.length - 1; i >= 0; i -- ) {
+
+					this.enemies[ i ].dispose();
+
+				}
+
+				for ( let i = 0; i < game.enemies.length; i ++ ) {
+
+					this.enemies.push( new Enemy({
+					
+						game: this,
+						...game.enemies[ i ] 
+					
+					}));
+
+				}
+
+				document
+				.getElementById('ingame-loader')
+				.classList.add('hidden');
+
+				this.start();
+
+			}, 0 );
+
+		}
+
+	};
+
+	new({ level }) {
+
+		document
+			.getElementById('ingame-loader')
+			.classList.remove('hidden');
+
+		setTimeout( () => {
+
+			this.graphics.reset();
+			this.fixed.reset();
+		
+			this.generator.create( level );
+
+			if ( !this.player ) {
+
+				this.player = new Player({
+
+					game: this,
+					r: this.spawn.r,
+					y: this.spawn.y,
+					controls: true
+
+				});
+
+				this.player.init();
+
+
+			} else this.player.reset();
+
+			for (let i = this.enemies.length - 1; i >= 0; i--) {
+			    this.enemies[i].dispose();
+			}
+
+
+			for ( let i = 0; i < 7*level; i ++ ) {
+
+				this.enemies.push( new Enemy({
+
+					game: this,
+					r: this.spawn.r - i*1.45 - 0.6,
+					y: this.spawn.y + i*1.45 + 8.25
+
+				}));
+
+			}
+
+
+			if ( !this.goal ) {
+
+				this.goal = new Goal({
+
+					game: this,
+					r: this.win.r,
+					y: this.win.y
+
+				});
+
+			} else this.goal.reset();
+
+			this.step();
+
+			document
+			.getElementById('ingame-loader')
+			.classList.add('hidden');
+		
+		}, 0 );
+
+	};
+
+	async requestWakeLock() {
+        if ('wakeLock' in navigator) {
+            try {
+                this.wakeLock = await navigator.wakeLock.request('screen');
+                console.log('Wake lock is active');
+                
+                // Re-acquire wake lock if it gets released (e.g., if the user switches tabs)
+                this.wakeLock.addEventListener('release', () => {
+                    console.log('Wake lock released');
+                    this.wakeLock = null;
+                });
+            } catch (err) {
+                console.error('Failed to acquire wake lock:', err);
+            }
+        }
+    };
+
+    releaseWakeLock() {
+        if (this.wakeLock) {
+            this.wakeLock.release().then(() => {
+                console.log('Wake lock released manually');
+                this.wakeLock = null;
+            });
+        }
+    };
+
+    async start() {
+        this.started = true;
+        this.paused = false;
+        this.events.dispatchEvent(new Event('start'));
+        await this.requestWakeLock();
+    };
+
+    async resume() {
+        this.paused = false;
+        this.events.dispatchEvent(new Event('resume'));
+        await this.requestWakeLock();
+    };
+
+    pause() {
+        this.paused = true;
+        this.events.dispatchEvent(new Event('pause'));
+        this.releaseWakeLock();
+    };
+
+    quit() {
+        this.paused = true;
+        this.started = false;
+        this.events.dispatchEvent(new Event('quit'));
+        this.releaseWakeLock();
+    };
+
+	step() {
+
+		this.physics.update(this.FIXED_DT);
+		this.graphics.update();
 
 	};
 

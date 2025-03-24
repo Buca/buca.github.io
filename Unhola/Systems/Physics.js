@@ -1,8 +1,13 @@
 export class Physics {
 
-	constructor( game ) {
+	constructor( game, options = {} ) {
 
 		this.game = game;
+
+		this.gravity = options.gravity || -0.053;
+		this.frictionR = options.frictionR || 0.85;
+		this.frictionY = options.frictionY || 0.99;
+
 		this.beforeTick = [];
 
 		this.sensor = [];
@@ -18,7 +23,11 @@ export class Physics {
 		const sin = Math.sin;
 		const now = Date.now();
 		const radius = this.game.radius.center;
-		const gravity = this.game.gravity;
+
+		const gravity = this.gravity;
+		const frictionR = this.frictionR;
+		const frictionY = this.frictionY;
+		
 		const dynamic = this.game.dynamic;
 		const fixed = this.game.fixed;
 
@@ -44,8 +53,8 @@ export class Physics {
 				const y1 = fixed.getMaxY( i );
 				const z1 = fixed.getMaxZ( i );
 
-				const iterations = 10;
-				for ( let j = iterations; j > -1; j -- ) {
+				const iterations = 20;
+				for ( let j = iterations; j >= 0; j -- ) {
 
 					let vr = dynamic.getVR( k )*j/iterations;
 					let px = radius*cos( 2*PI*( dynamic.getR( k ) + dt*vr ) );
@@ -86,22 +95,18 @@ export class Physics {
 
 			dynamic.addR( k, dt*dynamic.getVR( k ) );
 
-			// TODO: Fix this by re calculating the velocity after:
 			const previousY = dynamic.getY( k );
 			dynamic.addY( k, dt*( dynamic.getVY( k ) + gravity ) );
 			const currentY =  dynamic.getY( k );
-			const deltaY = (currentY - previousY)/dt;
-
-			//dynamic.setVY( deltaY );
 
 			// Frictional forces:
-			dynamic.mulVR( k, 0.72 );
-			dynamic.mulVY( k, 0.99 );
+			dynamic.mulVR( k, frictionR );
+			dynamic.mulVY( k, frictionY );
 			
 		}
 
 		
-		for ( const handler of this.beforeTick ) handler();
+		for ( const handler of this.beforeTick ) handler( dt );
 
 	};
 

@@ -11,29 +11,22 @@ export class Dynamic {
 	*[Symbol.iterator]() {
 
 		for ( let i = 0; i < this.data.length; i += 8 ) {
-			
-			const isActive = this.data[ i + 7 ] === 1 ? true : false;
 
-			if ( isActive ) yield i;
+			if ( this.data[ i + 7 ] === 1 ) yield i;
 		
 		}
 
 	};
 
-	isActive( index ) {
-
-		if ( this.data[ index + 7 ] === 0 ) return false;
-		else return true;
-
-	};
+	isActive( index ) { return this.data[ index + 7 ] !== 0; };
 
 	activate( index ) { this.data[ index + 7 ] = 1 };
 
 	deactivate( index ) { this.data[ index + 7 ] = 0 };
 
 	getR( index ) { return this.data[ index ] };
-	setR( index, value ) { return this.data[ index ] = value };
-	addR( index, value ) { return this.data[ index ] += value };
+	setR( index, value ) { return this.data[ index ] = value % 1 };
+	addR( index, value ) { return this.data[ index ] = (this.data[ index ] + value) % 1 };
 
 	getX( index ) { return this.radius*Math.cos( 2*Math.PI*this.data[ index ] ) };
 
@@ -44,8 +37,11 @@ export class Dynamic {
 	getZ( index ) { return this.radius*Math.sin( 2*Math.PI*this.data[ index ] ) };
 
 	getW( index ) { return this.data[ index + 2 ] };
+	setW( index, value ) { return this.data[ index + 2 ] = value };
 	getH( index ) { return this.data[ index + 3 ] };
+	setH( index, value ) { return this.data[ index + 3 ] = value };
 	getD( index ) { return this.data[ index + 4 ] };
+	setD( index, value ) { return this.data[ index + 4 ] = value };
 
 	getVR( index ) { return this.data[ index + 5 ] };
 	setVR( index, value ) { return this.data[ index + 5 ] = value };
