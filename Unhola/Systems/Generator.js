@@ -1,6 +1,4 @@
 import * as THREE from 'three';
-import * as BufferGeometryUtils from '../three/examples/jsm/utils/BufferGeometryUtils.js';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { XORShift } from 'https://cdn.jsdelivr.net/npm/random-seedable@1.0.8/+esm';
 
 function samplePositions( 
