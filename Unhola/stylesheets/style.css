@@ -186,7 +186,7 @@ canvas {
 	display: flex;
 	align-items: center;
 	position: absolute;
-	font-family: "Silkscreen", serif;
+	font-family: "Silkscreen";
 	font-size: 16px;
 	background-color: transparent;
 	border: none;
@@ -328,7 +328,7 @@ canvas {
 .ui	button {
 
 	width: 100%;
-	font-family: "Silkscreen", serif;
+	font-family: "Silkscreen";
 	font-size: 16px;
 	background-color: #292929;
 	outline-color: white;
