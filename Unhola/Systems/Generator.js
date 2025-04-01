@@ -235,6 +235,8 @@ export class Generator {
 
 	create( sections ) {
 
+		console.log(sections)
+
 		const fixed = this.game.fixed;
 		const seed = this.game.seed;
 		const random = new XORShift( seed + this.game.level );
@@ -331,6 +333,8 @@ export class Generator {
 			);
 			
 		}
+
+		console.log( 123 );
 
 		const grassGroundInstancedMesh = createInstancedMeshFromGeometry( grassGroundGeometries, new THREE.MeshStandardMaterial( { color: 0x56AA0B } ) );
 		this.game.graphics.meshes.push( grassGroundInstancedMesh );

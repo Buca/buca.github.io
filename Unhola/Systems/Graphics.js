@@ -2,24 +2,36 @@ import * as THREE from 'three';
 import { BlendFunction, BrightnessContrastEffect, BloomEffect, EffectComposer, EffectPass, RenderPass, SelectiveBloomEffect, VignetteEffect } from 'https://cdn.jsdelivr.net/npm/postprocessing@6.36.3/+esm';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-function removeObject3D(object3D) {
 
-    // for better memory management and performance
-    if (object3D.geometry) object3D.geometry.dispose();
+function removeObject3D(object3D, scene) {
+    if (!object3D) return false;
 
+    // Dispose geometry
+    if (object3D.geometry) {
+        object3D.geometry.dispose();
+    }
+
+    // Dispose materials
     if (object3D.material) {
-        if (object3D.material instanceof Array) {
-            // for better memory management and performance
+        if (Array.isArray(object3D.material)) {
             object3D.material.forEach(material => material.dispose());
         } else {
-            // for better memory management and performance
             object3D.material.dispose();
         }
     }
-    object3D.removeFromParent(); // the parent might be the scene or another Object3D, but it is sure to be removed this way
-    return true;
 
-};
+    // Remove object from its parent
+    if (object3D.parent) {
+        object3D.parent.remove(object3D);
+    }
+
+    // Ensure it's removed from the scene
+    if (scene && scene.children.includes(object3D)) {
+        scene.remove(object3D);
+    }
+
+    return true;
+}
 
 export class Graphics {
 
@@ -28,6 +40,7 @@ export class Graphics {
 		this.game = game;
 
 		this.meshes = [];
+		this.mixers = [];
 
 		// Update handlers:
 		this.updateHandlers = [];
@@ -48,7 +61,7 @@ export class Graphics {
 
 		// Setup renderer:
 		this.renderer = new THREE.WebGLRenderer({
-			powerPreference: "high-performance",
+			/*powerPreference: "high-performance",*/
 			precision: "lowp",
 			antialias: false	
 		});
@@ -79,15 +92,11 @@ export class Graphics {
 		this.composer = new EffectComposer( this.renderer );
 		this.composer.addPass( new RenderPass( this.scene, this.camera ) );
 		this.composer.addPass( new EffectPass( this.camera, bloomEffect ) );
-		//this.composer.addPass( new EffectPass( this.camera, noiseEffect ) );
 		this.composer.addPass( new EffectPass( this.camera, vignetteEffect ) );
-
 		this.composer.addPass( new EffectPass( this.camera, brightnessContrastEffect ) );
 		
-
 		// Setup controls:
 		this.controls = new OrbitControls( this.camera, this.renderer.domElement );
-
 
 		// Setup materials:
 		this.materials = {}
@@ -107,10 +116,7 @@ export class Graphics {
 		
 		// The sun:
 		this.lights.sun = new THREE.DirectionalLight( 0x2D007C, 1 );
-		//this.lights.sun.castShadow = true;
 		this.lights.sun.shadow.blurSamples = 8;
-		//this.lights.sun.shadow.mapSize.width = 8192; // default
-		//this.lights.sun.shadow.mapSize.height = 8192; // default
 		this.lights.sun.shadow.camera.near = 0; // default
 		this.lights.sun.shadow.camera.far = 10000; // default
 		this.lights.sun.position.set( 30, 10, 30 );
@@ -156,6 +162,7 @@ export class Graphics {
 		const promises = [];
 
 		this.assets = {};
+		this.animations = {};
 		this.instances = {};
 
 		for ( const name of models ) {
@@ -163,7 +170,9 @@ export class Graphics {
 			promises.push( new Promise( ( resolve ) => {
 
 				loader.load( `Models/${name}.glb`, ( model ) => {
+					
 					this.assets[ name ] = model.scene;
+					this.animations[ name ] = model.animations;
 
 					model.scene.traverse( function ( child ) {
 
@@ -214,7 +223,9 @@ export class Graphics {
 
 	reset() {
 
-		for ( const mesh of this.meshes ) removeObject3D( mesh );
+		for ( const mesh of this.meshes ) removeObject3D( mesh, this.scene );
+		this.meshes.length = 0;
+
 
 	};
 
@@ -222,14 +233,59 @@ export class Graphics {
 
 		const handlers = this.updateHandlers;
 
-		for ( const handler of handlers ) handler( dt );
+		for ( const handler of this.updateHandlers ) handler( dt );
+
+		for ( const mixer of this.mixers ) mixer.update( dt * 0.001 );
 
 		this.updateCamera();
 
 		//this.renderer.render( this.scene, this.camera );
 		this.composer.render();
 
+	};
+
+	create( name ) {
+
+		const instances = this.instances.inactive[ name ];
+		let instance;
+
+		if ( instances.length > 0 ) {
+
+			instance = instances.pop();
+			
+			instance.mesh.position.set( 0, 0, 0 );
+			instance.mesh.rotation.set( 0, 0, 0 );
+			instance.mesh.visibility = true;
+			
+			// Reset logic
+			// Position, rotation, stop all animations, visibility
+
+
+		} else {
+
+			// change name to assets to models
+			const mesh = this.assets[ name ].clone();
+			const animations = this.animations[ name ];
+			const mixer = animations.length > 0 ? new THREE.AnimationMixer( mesh ) : undefined;
+
+			instance = { mesh, animations, mixer };
+
+		}
+
+		this.mixers.push( mixer );
+		this.instances.active.push( instance );
+
+		return instance;
 
 	};
+
+	dispose( instance ) {};
+
+	// Animation control
+	play( instance, animation ) {};
+
+	pause( instance, animation ) {};
+
+	stop( instance, animation ) {};
 
 };

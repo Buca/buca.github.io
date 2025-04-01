@@ -8,6 +8,20 @@ export class Dynamic {
 
 	};
 
+	get length() {
+
+		let count = 0;
+
+		for ( let i = 0; i < this.data.length; i += 8 ) {
+
+			if ( this.data[ i + 7 ] === 1 ) count ++;
+		
+		}
+
+		return count;
+
+	};
+
 	*[Symbol.iterator]() {
 
 		for ( let i = 0; i < this.data.length; i += 8 ) {
@@ -67,7 +81,7 @@ export class Dynamic {
 		this.data[ i + 4 ] = d;
 		this.data[ i + 5 ] = vr;
 		this.data[ i + 6 ] = vy;
-		this.data[ i + 7 ] = isActive;
+		this.data[ i + 7 ] = 1;
 
 		return i;
 

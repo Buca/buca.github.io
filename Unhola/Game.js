@@ -96,7 +96,7 @@ export class Game {
 		        
 		        }
 
-		        this.graphics.update();
+		        this.graphics.update( delta );
 		    
 		    }
 
@@ -161,7 +161,6 @@ export class Game {
 
 		if ( !saveStringified ) return;
 
-
 		const game = JSON.parse( saveStringified );
 
 		if ( isVersionCompatible( game.version, this.compatability ) ) {
@@ -203,11 +202,12 @@ export class Game {
 
 				}
 
+
+				this.start();
+				
 				document
 				.getElementById('ingame-loader')
 				.classList.add('hidden');
-
-				this.start();
 
 			}, 0 );
 
@@ -220,12 +220,12 @@ export class Game {
 		document
 			.getElementById('ingame-loader')
 			.classList.remove('hidden');
+		
 
 		setTimeout( () => {
 
 			this.graphics.reset();
 			this.fixed.reset();
-		
 			this.generator.create( level );
 
 			if ( !this.player ) {
@@ -260,6 +260,8 @@ export class Game {
 				}));
 
 			}
+
+			console.log( 'Dynamic entities:', this.dynamic.length );
 
 
 			if ( !this.goal ) {
@@ -339,7 +341,7 @@ export class Game {
 	step() {
 
 		this.physics.update(this.FIXED_DT);
-		this.graphics.update();
+		this.graphics.update(0);
 
 	};
 

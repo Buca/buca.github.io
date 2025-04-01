@@ -178,7 +178,7 @@ export class Enemy {
 
 		if ( this.dead ) return;
 
-		this.beforePhysicsTick = () => {
+		this.beforePhysicsTick = (dt) => {
 
 			
 			const index = this.dynamic;
@@ -217,8 +217,7 @@ export class Enemy {
 			if ( this.movingRight || this.movingLeft ) {
 
 				const query = this.game.fixed.query( x, y - 0.1, z, w+0.2, h - 0.2, d+0.2 );
-				
-				let goAhead = false;
+
 				let delta = Infinity;
 
 				for ( let i = 0; i < query.length; i ++ ) {
@@ -230,15 +229,13 @@ export class Enemy {
 
 					if ( smaxy < y ) {
 
-						goAhead = true;
 						delta = y - smaxy;
+						dynamic.addVY( index, 0.002*delta );
 						break;
 
 					}
 
 				}
-
-				if ( goAhead ) dynamic.addVY( index, 0.002*delta );
 
 			}
 

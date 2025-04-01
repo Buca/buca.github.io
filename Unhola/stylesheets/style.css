@@ -1,3 +1,23 @@
+@font-face {
+
+	font-family: 'Silkscreen';
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+ 	src: url('https://fonts.gstatic.com/s/silkscreen/v4/m8JUjfVPf62XiF7kO-i9aAhAfmyi2A.woff2') format('woff2');
+
+}
+
+@font-face {
+	
+	font-family: 'Silkscreen';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url('https://fonts.gstatic.com/s/silkscreen/v4/m8JXjfVPf62XiF7kO-i9YLNlaw.woff2') format('woff2');
+
+}
+
 :root {
 
 	--mobile-controls-size-small: 64px;
