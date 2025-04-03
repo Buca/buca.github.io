@@ -180,7 +180,6 @@ export class Enemy {
 
 		this.beforePhysicsTick = (dt) => {
 
-			
 			const index = this.dynamic;
 			const dynamic = this.game.dynamic;
 			const h = dynamic.getH( index );
@@ -217,7 +216,6 @@ export class Enemy {
 			if ( this.movingRight || this.movingLeft ) {
 
 				const query = this.game.fixed.query( x, y - 0.1, z, w+0.2, h - 0.2, d+0.2 );
-
 				let delta = Infinity;
 
 				for ( let i = 0; i < query.length; i ++ ) {
@@ -380,6 +378,8 @@ export class Enemy {
 		};
 
 		this.game.physics.beforeTick.push( beforeTick );
+
+		// This needs to be removed on disposal
 
 	};
 

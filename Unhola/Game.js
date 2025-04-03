@@ -169,7 +169,7 @@ export class Game {
 			.getElementById('ingame-loader')
 			.classList.remove('hidden');
 
-			setTimeout( () => {
+			//setTimeout( () => {
 
 				this.seed = game.seed;
 				this.level = game.level;
@@ -209,7 +209,7 @@ export class Game {
 				.getElementById('ingame-loader')
 				.classList.add('hidden');
 
-			}, 0 );
+			//}, 0 );
 
 		}
 
@@ -222,7 +222,7 @@ export class Game {
 			.classList.remove('hidden');
 		
 
-		setTimeout( () => {
+		//setTimeout( () => {
 
 			this.graphics.reset();
 			this.fixed.reset();
@@ -244,10 +244,22 @@ export class Game {
 
 			} else this.player.reset();
 
-			for (let i = this.enemies.length - 1; i >= 0; i--) {
-			    this.enemies[i].dispose();
-			}
+			while ( this.enemies.length > 0 ) this.enemies[0].dispose();
+    	
+			
+		    // Reset the pool, but *not* the data array itself.
+		    this.dynamic.pool = [];
 
+		    // Correctly handle the dynamic data.
+		    const playerIndex = this.player.dynamic; // Save the player index
+		    const playerData = this.dynamic.data.slice(playerIndex, playerIndex + 8); // Save player data
+
+		    // Clear the dynamic array, but keep the player data.
+		    this.dynamic.data = [];
+		    this.dynamic.data.push(...playerData);
+			
+			console.log( 'Empty spots: ', this.dynamic.pool.toString() );
+			console.log( 'After disposal: ', this.dynamic.data.toString() );
 
 			for ( let i = 0; i < 7*level; i ++ ) {
 
@@ -261,7 +273,7 @@ export class Game {
 
 			}
 
-			console.log( 'Dynamic entities:', this.dynamic.length );
+			console.log( 'Dynamic entities:', this.dynamic.data );
 
 
 			if ( !this.goal ) {
@@ -282,7 +294,7 @@ export class Game {
 			.getElementById('ingame-loader')
 			.classList.add('hidden');
 		
-		}, 0 );
+		//}, 0 );
 
 	};
 

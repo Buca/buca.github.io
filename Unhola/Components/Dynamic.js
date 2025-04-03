@@ -10,15 +10,7 @@ export class Dynamic {
 
 	get length() {
 
-		let count = 0;
-
-		for ( let i = 0; i < this.data.length; i += 8 ) {
-
-			if ( this.data[ i + 7 ] === 1 ) count ++;
-		
-		}
-
-		return count;
+		return this.data.length/8 - this.pool.length;
 
 	};
 
@@ -73,6 +65,8 @@ export class Dynamic {
 
 		if ( this.pool.length > 0 ) i = this.pool.pop();
 		else i = this.data.length;
+		
+		console.log( 'Created index: ', i );
 
 		this.data[ i + 0 ] = r;
 		this.data[ i + 1 ] = y;
@@ -81,7 +75,7 @@ export class Dynamic {
 		this.data[ i + 4 ] = d;
 		this.data[ i + 5 ] = vr;
 		this.data[ i + 6 ] = vy;
-		this.data[ i + 7 ] = 1;
+		this.data[ i + 7 ] = isActive;
 
 		return i;
 
@@ -130,8 +124,11 @@ export class Dynamic {
 
 	dispose( index ) {
 
-		this.pool.push( index );
 		this.deactivate( index );
+		this.pool.push( index );
+ 
+		console.log( 'Disposed index:', index );
+		console.log( 'Length:', this.length );
 
 	};
 
