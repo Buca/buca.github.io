@@ -185,11 +185,7 @@ export class Game {
 				this.player.r = game.player.r;
 				this.player.y = game.player.y;
 
-				for ( let i = this.enemies.length - 1; i >= 0; i -- ) {
-
-					this.enemies[ i ].dispose();
-
-				}
+				while ( this.enemies.length > 0 ) this.enemies[0].dispose();
 
 				for ( let i = 0; i < game.enemies.length; i ++ ) {
 
@@ -244,37 +240,21 @@ export class Game {
 
 			} else this.player.reset();
 
-			while ( this.enemies.length > 0 ) this.enemies[0].dispose();
-    	
-			
-		    // Reset the pool, but *not* the data array itself.
-		    this.dynamic.pool = [];
+			while ( this.enemies.length > 0 ) this.enemies[ 0 ].dispose();
 
-		    // Correctly handle the dynamic data.
-		    const playerIndex = this.player.dynamic; // Save the player index
-		    const playerData = this.dynamic.data.slice(playerIndex, playerIndex + 8); // Save player data
-
-		    // Clear the dynamic array, but keep the player data.
-		    this.dynamic.data = [];
-		    this.dynamic.data.push(...playerData);
-			
-			console.log( 'Empty spots: ', this.dynamic.pool.toString() );
-			console.log( 'After disposal: ', this.dynamic.data.toString() );
-
-			for ( let i = 0; i < 7*level; i ++ ) {
+			for ( const position of this.generator.spawn.enemies ) {
 
 				this.enemies.push( new Enemy({
 
 					game: this,
-					r: this.spawn.r - i*1.45 - 0.6,
-					y: this.spawn.y + i*1.45 + 8.25
+					r: position.r,
+					y: position.y
 
 				}));
 
 			}
 
-			console.log( 'Dynamic entities:', this.dynamic.data );
-
+			console.log('Enemies: ', this.enemies.length );
 
 			if ( !this.goal ) {
 

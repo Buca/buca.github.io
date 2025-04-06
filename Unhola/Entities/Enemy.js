@@ -46,8 +46,8 @@ export class Enemy {
 	set width( value ) { return this.game.dynamic.setW( this.dynamic, value ) };
 	get height() { return this.game.dynamic.getH( this.dynamic ) };
 	set height( value ) { return this.game.dynamic.setH( this.dynamic, value ) };
-	get depth() { return this.game.dynamic.getH( this.dynamic ) };
-	set depth( value ) { return this.game.dynamic.setH( this.dynamic, value ) };
+	get depth() { return this.game.dynamic.getD( this.dynamic ) };
+	set depth( value ) { return this.game.dynamic.setD( this.dynamic, value ) };
 	
 	toJSON() {
 
@@ -65,6 +65,8 @@ export class Enemy {
 	};
 
 	dispose() {
+
+
 
 		const index = this.game.enemies.indexOf( this );
 		if ( index !== -1 ) this.game.enemies.splice( index, 1 );
@@ -177,11 +179,12 @@ export class Enemy {
 	initPhysics() {
 
 		if ( this.dead ) return;
+		
+		const index = this.dynamic;
+		const dynamic = this.game.dynamic;
 
 		this.beforePhysicsTick = (dt) => {
 
-			const index = this.dynamic;
-			const dynamic = this.game.dynamic;
 			const h = dynamic.getH( index );
 			const d = dynamic.getD( index );
 			const w = dynamic.getW( index );
@@ -192,6 +195,7 @@ export class Enemy {
 		        const idx = this.game.physics.beforeTick.indexOf( this.beforePhysicsTick );
 		        this.game.physics.beforeTick.splice( idx, 1 );
 		        return;
+
 		    
 		    }
 
@@ -204,7 +208,6 @@ export class Enemy {
 			if ( this.jumping ) {
 
 				const platformQuery = this.game.fixed.query( x, y - 0.05, z, w - 0.05, h + 0.1, d - 0.05 );
-				
 				if ( platformQuery.length > 0 ) dynamic.setVY( index, -(1+this.jumpingSpeed)*this.game.gravity );
 				
 			}
@@ -248,6 +251,7 @@ export class Enemy {
 
 		if ( this.dead ) return;
 		
+		const index = this.dynamic;
 		const dyn = this.game.dynamic;
 		const fixed = this.game.fixed;
 		const center = this.game.radius.center;
@@ -264,15 +268,15 @@ export class Enemy {
 		    
 			}
 
-			const r = dyn.getR( this.dynamic );
-			const x = dyn.getX( this.dynamic );
-			const y = dyn.getY( this.dynamic );
-			const z = dyn.getZ( this.dynamic );
-			const w = dyn.getW( this.dynamic );
-			const h = dyn.getH( this.dynamic );
-			const d = dyn.getD( this.dynamic );
-			const vr = dyn.getVR( this.dynamic );
-			const vy = dyn.getVY( this.dynamic );
+			const r = dyn.getR( index );
+			const x = dyn.getX( index );
+			const y = dyn.getY( index );
+			const z = dyn.getZ( index );
+			const w = dyn.getW( index );
+			const h = dyn.getH( index );
+			const d = dyn.getD( index );
+			const vr = dyn.getVR( index );
+			const vy = dyn.getVY( index );
 
 			const player = this.game.player;
 			const pr = dyn.getR( player.dynamic );
@@ -383,10 +387,4 @@ export class Enemy {
 
 	};
 
-	kill() {
-
-
-
-	};
-
-};
+}

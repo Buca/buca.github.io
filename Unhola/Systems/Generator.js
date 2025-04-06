@@ -205,6 +205,9 @@ export class Generator {
 
 		let lastHeight = 1;
 
+		this.spawn = {};
+		this.spawn.enemies = [];
+
 		for ( let i = 0; i < numberOfPlatforms - 1; i ++ ) {
 
 			const r0 = pointsR[ i ];
@@ -222,6 +225,14 @@ export class Generator {
 
 			lastHeight = height;
 
+			const spawnEnemy = random.float()**(numberOfPlatforms - i - 1) > 0.15;
+
+			if ( spawnEnemy ) {
+
+				this.spawn.enemies.push({ r: -r0 + r, y: y + height + 3 })
+
+			}
+
 			// Physics:
 			if ( i === 0 ) this.game.spawn = { r: -r0 + r, y: y + height + 3 };
 			if ( i === numberOfPlatforms - 2 ) this.game.win = { r: -r0 + r, y: y + height/2 }
@@ -234,8 +245,6 @@ export class Generator {
 	};
 
 	create( sections ) {
-
-		console.log(sections)
 
 		const fixed = this.game.fixed;
 		const seed = this.game.seed;
@@ -333,8 +342,6 @@ export class Generator {
 			);
 			
 		}
-
-		console.log( 123 );
 
 		const grassGroundInstancedMesh = createInstancedMeshFromGeometry( grassGroundGeometries, new THREE.MeshStandardMaterial( { color: 0x56AA0B } ) );
 		this.game.graphics.meshes.push( grassGroundInstancedMesh );

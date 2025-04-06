@@ -1,3 +1,8 @@
+const cos = Math.cos;
+const sin = Math.sin;
+const PI = Math.PI;
+
+
 export class Dynamic {
 	
 	constructor( radius ) {
@@ -5,6 +10,8 @@ export class Dynamic {
 		this.radius = radius;
 		this.data = [];
 		this.pool = [];
+		this.next = 0;
+
 
 	};
 
@@ -24,28 +31,24 @@ export class Dynamic {
 
 	};
 
-	isActive( index ) { return this.data[ index + 7 ] !== 0; };
-
-	activate( index ) { this.data[ index + 7 ] = 1 };
-
-	deactivate( index ) { this.data[ index + 7 ] = 0 };
-
 	getR( index ) { return this.data[ index ] };
 	setR( index, value ) { return this.data[ index ] = value % 1 };
 	addR( index, value ) { return this.data[ index ] = (this.data[ index ] + value) % 1 };
 
-	getX( index ) { return this.radius*Math.cos( 2*Math.PI*this.data[ index ] ) };
+	getX( index ) { return this.radius*cos( 2*PI*this.data[ index ] ) };
 
 	getY( index ) { return this.data[ index + 1 ] };
 	setY( index, value ) { return this.data[ index + 1 ] = value };
 	addY( index, value ) { return this.data[ index + 1 ] += value };
 	
-	getZ( index ) { return this.radius*Math.sin( 2*Math.PI*this.data[ index ] ) };
+	getZ( index ) { return this.radius*sin( 2*PI*this.data[ index ] ) };
 
 	getW( index ) { return this.data[ index + 2 ] };
 	setW( index, value ) { return this.data[ index + 2 ] = value };
+
 	getH( index ) { return this.data[ index + 3 ] };
 	setH( index, value ) { return this.data[ index + 3 ] = value };
+
 	getD( index ) { return this.data[ index + 4 ] };
 	setD( index, value ) { return this.data[ index + 4 ] = value };
 
@@ -59,14 +62,21 @@ export class Dynamic {
 	addVY( index, value ) { return this.data[ index + 6 ] += value };
 	mulVY( index, value ) { return this.data[ index + 6 ] *= value };
 
+	isActive( index ) { return this.data[ index + 7 ] === 1; };
+	activate( index ) { this.data[ index + 7 ] = 1 };
+	deactivate( index ) { this.data[ index + 7 ] = 0 };
+
 	create( r = 0, y = 0, w = 1, h = 1, d = 1, vr = 0, vy = 0, isActive = 1 ) {
 
 		let i;
 
 		if ( this.pool.length > 0 ) i = this.pool.pop();
-		else i = this.data.length;
-		
-		console.log( 'Created index: ', i );
+		else {
+
+			i = this.next;
+			this.next += 8;
+
+		}
 
 		this.data[ i + 0 ] = r;
 		this.data[ i + 1 ] = y;
@@ -126,9 +136,6 @@ export class Dynamic {
 
 		this.deactivate( index );
 		this.pool.push( index );
- 
-		console.log( 'Disposed index:', index );
-		console.log( 'Length:', this.length );
 
 	};
 

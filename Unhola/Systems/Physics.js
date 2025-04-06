@@ -17,6 +17,7 @@ export class Physics {
 	update( dt ) {
 		
 		//dt = 22;
+
 		
 		const PI = Math.PI;
 		const cos = Math.cos;
@@ -43,6 +44,9 @@ export class Physics {
 			let x = radius*cos( 2*PI*pR );
 			let z = radius*sin( 2*PI*pR );
 			let y = pY;
+
+
+			console.log
 
 			for ( const i of fixed ) {
 
@@ -105,7 +109,6 @@ export class Physics {
 			
 		}
 
-		
 		for ( const handler of this.beforeTick ) handler( dt );
 
 	};
