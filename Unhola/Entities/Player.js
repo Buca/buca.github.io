@@ -49,6 +49,9 @@ export class Player {
 		this.movingLeft = false;
 		this.movingRight = false;
 		this.jumping = false;
+		this.secondJumping = false;
+		this.numberOfJumps = 0;
+		this.goDown = false;
 
 		this.isTouchingTheFloor = false;
 		this.isJumping = false;
@@ -58,29 +61,24 @@ export class Player {
 
 	};
 
-	get r() {
+	get r() { return this.game.dynamic.getR( this.dynamic ) };
+	set r( value ) { return this.game.dynamic.setR( this.dynamic, value ) };
+	get y() { return this.game.dynamic.getY( this.dynamic ) };
+	set y( value ) { return this.game.dynamic.setY( this.dynamic, value ) };
 
-		return this.game.dynamic.getR( this.dynamic );
+	// Velocity
+	get vr() { return this.game.dynamic.getVR( this.dynamic ) };
+	set vr( value ) { return this.game.dynamic.setVR( this.dynamic, value ) };
+	get vy() { return this.game.dynamic.getVY( this.dynamic ) };
+	set vy( value ) { return this.game.dynamic.setVY( this.dynamic, value ) };
 
-	};
-
-	set r( value ) {
-
-		return this.game.dynamic.setR( this.dynamic, value );
-
-	};
-
-	get y() {
-
-		return this.game.dynamic.getY( this.dynamic );
-
-	};
-
-	set y( value ) {
-
-		return this.game.dynamic.setY( this.dynamic, value );
-
-	};
+	// Dimensions
+	get width() { return this.game.dynamic.getW( this.dynamic ) };
+	set width( value ) { return this.game.dynamic.setW( this.dynamic, value ) };
+	get height() { return this.game.dynamic.getH( this.dynamic ) };
+	set height( value ) { return this.game.dynamic.setH( this.dynamic, value ) };
+	get depth() { return this.game.dynamic.getD( this.dynamic ) };
+	set depth( value ) { return this.game.dynamic.setD( this.dynamic, value ) };
 
 	toJSON() {
 
@@ -279,25 +277,32 @@ export class Player {
 			// Jumping logic
 			if ( this.jumping ) {
 
-				const query = this.game.fixed.query( x, y - 0.001*dt, z, w, h, d );
+				if ( this.numberOfJumps < 2 ) {
+					
+
+				}
+
+				const query = this.game.fixed.query( x, y - 0.01, z, w, h, d );
 				
 				if ( query.length > 0 ) {
 
-					actuallyJumping = true;
-					
 					dynamic.setVY( index, -1.3*this.game.gravity );
-
+					actuallyJumping = true;
+					//this.numberOfJumps = 0;
 					if ( this.sound.jump.isPlaying ) this.sound.jump.stop();
 					this.sound.jump.play();
 					
 				
 				} else actuallyJumping = false;
+
+				console.log( this.numberOfJumps );
 			
 			}
 
 			// Movement logic
 			if ( this.movingRight ) dynamic.addVR( index, +0.000014 );
 			if ( this.movingLeft ) dynamic.addVR( index, -0.000014 );
+			if ( this.goDown ) dynamic.addVY( index, -0.005 );
 
 			if ( this.movingRight || this.movingLeft ) {
 					
@@ -323,16 +328,16 @@ export class Player {
 
 			} else {
 
-				this.sound.walk.pause();
+				this.sound.walk.stop();
 			
 			}
 
 			// Killing enemies logic
-			//if ( !this.touchingTheFloor && vy + this.game.gravity < 0 ) {
+			if ( vy + this.game.gravity < 0 ) {
 
 				const enemies = dynamic.query( 
-					x, y - 0.5, z, 
-					w - 0.01, 0.1, d - 0.01 
+					x, y - this.height/2 + 0.1, z, 
+					w - 0.1, 0.1, d - 0.1 
 				);
 
 				enemies.splice( enemies.indexOf( index ), 1 );
@@ -342,7 +347,7 @@ export class Player {
 					const enemyY = dynamic.getY( enemy );
 					const enemyH = dynamic.getH( enemy );
 
-					//if ( enemyY + enemyH < y - 0.4 ) {
+					//if ( enemyY + enemyH/2 < y + this.height/2 ) {
 
 						dynamic.setVY( index, -1.3*this.game.gravity );
 						dynamic.deactivate( enemy );
@@ -352,10 +357,10 @@ export class Player {
 
 				}
 			
-			//}
+			}
 
 			// Player death logic
-			const deathQuery = dynamic.query( x, y + 0.01, z, w, h - 0.01, d );
+			const deathQuery = dynamic.query( x, y, z, w, h - 0.1, d );
 			deathQuery.splice( deathQuery.indexOf( index ), 1 );
 
 			if ( deathQuery.length > 0 || this.y < -10 ) {

@@ -169,7 +169,7 @@ export class Game {
 			.getElementById('ingame-loader')
 			.classList.remove('hidden');
 
-			//setTimeout( () => {
+			setTimeout( () => {
 
 				this.seed = game.seed;
 				this.level = game.level;
@@ -198,14 +198,13 @@ export class Game {
 
 				}
 
-
-				this.start();
-				
 				document
 				.getElementById('ingame-loader')
 				.classList.add('hidden');
+				
+				this.start();
 
-			//}, 0 );
+			}, 0 );
 
 		}
 
@@ -218,7 +217,7 @@ export class Game {
 			.classList.remove('hidden');
 		
 
-		//setTimeout( () => {
+		setTimeout( () => {
 
 			this.graphics.reset();
 			this.fixed.reset();
@@ -254,8 +253,6 @@ export class Game {
 
 			}
 
-			console.log('Enemies: ', this.enemies.length );
-
 			if ( !this.goal ) {
 
 				this.goal = new Goal({
@@ -274,7 +271,7 @@ export class Game {
 			.getElementById('ingame-loader')
 			.classList.add('hidden');
 		
-		//}, 0 );
+		}, 0 );
 
 	};
 

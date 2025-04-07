@@ -15,7 +15,7 @@ export class Enemy {
 		this.y = y;
 
 		this.wanderingSpeed = 0.0000025;
-		this.followingSpeed = 0.00001;
+		this.followingSpeed = 0.000008;
 		this.jumpingSpeed = 0.15;
 
 		this.movingLeft = false;
@@ -133,6 +133,7 @@ export class Enemy {
 				this.sound.death.play();
 				const index = graphics.updateHandlers.indexOf( updateHandler );
 				if ( index !== -1 ) graphics.updateHandlers.splice( index, 1 );
+
 				enemy.position.y = -100000; //.visible = false;
 				this.sound.death.position.y = 100000;
 				return;
@@ -311,15 +312,15 @@ export class Enemy {
 
 				if ( pr - r < 0 ) {
 
-					frontRA = (r - 0.00025);
-					frontRB = frontRA - 0.000015;
+					frontRA = (r - 0.0025);
+					frontRB = frontRA - 0.00015;
 					this.movingLeft = true;
 					this.movingRight = false;
 
 				} else if ( pr - r > 0 ) {
 
-					frontRA = (r + 0.00025);
-					frontRB = frontRA + 0.000015;
+					frontRA = (r + 0.0025);
+					frontRB = frontRA + 0.00015;
 					this.movingLeft = false;
 					this.movingRight = true;
 

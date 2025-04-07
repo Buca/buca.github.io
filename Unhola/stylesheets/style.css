@@ -332,6 +332,7 @@ canvas {
 
 .ui h1 {
 
+	-webkit-text-stroke: 1px #932886;
 	text-shadow: 
 		0 var(--logo-border-min-offset) var(--logo-border-min-color), 
 		0 calc(-1 * var(--logo-border-min-offset)) var(--logo-border-min-color), 

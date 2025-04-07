@@ -48,7 +48,13 @@ export class Controls {
 				
 				if ( code === 'KeyA' ) player.movingRight = true;
 				if ( code === 'KeyD' ) player.movingLeft = true;
-				if ( code === 'Space' ) player.jumping = true;
+				if ( code === 'Space' ) {
+
+					//player.numberOfJumps ++;
+					player.jumping = true;
+
+				}
+				if ( code === 'KeyS' ) player.goDown = true;
 			
 			}
 
@@ -61,7 +67,12 @@ export class Controls {
 
 			if ( code === 'KeyA' ) player.movingRight = false;
 			if ( code === 'KeyD' ) player.movingLeft = false
-			if ( code === 'Space' ) player.jumping = false;
+			if ( code === 'Space' ) {
+
+				player.jumping = false;
+			
+			}
+			if ( code === 'KeyS' ) player.goDown = false;
 
 		});
 
@@ -101,6 +112,7 @@ export class Controls {
 		    moving = false;
 		    player.movingLeft = false;
 		    player.movingRight = false;
+		    player.goDown = false;
 
 		});
 

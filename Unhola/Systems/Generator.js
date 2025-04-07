@@ -11,7 +11,7 @@ function samplePositions(
 ) {
 
     const size = 4 * count;
-    output = output || new Array(size);
+    output = output || new Array(size).fill(0);
     let index = 0;
 
     while (index < size) {
@@ -225,11 +225,11 @@ export class Generator {
 
 			lastHeight = height;
 
-			const spawnEnemy = random.float()**(numberOfPlatforms - i - 1) > 0.15;
+			const spawnEnemy = random.float()**(numberOfPlatforms - i - 1) > 0.0;
 
 			if ( spawnEnemy ) {
 
-				this.spawn.enemies.push({ r: -r0 + r, y: y + height + 3 })
+				this.spawn.enemies.push({ r: -r0 + r, y: y + height })
 
 			}
 
@@ -237,6 +237,32 @@ export class Generator {
 			if ( i === 0 ) this.game.spawn = { r: -r0 + r, y: y + height + 3 };
 			if ( i === numberOfPlatforms - 2 ) this.game.win = { r: -r0 + r, y: y + height/2 }
 			indices.push( this.game.fixed.create( x, y, z, width, height, depth ) );
+
+		}
+
+		for ( const position of this.spawn.enemies ) {
+
+			const ex = center*Math.cos( TAU*position.r );
+			const ey = position.y;
+			const ez = center*Math.sin( TAU*position.r );
+
+			const query = this.game.fixed.query( ex, ey, ez, 0.5, 0.5, 0.5 );
+
+			if ( query.length > 0 ) {
+
+				console.log('BONK');
+
+				let maxY = -Infinity;
+
+				for ( const index of query ) {
+
+					maxY = Math.max( maxY, this.game.fixed.getMaxY( index ) );
+
+				}
+
+				position.y = maxY + 0.35;
+
+			} 
 
 		}
 
@@ -296,7 +322,7 @@ export class Generator {
 			tree2Total += tree2N;
 			const tree3N = Math.round( random.float() * area / 75 );
 			tree3Total += tree3N;
-			const rockN = Math.round( random.float() * area / 20 );
+			const rockN = Math.round( random.float() * area / 10 );
 			rockTotal += rockN;
 			const fungi1N = Math.round( random.float() * area / 50 );
 			fungi1Total += fungi1N;
@@ -336,12 +362,14 @@ export class Generator {
 			samplePositions(
 				random, rockN,
 				x, y, z, w, h, d,
-				this.game.radius.min+5, this.game.radius.min + 10,
+				this.game.radius.min + 5, this.game.radius.min + 7,
 				10,
 				rockPositions, rockPositions.length
 			);
 			
 		}
+
+
 
 		const grassGroundInstancedMesh = createInstancedMeshFromGeometry( grassGroundGeometries, new THREE.MeshStandardMaterial( { color: 0x56AA0B } ) );
 		this.game.graphics.meshes.push( grassGroundInstancedMesh );
@@ -368,7 +396,7 @@ export class Generator {
 		dirtGround3InstancedMesh.receiveShadow = true;
 
 		const tree1Model = this.game.graphics.assets['TREE1'];
-		tree1Model.scale.set(0.95, 0.95, 0.95);
+		tree1Model.scale.set(1, 1, 1);
 		const tree1InstancedMesh = createInstancedMeshFromModel( tree1Model, tree1Positions, random );
 		this.game.graphics.meshes.push( ...tree1InstancedMesh );
 		this.game.graphics.scene.add( ...tree1InstancedMesh );
