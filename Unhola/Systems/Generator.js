@@ -225,7 +225,7 @@ export class Generator {
 
 			lastHeight = height;
 
-			const spawnEnemy = random.float()**(numberOfPlatforms - i - 1) > 0.0;
+			const spawnEnemy = random.float()**(numberOfPlatforms - i - 1) > 0.1;
 
 			if ( spawnEnemy ) {
 

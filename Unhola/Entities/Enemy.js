@@ -16,7 +16,7 @@ export class Enemy {
 
 		this.wanderingSpeed = 0.0000025;
 		this.followingSpeed = 0.000008;
-		this.jumpingSpeed = 0.15;
+		this.jumpingSpeed = 0.175;
 
 		this.movingLeft = false;
 		this.movingRight = false;
@@ -209,7 +209,9 @@ export class Enemy {
 			if ( this.jumping ) {
 
 				const platformQuery = this.game.fixed.query( x, y - 0.05, z, w - 0.05, h + 0.1, d - 0.05 );
-				if ( platformQuery.length > 0 ) dynamic.setVY( index, -(1+this.jumpingSpeed)*this.game.gravity );
+				const enemiesQuery = this.game.dynamic.query( x, y - 0.05, z, w - 0.1, h + 0.1, d - 0.1 );
+				enemiesQuery.splice( enemiesQuery.indexOf( this.dynamic ), 1 );
+				if ( platformQuery.length > 0 || enemiesQuery.length > 0 ) dynamic.setVY( index, -(1+this.jumpingSpeed)*this.game.gravity );
 				
 			}
 

@@ -333,6 +333,7 @@ export class Player {
 			}
 
 			// Killing enemies logic
+			
 			if ( vy + this.game.gravity < 0 ) {
 
 				const enemies = dynamic.query( 
@@ -358,9 +359,11 @@ export class Player {
 				}
 			
 			}
+			
 
 			// Player death logic
-			const deathQuery = dynamic.query( x, y, z, w, h - 0.1, d );
+			
+			const deathQuery = dynamic.query( x, y, z, w + 0.02, h - 0.1, d + 0.02 );
 			deathQuery.splice( deathQuery.indexOf( index ), 1 );
 
 			if ( deathQuery.length > 0 || this.y < -10 ) {
@@ -368,6 +371,7 @@ export class Player {
 				this.kill();
 
 			}
+			
 
 		});
 
