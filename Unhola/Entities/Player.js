@@ -46,8 +46,8 @@ export class Player {
 		this.game.player = this;
 		this.dynamic = game.dynamic.create( r, y, 0.5, 0.95, 0.5, 0, 0 );
 
-		this.movingLeft = false;
-		this.movingRight = false;
+		this.movingLeft = 0;
+		this.movingRight = 0;
 		this.jumping = false;
 		this.secondJumping = false;
 		this.numberOfJumps = 0;
@@ -300,11 +300,11 @@ export class Player {
 			}
 
 			// Movement logic
-			if ( this.movingRight ) dynamic.addVR( index, +0.000014 );
-			if ( this.movingLeft ) dynamic.addVR( index, -0.000014 );
+			if ( this.movingRight > 0 ) dynamic.addVR( index, +0.000014 * this.movingRight );
+			if ( this.movingLeft > 0 ) dynamic.addVR( index, -0.000014 * this.movingLeft );
 			if ( this.goDown ) dynamic.addVY( index, -0.005 );
 
-			if ( this.movingRight || this.movingLeft ) {
+			if ( this.movingRight > 0 || this.movingLeft > 0 ) {
 					
 					const query = this.game.fixed.query( x, y, z, w + 0.002*dt, h, d + 0.002*dt );
 

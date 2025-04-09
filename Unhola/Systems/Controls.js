@@ -62,12 +62,10 @@ export class Controls {
 			const code = event.code;
 			const player = this.game.player;
 
-			console.log()
-
 			if ( !this.paused ) {
 				
-				if ( code === 'KeyA' ) player.movingRight = true;
-				if ( code === 'KeyD' ) player.movingLeft = true;
+				if ( code === 'KeyA' ) player.movingRight = 1;
+				if ( code === 'KeyD' ) player.movingLeft = 1;
 				if ( code === 'Space' ) {
 
 					//player.numberOfJumps ++;
@@ -85,8 +83,8 @@ export class Controls {
 			const code = event.code;
 			const player = this.game.player;
 
-			if ( code === 'KeyA' ) player.movingRight = false;
-			if ( code === 'KeyD' ) player.movingLeft = false
+			if ( code === 'KeyA' ) player.movingRight = 0;
+			if ( code === 'KeyD' ) player.movingLeft = 0;
 			if ( code === 'Space' ) {
 
 				player.jumping = false;
@@ -113,8 +111,8 @@ export class Controls {
 			pointerDownOnJoystick = false;
 
 			const player = this.game.player;
-			player.movingLeft = false;
-			player.movingRight = false;
+			player.movingLeft = 0;
+			player.movingRight = 0;
 
 			stick.style.translate = `0px 0px`;
 
@@ -133,15 +131,15 @@ export class Controls {
 
 			if ( x > 0 ) {
 
-				player.movingLeft = true;
-				player.movingRight = false;
+				player.movingLeft = Math.abs( x / 25 );
+				player.movingRight = 0;
 
 			}
 
 			if ( x < 0) {
 
-				player.movingLeft = false;
-				player.movingRight = true;
+				player.movingLeft = 0;
+				player.movingRight = Math.abs( x / 25 );
 
 			}
 
