@@ -1,5 +1,9 @@
 import { isTouchDevice } from '../Utilities.js';
 
+const abs = Math.abs;
+const min = Math.min;
+const max = Math.max;
+
 export class Controls {
 
 	constructor( game ) {
@@ -113,6 +117,7 @@ export class Controls {
 			const player = this.game.player;
 			player.movingLeft = 0;
 			player.movingRight = 0;
+			player.goDown = false;
 
 			stick.style.translate = `0px 0px`;
 
@@ -126,12 +131,13 @@ export class Controls {
 
 			const width = stick.offsetWidth;
 			const height = stick.offsetHeight;
-			const x = Math.max( -25, Math.min( event.offsetX - width/2, 25 ) );
-			const y = Math.max( -25, Math.min( event.offsetY - height/2, 25 ) );
+			const maxWidth = joystick.offsetWidth;
+			const x = max( -maxWidth/3, min( event.offsetX - width/2, maxWidth/3 ) );
+			const y = max( -maxWidth/3, min( event.offsetY - height/2, maxWidth/3 ) );
 
 			if ( x > 0 ) {
 
-				player.movingLeft = Math.abs( x / 25 );
+				player.movingLeft = min( abs( x / (maxWidth / 4) ), 1 );
 				player.movingRight = 0;
 
 			}
@@ -139,7 +145,17 @@ export class Controls {
 			if ( x < 0) {
 
 				player.movingLeft = 0;
-				player.movingRight = Math.abs( x / 25 );
+				player.movingRight = min( abs( x / (maxWidth / 4) ), 1 );
+
+			}
+
+			if ( y > maxWidth / 4 ) {
+
+				player.goDown = true;
+
+			} else {
+
+				player.goDown = false;
 
 			}
 

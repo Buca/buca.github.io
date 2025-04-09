@@ -49,9 +49,10 @@ export class Player {
 		this.movingLeft = 0;
 		this.movingRight = 0;
 		this.jumping = false;
-		this.secondJumping = false;
-		this.numberOfJumps = 0;
 		this.goDown = false;
+
+		this.jumpCount = 0;
+		this.maxJumps = 2;
 
 		this.isTouchingTheFloor = false;
 		this.isJumping = false;
@@ -263,8 +264,9 @@ export class Player {
 			// Checking if touching the floor
 			const floorQuery = this.game.fixed.query( x, y - 0.05, z, w-0.05, h, d-0.05 );
 
-			if ( floorQuery.length > 0 && !this.touchingTheFloor && !actuallyJumping ) {
+			if ( floorQuery.length > 0 && !this.touchingTheFloor ) {
 
+				this.jumpCount = 0;
 				this.touchingTheFloor = true;
 				this.sound.land.play();
 
@@ -275,28 +277,20 @@ export class Player {
 			}
 
 			// Jumping logic
-			if ( this.jumping ) {
+			if (this.jumping && this.jumpCount < this.maxJumps) {
+				const query = this.game.fixed.query(x, y - 0.01, z, w, h, d);
 
-				if ( this.numberOfJumps < 2 ) {
-					
+				if (query.length > 0 || this.jumpCount < this.maxJumps) { // either grounded or in air but still has jumps
 
-				}
-
-				const query = this.game.fixed.query( x, y - 0.01, z, w, h, d );
-				
-				if ( query.length > 0 ) {
-
-					dynamic.setVY( index, -1.3*this.game.gravity );
+					dynamic.setVY(index, -1.3 * this.game.gravity);
 					actuallyJumping = true;
-					//this.numberOfJumps = 0;
-					if ( this.sound.jump.isPlaying ) this.sound.jump.stop();
-					this.sound.jump.play();
-					
-				
-				} else actuallyJumping = false;
 
-				console.log( this.numberOfJumps );
-			
+					if (this.sound.jump.isPlaying) this.sound.jump.stop();
+					this.sound.jump.play();
+
+					this.jumpCount++; // increment jump count
+					this.jumping = false; // prevent holding space for repeated jumps
+				}
 			}
 
 			// Movement logic

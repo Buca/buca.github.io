@@ -250,8 +250,6 @@ export class Generator {
 
 			if ( query.length > 0 ) {
 
-				console.log('BONK');
-
 				let maxY = -Infinity;
 
 				for ( const index of query ) {
