@@ -174,32 +174,6 @@ canvas {
 
 }
 
-
-#jump-button {
-
-	position: absolute;
-	bottom: 24px;
-	width: var(--mobile-controls-size-small);
-	height: var(--mobile-controls-size-small);
-	border-radius: 50%;
-	overflow: hidden;
-	z-index: 2;
-	left: 50%;
-	translate: -50% 0;
-	background-color: #0000004f;
-	border: 8px solid #00000033;
-	transition: background-color .3s, border .3s;
-
-}
-
-#jump-button:hover,
-#jump-button:active {
-
-	border: 8px solid #0000004f;
-	background-color: #0000007d;
-
-}
-
 #open-pause-menu-button,
 #close-pause-menu-button {
 
@@ -505,5 +479,59 @@ canvas {
 	height: 32px;
 	background: #04AA6D;
 	cursor: pointer;
+
+}
+
+.joystick {
+
+	bottom: 34px;
+	left: 44px;
+	width: 74px;
+	height: 74px;
+	background-color: grey;
+	border-radius: 50%;
+	position: absolute;
+	z-index: 8;
+	pointer-events: none;
+
+}
+
+.stick {
+
+	width: 46px;
+	height: 46px;
+	background-color: darkgrey;
+	border-radius: 50%;
+	position: absolute;
+	pointer-events: auto;
+	top: 50%;
+	left: 50%;
+	margin-top: -23px;
+	margin-left: -23px;
+	transition: translate 0.1s;
+
+}
+
+#jump-button {
+
+	bottom: 34px;
+	right: 44px;
+	width: 74px;
+	height: 74px;
+	background-color: darkgrey;
+	border-radius: 50%;
+	overflow: hidden;
+	position: absolute;
+	z-index: 8;
+	outline: none;
+	border: none;
+
+}
+
+#jump-button:hover {
+
+	border: 6px solid grey;
+	width: 62px;
+	height: 62px;
 
 }

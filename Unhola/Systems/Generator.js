@@ -234,7 +234,7 @@ export class Generator {
 			}
 
 			// Physics:
-			if ( i === 0 ) this.game.spawn = { r: -r0 + r, y: y + height + 3 };
+			if ( i === 0 ) this.game.spawn = { r: -r0 + r, y: y + height };
 			if ( i === numberOfPlatforms - 2 ) this.game.win = { r: -r0 + r, y: y + height/2 }
 			indices.push( this.game.fixed.create( x, y, z, width, height, depth ) );
 

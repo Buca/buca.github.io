@@ -11,28 +11,48 @@ export class Controls {
 		this.game.events.addEventListener('start', () => {
 
 			this.paused = false;
-			if ( this.touch ) jumpButton.classList.remove('hidden');
+			if ( this.touch ) {
+
+				joystick.classList.remove('hidden');
+				jumpButton.classList.remove('hidden');
+
+			}
 
 		});
 
 		this.game.events.addEventListener('resume', () => {
 
 			this.paused = false;
-			if ( this.touch ) jumpButton.classList.remove('hidden');
+			if ( this.touch ) {
+
+				joystick.classList.remove('hidden');
+				jumpButton.classList.remove('hidden');
+
+			}
 
 		});
 
 		this.game.events.addEventListener('pause', () => {
 
 			this.paused = true;
-			if ( this.touch ) jumpButton.classList.add('hidden');
+			if ( this.touch ) {
+
+				joystick.classList.add('hidden');
+				jumpButton.classList.add('hidden');
+
+			}
 
 		});
 
 		this.game.events.addEventListener('quit', () => {
 
 			this.paused = true;
-			if ( this.touch ) jumpButton.classList.add('hidden');
+			if ( this.touch ) {
+
+				joystick.classList.add('hidden');
+				jumpButton.classList.add('hidden');
+
+			}
 
 		});
 
@@ -76,11 +96,63 @@ export class Controls {
 
 		});
 
+		
+
 		// Mobile/Pointer Controls
+		const joystick = document.querySelector('.joystick');
+		const stick = document.querySelector('.stick');
+		let pointerDownOnJoystick = false;
+		joystick.addEventListener('pointerdown', () => {
+
+			pointerDownOnJoystick = true;
+
+		});
+
+		joystick.addEventListener('pointerup', () => {
+
+			pointerDownOnJoystick = false;
+
+			const player = this.game.player;
+			player.movingLeft = false;
+			player.movingRight = false;
+
+			stick.style.translate = `0px 0px`;
+
+		});
+
+		joystick.addEventListener('pointermove', ( event ) => {
+
+			if ( !pointerDownOnJoystick ) return;
+
+			const player = this.game.player;
+
+			const width = stick.offsetWidth;
+			const height = stick.offsetHeight;
+			const x = Math.max( -25, Math.min( event.offsetX - width/2, 25 ) );
+			const y = Math.max( -25, Math.min( event.offsetY - height/2, 25 ) );
+
+			if ( x > 0 ) {
+
+				player.movingLeft = true;
+				player.movingRight = false;
+
+			}
+
+			if ( x < 0) {
+
+				player.movingLeft = false;
+				player.movingRight = true;
+
+			}
+
+			stick.style.translate = `${x}px ${y}px`;
+
+		});
+
 		const jumpButton = document.getElementById('jump-button');
 		let pointerDown = false;
 		let moving = false;
-
+/*
 		document.addEventListener('pointerdown', (event) => {
 
 			if ( this.paused || !this.touch ) return;
@@ -122,7 +194,7 @@ export class Controls {
 
 		    if (pointerDown && moving) pointerOneSide(event);
 		
-		});
+		});*/
 
 		const openPauseMenuButton = document.getElementById('open-pause-menu-button');
 
