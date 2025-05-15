@@ -420,7 +420,7 @@ canvas {
 		image-rendering: pixelated;
 		image-rendering: crisp-edges;
 		padding-top: 80px;
-		background-image: url('../Logo.png');
+		background-image: url('../logo.png');
 		background-repeat: no-repeat;
 		background-size: 100%;
 		background-position-y: 70px;
