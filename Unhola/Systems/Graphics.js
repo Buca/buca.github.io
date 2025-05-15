@@ -3,7 +3,6 @@ import { BlendFunction, GodRaysEffect, DepthOfFieldEffect, BrightnessContrastEff
 import { OutlinePass } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/postprocessing/OutlinePass.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { CSM } from 'three/examples/jsm/csm/CSM.js';
 import { random, circularLerp, round } from '../Utilities.js';
 
 const dummy3D = new THREE.Object3D();
