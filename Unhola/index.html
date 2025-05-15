@@ -2,15 +2,26 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+		<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
 		<title>Unhola</title>
 		<link rel="icon" type="image/png" href="./fav.png">
 		<link rel="preload" href="https://fonts.gstatic.com/s/silkscreen/v4/m8JXjfVPf62XiF7kO-i9YLNlaw.woff2" as="font" type="font/woff2" crossorigin="anonymous">
 		<link rel="preload" href="https://fonts.gstatic.com/s/silkscreen/v4/m8JUjfVPf62XiF7kO-i9aAhAfmyi2A.woff2" as="font" type="font/woff2" crossorigin="anonymous">
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Tiny5&display=swap" rel="stylesheet">
 		<link href="./stylesheets/style.css" rel="stylesheet">
+		    <!-- overlayscrollbars css -->
+	    <link
+	      href="https://cdn.jsdelivr.net/npm/overlayscrollbars/styles/overlayscrollbars.min.css"
+	      rel="stylesheet"
+	    />
+
+	    <!-- overlayscrollbars js -->
+	    <script
+	      src="https://cdn.jsdelivr.net/npm/overlayscrollbars/browser/overlayscrollbars.browser.es6.min.js"
+	      defer
+	    ></script>
 		<script type="importmap">
 		  {
 		    "imports": {
@@ -20,14 +31,10 @@
 		  }
 		</script>
 		<script type="module">
-			import randomSeedable from 'https://cdn.jsdelivr.net/npm/random-seedable@1.0.8/+esm';
-		</script>
-		<script type="module">
 			import postprocessing from 'https://cdn.jsdelivr.net/npm/postprocessing@6.36.3/+esm';
 		</script>
 	</head>
 	<body>
-		<div style="position: absolute; font-family: 'Silkscreen';">I</div>
 		<script type="module" src="main.js"></script>
 		<div id="noise" class="overlay"></div>
 		<div id="loading-page" class="page">
@@ -40,6 +47,10 @@
 		<div class="joystick hidden">
 			<div class="stick"></div>
 		</div>
+		<div class="level hidden">
+			<span>LEVEL</span>
+			<span class="bold"> 1.</span>
+		</div>
 		<button class="hidden" id="open-pause-menu-button">
 			<span>PAUSE</span> 
 			<span class="key">esc</span>
@@ -51,54 +62,180 @@
 		<div id="ingame-loader" class="loader hidden"></div>
 		<div id="main-menu" class="menu ui column hidden">
 			<div class="column menu-container">
-				<h1>UNHOLA</h1>
-				<button class="new-game-button">new game</button>
-				<button class="continue-game-button">continue</button>
-				<button class="open-settings-menu-button">settings</button>
+				<div class="logo"></div>
+				<div class="overlayscrollbars">
+				<div class="button-container">
+					<button class="new-game-button">new game</button>
+					<button class="continue-game-button">continue</button>
+					<button class="open-settings-menu-button">settings</button>
+				</div>
+				</div>
 			</div>
 		</div>
 		<div id="pause-menu" class="menu ui column hidden">
 			<div class="column menu-container ">
 				<h2>PAUSED</h2>
-				<button class="go-back-button">back</button>
-				<button class="save-game-button">save</button>
-				<button class="open-settings-menu-button">settings</button>
-				<button class="back-to-main-menu-button">quit</button>
+				<div class="overlayscrollbars">
+				<div class="button-container">
+					<button class="go-back-button">back</button>
+					<button class="save-game-button">save</button>
+					<button class="open-settings-menu-button">settings</button>
+					<button class="back-to-main-menu-button">quit</button>
+				</div>
+				</div>
 			</div>
 		</div>
 		<div id="settings-menu" class="menu ui column hidden">
 			<div class="column menu-container ">
 				<h2>SETTINGS</h2>
-				<button class="go-back-button">back to menu</button>
-				<div class="input-container">
-					<div class="input-range-label">
-						<span>MASTER VOLUME: </span> 
-						<span>100</span>
-					</div>
-					<input id="master-volume-input" type="range" min="0" max="100" value="50">
+				<div class="overlayscrollbars">
+				<div class="button-container">
+					<button class="go-back-button">back</button>
+					<button class="open-sound-settings-menu-button">sound</button>
+					<button class="open-video-settings-menu-button">video</button>
+					<button class="open-control-settings-menu-button hidden">controls</button>
 				</div>
-				<div class="input-container">
-					<div class="input-range-label">
-						<span>UI VOLUME: </span> 
-						<span>100</span>
-					</div>
-					<input id="ui-volume-input" type="range" min="0" max="100" value="50">
-				</div>
-				<div class="input-container">
-					<div class="input-range-label">
-						<span>SOUND FX VOLUME: </span> 
-						<span>100</span>
-					</div>
-					<input id="sound-fx-volume-input" type="range" min="0" max="100" value="50">
-				</div>
-				<div class="input-container">
-					<div class="input-range-label">
-						<span>AMBIENCE VOLUME: </span> 
-						<span>100</span>
-					</div>
-					<input id="ambience-volume-input" type="range" min="0" max="100" value="50">
 				</div>
 			</div>
 		</div>
+		<div id="sound-settings-menu" class="menu ui column hidden">
+			<div class="column menu-container ">
+				<h2>SOUND SETTINGS</h2>
+				<div class="overlayscrollbars" data-overlayscrollbars-initialize>
+				<div class="button-container">
+					<button class="go-back-button">back</button>
+					<div class="input-container">
+						<div class="input-range-label">
+							<span>MASTER VOLUME: </span> 
+							<span>100</span>
+						</div>
+						<input id="master-volume-input" type="range" min="0" max="100" value="50">
+					</div>
+					<div class="input-container">
+						<div class="input-range-label">
+							<span>UI VOLUME: </span> 
+							<span>100</span>
+						</div>
+						<input id="ui-volume-input" type="range" min="0" max="100" value="50">
+					</div>
+					<div class="input-container">
+						<div class="input-range-label">
+							<span>SOUND FX VOLUME: </span> 
+							<span>100</span>
+						</div>
+						<input id="sfx-volume-input" type="range" min="0" max="100" value="50">
+					</div>
+					<div class="input-container">
+						<div class="input-range-label">
+							<span>AMBIENCE VOLUME: </span> 
+							<span>100</span>
+						</div>
+						<input id="ambience-volume-input" type="range" min="0" max="100" value="50">
+					</div>
+				</div>
+				</div>
+			</div>
+		</div>
+		<div id="video-settings-menu" class="menu ui column hidden">
+			<div class="column menu-container ">
+				<h2>VIDEO SETTINGS</h2>
+				<div class="overlayscrollbars" data-overlayscrollbars-initialize>
+					<div class="button-container">
+						<button class="go-back-button">back</button>
+						<button class="toggle-fullscreen-button">
+							<span>FULLSCREEN: </span>
+							<span>OFF</span>
+						</button>
+						<div class="input-container">
+								<div class="input-range-label">
+									<span>RENDER DISTANCE: </span> 
+									<span>20</span>
+								</div>
+								<input id="render-distance-input" type="range" min="10" max="100" value="20" step="2.5">
+							</div>
+						<div class="two-panel">
+							<div class="input-container">
+								<div class="input-range-label">
+									<span>BRIGHTNESS: </span> 
+									<span>100</span>
+								</div>
+								<input id="brightness-input" type="range" min="0" max="100" value="50">
+							</div>
+							<div class="input-container">
+								<div class="input-range-label">
+									<span>CONTRAST: </span> 
+									<span>100</span>
+								</div>
+								<input id="contrast-input" type="range" min="0" max="100" value="50">
+							</div>
+						</div>
+						<div class="two-panel">
+							<button class="toggle-volumetric-light-button">
+								<span>VOLUMETRIC LIGHT:</span>
+								<span>ON</span>
+							</button>
+							<button class="toggle-noise-button">
+								<span>NOISE: </span> 
+								<span>ON</span>
+							</button>
+						</div>
+						<div class="two-panel">
+							<button class="toggle-vignette-button">
+								<span>VIGNETTE: </span> 
+								<span>ON</span>
+							</button>
+							<button class="toggle-bloom-button">
+								<span>BLOOM: </span> 
+								<span>ON</span>
+							</button>
+						</div>
+						<button class="toggle-resolution-button">
+							<span>RESOLUTION:</span> 
+							<span>1X</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="control-settings-menu" class="menu ui column hidden">
+			<div class="column menu-container ">
+				<h2>CONTROL SETTINGS</h2>
+				<div class="overlayscrollbars">
+					<div class="button-container">
+						<button class="go-back-button">back</button>
+						<button class="toggle-noise-button">LEFT: ON</button>
+						<button class="toggle-vignette-button">RIGHT: ON</button>
+						<button class="toggle-bloom-button">JUMP: ON</button>
+						<button class="toggle-bloom-button">DOWN: ON</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			window.addEventListener('DOMContentLoaded', () => {
+			      
+			      const { OverlayScrollbars } = OverlayScrollbarsGlobal;
+			      const elements = document.querySelectorAll('.overlayscrollbars');
+
+			      for ( const element of elements ) {
+
+				      OverlayScrollbars( element, {
+						contentLayout: 'flex',
+						overflowBehavior: {
+							x: 'scroll',
+							y: 'scroll'
+						},
+						scrollbars: {
+							autoHide: 'never', // or 'leave' / 'move' — avoid 
+							dragScrolling: true,
+				    			clickScrolling: true,
+				    			touchSupport: true,
+						}
+					});
+
+				}
+
+			});
+		</script>
 	</body>
 </html>

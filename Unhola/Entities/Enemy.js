@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { cylinderDistance } from '../Utilities.js';
+import { cylindricalDistance, angleDifference, abs } from '../Utilities.js';
 
 export class Enemy {
 
@@ -14,8 +14,8 @@ export class Enemy {
 		this.r = r;
 		this.y = y;
 
-		this.wanderingSpeed = 0.0000025;
-		this.followingSpeed = 0.000008;
+		this.wanderingSpeed = 0.00025;
+		this.followingSpeed = 0.00075;
 		this.jumpingSpeed = 0.175;
 
 		this.movingLeft = false;
@@ -106,9 +106,9 @@ export class Enemy {
 		enemy.add( model );
 		enemy.isEnemy = true;
 
-		const light = new THREE.PointLight( 0xFFFFFF, 8, 150 );
-		light.position.set( -1, 1, 0 );
-		enemy.add( light );
+		this.light = new THREE.PointLight( 0xFFFFFF, 20, 250 );
+		graphics.scene.add( this.light );
+
 
 		enemy.traverse( function ( child ) {
 		
@@ -136,19 +136,61 @@ export class Enemy {
 
 				enemy.position.y = -100000; //.visible = false;
 				this.sound.death.position.y = 100000;
+				this.light.intensity = 0;
 				return;
-			
-			}
 
+			}
 
 			const r = dynamic.getR( index );
 			const x = dynamic.getX( index );
 			const y = dynamic.getY( index );
 			const z = dynamic.getZ( index );
 
-			//cube.position.set( x, y, z );
+			const radius = this.game.radius.center;
+			const lx = ( radius + 2 )*Math.cos( 2*Math.PI*r );
+			const lz = ( radius + 2 )*Math.sin( 2*Math.PI*r );
 
-			const pr = dynamic.getR( this.game.player.dynamic );
+			this.light.position.set( lx, y+.5, lz );
+
+			const pi = this.game.player.dynamic;
+			const pr = this.game.dynamic.getR( pi );
+			const px = dynamic.getX( pi );
+			const py = dynamic.getY( pi );
+			const pz = dynamic.getZ( pi );
+
+			const renderRadius = this.game.settings['render-distance'];
+
+			const minX = x - renderRadius;
+			const minY = y - renderRadius;
+			const minZ = z - renderRadius;
+			const maxX = x + renderRadius;
+			const maxY = y + renderRadius;
+			const maxZ = z + renderRadius;
+
+			const intersects = (
+
+				px <= maxX &&
+				px >= minX &&
+				py <= maxY &&
+				py >= minY &&
+				pz <= maxZ &&
+				pz >= minZ
+
+			);
+
+			if ( !intersects ) {
+
+				this.light.intensity = 0;
+				if ( enemy.parent === this.game.graphics.scene ) enemy.removeFromParent();
+
+			}
+
+			else {
+
+				this.light.intensity = 30;
+				if ( enemy.parent !== this.game.graphics.scene ) this.game.graphics.scene.add( enemy );
+
+			}
 
 			enemy.position.set( x, y, z );
 			enemy.rotation.y = -2*Math.PI*pr - Math.PI;
@@ -215,13 +257,16 @@ export class Enemy {
 				
 			}
 
-			if ( this.movingRight ) dynamic.addVR( index, !this.isWandering ? this.followingSpeed : this.wanderingSpeed );
+			let speed = !this.isWandering ? this.followingSpeed : this.wanderingSpeed;
+			speed /= 2*Math.PI*this.game.radius.center;
 
-			if ( this.movingLeft ) dynamic.addVR( index, !this.isWandering ? -this.followingSpeed : -this.wanderingSpeed );
+			if ( this.movingRight ) dynamic.addVR( index, speed );
+
+			if ( this.movingLeft ) dynamic.addVR( index, -speed );
 
 			if ( this.movingRight || this.movingLeft ) {
 
-				const query = this.game.fixed.query( x, y - 0.1, z, w+0.2, h - 0.2, d+0.2 );
+				const query = this.game.fixed.query( x, y, z, w + 0.002*dt, h, d + 0.002*dt );
 				let delta = Infinity;
 
 				for ( let i = 0; i < query.length; i ++ ) {
@@ -233,10 +278,17 @@ export class Enemy {
 
 					if ( smaxy < y ) {
 
-						delta = y - smaxy;
-						dynamic.addVY( index, 0.002*delta );
-						break;
+						const index = query[ i ];
+						const sy = this.game.fixed.getY( index );
+						const sh = this.game.fixed.getH( index );
+						const smaxy = sy + sh/2;
 
+						if ( smaxy < this.y ) {
+
+							delta = abs( y - smaxy );
+							dynamic.addVY( this.dynamic, 0.005*delta );
+
+						}
 					}
 
 				}
@@ -250,7 +302,6 @@ export class Enemy {
 	};
 
 	initAgent() {
-
 
 		if ( this.dead ) return;
 		
@@ -312,25 +363,23 @@ export class Enemy {
 
 				this.isWandering = false;
 
-				if ( pr - r < 0 ) {
+				const diff = angleDifference(r, pr);
 
-					frontRA = (r - 0.0025);
-					frontRB = frontRA - 0.00015;
+				if (Math.abs(diff) < 0.001) {
+					
+					this.movingLeft = false;
+					this.movingRight = false;
+				
+				} else if (diff < 0) {
+					
 					this.movingLeft = true;
 					this.movingRight = false;
-
-				} else if ( pr - r > 0 ) {
-
-					frontRA = (r + 0.0025);
-					frontRB = frontRA + 0.00015;
+				
+				} else {
+				
 					this.movingLeft = false;
 					this.movingRight = true;
-
-				} else {
-
-					this.movingLeft = false;
-					this.movingRight = false;
-
+				
 				}
 				
 				const ax = center*Math.cos(2*Math.PI*frontRA);
@@ -338,12 +387,26 @@ export class Enemy {
 				const bx = center*Math.cos(2*Math.PI*frontRB);
 				const bz = center*Math.sin(2*Math.PI*frontRB); 
 
-				const queryWallInfront = fixed.query( ax, y + 0.05, az, w+0.01, h + 0.2, d+0.01 );
+				const queryWallInfront = fixed.query( 
+
+					ax, y + h/2, az, 		// Position
+					w + 0.01, h, d + 0.01 	// Dimensions
+				
+				);
 				const queryFloorInfront = fixed.query( bx, y-h, bz, w, h, d );
 
-				if ((queryWallInfront.length > 0 && py > y + 1.5*h ) ||
-					(queryFloorInfront.length === 0 && py > y)) this.jumping = true;
-				else this.jumping = false;
+
+				if ((queryWallInfront.length > 0 && py > y + h/2) 
+					|| (queryFloorInfront.length === 0 && py > y)
+					) {
+
+					this.jumping = true;
+				
+				} else {
+
+					this.jumping = false;
+
+				}
 
 			} else {
 

@@ -60,6 +60,8 @@ export class Player {
 
 		this.sound = {};
 
+		this.game.events.addEventListener('loaded', () => { this.init() });
+
 	};
 
 	get r() { return this.game.dynamic.getR( this.dynamic ) };
@@ -107,6 +109,7 @@ export class Player {
 		this.movingLeft = false;
 		this.movingRight = false;
 		this.jumping = false;
+		this.jumpCount = 0;
 
 		const dynamic = this.game.dynamic;
 		const spawn = this.game.spawn;
@@ -149,10 +152,22 @@ export class Player {
 
 		player.add( model );
 
-		const light = new THREE.PointLight( 0xFFD13C, 8, 150 );
-		light.castShadow = true;
-		light.position.set( -1, 1, 1 );
+		const light = new THREE.PointLight( 0xFFD13C, 150, 250 );
+		light.castShadow = false;
+		light.position.set( -8, 0.25, 0 );
 		light.shadow.bias = -0.01;
+		light.shadow.mapSize.width = 512;
+		light.shadow.mapSize.height = 512;
+		light.shadow.camera.near = 0.1;
+		light.shadow.camera.far = 100;
+
+		const secondaryLight = new THREE.PointLight( 0xFFD13C, 20, 200 );
+		secondaryLight.castShadow = false;
+		secondaryLight.shadow.bias = -0.01;
+		secondaryLight.shadow.mapSize.width = 512;
+		secondaryLight.shadow.mapSize.height = 512;
+		secondaryLight.shadow.camera.near = 0.1;
+		secondaryLight.shadow.camera.far = 100;
 
 		player.traverse( function ( child ) {
 		
@@ -170,11 +185,21 @@ export class Player {
 
 		this.mesh.light = light;
 		player.position.y = -0.5;
-		this.mesh.add( light, player );
+		this.mesh.add( secondaryLight, light, player );
 		this.game.graphics.scene.add( this.mesh );
 		const root = player.children[0]
 		
 		this.game.graphics.updateHandlers.push((dt) => {
+
+			if ( !this.game.started ) {
+
+				this.mesh.visible = false;
+
+			} else {
+
+				this.mesh.visible = true;
+
+			}
 
 			const index = this.dynamic;
 
@@ -236,6 +261,8 @@ export class Player {
 
 	initPhysics() {
 
+		const radius = this.game.radius.center;
+
 		const index = this.dynamic;
 
 		if ( this.game.playerIndex === undefined ) this.game.playerIndex = index;
@@ -294,13 +321,13 @@ export class Player {
 			}
 
 			// Movement logic
-			if ( this.movingRight > 0 ) dynamic.addVR( index, +0.000014 * this.movingRight );
-			if ( this.movingLeft > 0 ) dynamic.addVR( index, -0.000014 * this.movingLeft );
+			if ( this.movingRight > 0 ) dynamic.addVR( index, +0.00025/radius * this.movingRight );
+			if ( this.movingLeft > 0 ) dynamic.addVR( index, -0.00025/radius * this.movingLeft );
 			if ( this.goDown ) dynamic.addVY( index, -0.005 );
 
 			if ( this.movingRight > 0 || this.movingLeft > 0 ) {
 					
-					const query = this.game.fixed.query( x, y, z, w + 0.002*dt, h, d + 0.002*dt );
+					const query = this.game.fixed.query( x, y, z, w + 0.001*dt, h, d + 0.001*dt );
 
 					let delta = Infinity;
 

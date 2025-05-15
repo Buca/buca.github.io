@@ -1,4 +1,4 @@
-import { isVersionCompatible } from '../Utilities.js';
+import { isVersionCompatible, clamp } from '../Utilities.js';
 
 export class Menu {
 
@@ -59,11 +59,20 @@ export class Menu {
 			.getElementById('open-pause-menu-button')
 			.classList.remove('hidden');
 
+			document
+			.querySelector('.level span:last-child')
+			.innerText = this.game.level + "."
+
+			document
+			.querySelector('.level')
+			.classList.remove('hidden');
+
 		});
 
 		this.game.events.addEventListener('quit', () => {
 
 			this.close();
+			this.game.clear();
 			this.open('main-menu');
 			
 			document
@@ -72,6 +81,10 @@ export class Menu {
 
 			document
 			.getElementById('close-pause-menu-button')
+			.classList.add('hidden');
+
+			document
+			.querySelector('.level')
 			.classList.add('hidden');
 
 		});
@@ -92,6 +105,10 @@ export class Menu {
 
 		this.game.events.addEventListener('pause', () => {
 
+			document
+			.querySelector('.save-game-button')
+			.innerText = "SAVE";
+			
 			this.empty();
 			this.open('pause-menu');
 
@@ -130,9 +147,21 @@ export class Menu {
 		// Save game button
 		document
 		.querySelector('.save-game-button')
-		.addEventListener('click', () => {
+		.addEventListener('click', ( e ) => {
 
 			this.game.save();
+
+			e.target.disabled = true;
+			e.target.innerText = "SAVING";
+
+			setTimeout(() => {
+
+				e.target.disabled = false;
+				e.target.innerText = "SAVED";
+				if ( document.activeElement === document.body ) e.target.focus();
+
+			}, 750 );
+
 
 		});
 
@@ -142,6 +171,14 @@ export class Menu {
 		.addEventListener('click', () => {
 
 			this.open('main-menu');
+			
+			const canvas = this.game.graphics.renderer.domElement;
+			document.body.append( canvas );
+			canvas.style.opacity = 0;
+			canvas.style.transition = "opacity 2s";
+
+			setTimeout( () => canvas.style.opacity = 1, 0 );
+
 			this.sound.wind.play();
 			this.sound.birds.play();
 
@@ -156,6 +193,45 @@ export class Menu {
 				
 				this.sound.click.play();
 				this.open('settings-menu');
+			
+			});
+		
+		}
+
+		const openVideoSettingsButtons = document.querySelectorAll('.open-video-settings-menu-button');
+		
+		for ( const button of openVideoSettingsButtons ) {
+
+			button.addEventListener('click', () => {
+				
+				this.sound.click.play();
+				this.open('video-settings-menu');
+			
+			});
+		
+		}
+
+		const openSoundSettingsButtons = document.querySelectorAll('.open-sound-settings-menu-button');
+		
+		for ( const button of openSoundSettingsButtons ) {
+
+			button.addEventListener('click', () => {
+				
+				this.sound.click.play();
+				this.open('sound-settings-menu');
+			
+			});
+		
+		}
+
+		const openControlsSettingsButtons = document.querySelectorAll('.open-control-settings-menu-button');
+		
+		for ( const button of openControlsSettingsButtons ) {
+
+			button.addEventListener('click', () => {
+				
+				this.sound.click.play();
+				this.open('control-settings-menu');
 			
 			});
 		
@@ -203,6 +279,7 @@ export class Menu {
 
 			this.sound.start.play();
 			this.game.continue();
+			this.game.start();
 
 		});
 
@@ -216,89 +293,125 @@ export class Menu {
 
 		});
 
+
+		// Fullscreen
+		const toggleFullscreenButton = document.querySelector('.toggle-fullscreen-button');
+		toggleFullscreenButton.addEventListener('click', () => {
+
+			this.game.settings['fullscreen'] = !this.game.settings['fullscreen'];
+
+		});
+
+		// Render Distance
+		const renderDistanceInput = document.getElementById('render-distance-input');
+		renderDistanceInput.addEventListener('input', () => {
+
+			const value = renderDistanceInput.value;
+			this.game.settings['render-distance'] = value;
+			this.game.graphics.update();
+
+		});
+
+		// Brightness
+		const brightnessInput = document.getElementById('brightness-input');
+		brightnessInput.addEventListener('input', () => {
+
+			const value = brightnessInput.value;
+			this.game.settings['brightness'] = value;
+
+		});
+
+		// Contrast
+		const contrastInput = document.getElementById('contrast-input');
+		contrastInput.addEventListener('input', () => {
+
+			const value = contrastInput.value;
+			this.game.settings['contrast'] = value;
+
+		});
+
+		// Bloom
+		const toggleBloomButton = document.querySelector('.toggle-bloom-button');
+		toggleBloomButton.addEventListener('click', () => {
+
+			this.game.settings['bloom'] = !this.game.settings['bloom'];
+			this.game.graphics.update();
+
+		});
+
+		// Volumetric Light
+		const toggleVolumetricLightButton = document.querySelector('.toggle-volumetric-light-button');
+		toggleVolumetricLightButton.addEventListener('click', () => {
+
+			this.game.settings['volumetric-light'] = !this.game.settings['volumetric-light'];
+			this.game.graphics.update();
+
+		});
+
+		// Vignette
+		const vignetteButton = document.querySelector('.toggle-vignette-button');
+		vignetteButton.addEventListener('click', () => {
+
+			this.game.settings['vignette'] = !this.game.settings['vignette'];
+			this.game.graphics.update();
+
+		});
+
+		// Noise
+		const noiseButton = document.querySelector('.toggle-noise-button');
+		noiseButton.addEventListener('click', () => {
+
+			this.game.settings['noise'] = !this.game.settings['noise'];
+
+		});
+
+		// Resolution
+		const resolutionButton = document.querySelector('.toggle-resolution-button');
+		resolutionButton.addEventListener('click', () => {
+
+			const current = this.game.settings['resolution'];
+			const next = Math.max(1, ((current + 1) % 8));
+
+			this.game.settings['resolution'] = next;
+			this.game.graphics.update();
+
+		});
+
+		// Master Volume
 		const masterVolumeInput = document.getElementById('master-volume-input');
+		masterVolumeInput.addEventListener('input', () => {
+
+			const value = masterVolumeInput.value;
+			this.game.settings['master'] = value;
+
+		});
+
+		// SFX Volume
+		const sfxVolumeInput = document.getElementById('sfx-volume-input');
+		sfxVolumeInput.addEventListener('input', () => {
+
+			const value = sfxVolumeInput.value;
+			this.game.settings['sfx'] = value;
+
+		});
+
+		// UI Volume
 		const uiVolumeInput = document.getElementById('ui-volume-input');
-		const soundFXVolumeInput = document.getElementById('sound-fx-volume-input');
+		uiVolumeInput.addEventListener('input', () => {
+
+			const value = uiVolumeInput.value;
+			this.game.settings['ui'] = value;
+
+		});
+
+		// Ambience Volume
 		const ambienceVolumeInput = document.getElementById('ambience-volume-input');
+		ambienceVolumeInput.addEventListener('input', () => {
 
-		const volumeInputs = [ masterVolumeInput, uiVolumeInput, soundFXVolumeInput, ambienceVolumeInput ];
+			const value = ambienceVolumeInput.value;
+			this.game.settings['ambience'] = value;
 
-		for ( const input of volumeInputs ) {
-
-			input.addEventListener('input', () => {
-
-				saveSettings(); 
-				applySettings();
-
-			});
-
-		}
-
-		applySettings();
-
-		function applySettings() {
-		
-			const settings = getSettings();
-
-			const volumeInputs = [
-				{ input: masterVolumeInput, value: settings.masterVolume },
-				{ input: soundFXVolumeInput, value: settings.soundFXVolume },
-				{ input: ambienceVolumeInput, value: settings.ambienceVolume },
-				{ input: uiVolumeInput, value: settings.uiVolume }
-			];
-
-			volumeInputs.forEach(({ input, value }) => {
-				input.value = value;
-				input.parentNode.querySelector('.input-range-label span:last-child').innerText = value;
-			});
-
-			game.sound.mixer.master.gain.value = settings.masterVolume / 100;
-			game.sound.mixer.sfx.gain.value = settings.soundFXVolume / 100;
-			game.sound.mixer.ambience.gain.value = settings.ambienceVolume / 100;
-			game.sound.mixer.ui.gain.value = settings.uiVolume / 100;
-		
-		};
-
-		function saveSettings() {
-		
-			const settings = {
-				masterVolume: Number(masterVolumeInput.value),
-				soundFXVolume: Number(soundFXVolumeInput.value),
-				ambienceVolume: Number(ambienceVolumeInput.value),
-				uiVolume: Number(uiVolumeInput.value)
-			};
-
-			localStorage.setItem('UNHOLA-Settings', JSON.stringify(settings));
-		
-		};
-
-		function getSettings() {
-		
-			const settingsString = localStorage.getItem('UNHOLA-Settings');
-
-			if (!settingsString) {
-		
-				return {
-					masterVolume: 100,
-					soundFXVolume: 100,
-					ambienceVolume: 100,
-					uiVolume: 100
-				};
-		
-			} else {
-		
-				const settings = JSON.parse(settingsString);
-
-				return {
-					masterVolume: Number(settings.masterVolume),
-					soundFXVolume: Number(settings.soundFXVolume),
-					ambienceVolume: Number(settings.ambienceVolume),
-					uiVolume: Number(settings.uiVolume)
-				};
-		
-			}
-		
-		};
+		});
 
 	};
 

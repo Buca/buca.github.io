@@ -16,8 +16,8 @@ document.body.addEventListener('click', () => {
         });
     }
 
-    document.body.append(game.graphics.renderer.domElement);
-    game.new({ level: 1 });
+    //document.body.append(game.graphics.renderer.domElement);
+   // game.new({ level: 1 });
 });
 
 

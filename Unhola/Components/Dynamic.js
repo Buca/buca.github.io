@@ -32,8 +32,8 @@ export class Dynamic {
 	};
 
 	getR( index ) { return this.data[ index ] };
-	setR( index, value ) { return this.data[ index ] = value % 1 };
-	addR( index, value ) { return this.data[ index ] = (this.data[ index ] + value) % 1 };
+	setR( index, value ) { return this.data[ index ] = ((value % 1) + 1) % 1 };
+	addR( index, value ) { return this.data[ index ] = ((this.data[ index ] + value) % 1 + 1) % 1 };
 
 	getX( index ) { return this.radius*cos( 2*PI*this.data[ index ] ) };
 
@@ -51,6 +51,14 @@ export class Dynamic {
 
 	getD( index ) { return this.data[ index + 4 ] };
 	setD( index, value ) { return this.data[ index + 4 ] = value };
+
+	getMinX( index ) { return this.getX( index ) - .5*this.getW( index ) };
+	getMinY( index ) { return this.getY( index ) - .5*this.getH( index ) };
+	getMinZ( index ) { return this.getZ( index ) - .5*this.getD( index ) };
+
+	getMaxX( index ) { return this.getX( index ) + .5*this.getW( index ) };
+	getMaxY( index ) { return this.getY( index ) + .5*this.getH( index ) };
+	getMaxZ( index ) { return this.getZ( index ) + .5*this.getD( index ) };
 
 	getVR( index ) { return this.data[ index + 5 ] };
 	setVR( index, value ) { return this.data[ index + 5 ] = value };

@@ -60,6 +60,9 @@ export class Controls {
 
 		});
 
+		// Prevents right clicks and long pressing in touch device from opening the context menu.
+		document.addEventListener('contextmenu', event => event.preventDefault());
+
 		// Desktop/Keyboard Controls
 		document.addEventListener("keydown", ( event ) => {
 
@@ -160,96 +163,35 @@ export class Controls {
 			}
 
 			stick.style.translate = `${x}px ${y}px`;
+			stick.style.boxShadow = `${-x/12}px ${-y/12}px 0 8px grey`;
 
 		});
 
 		const jumpButton = document.getElementById('jump-button');
 		let pointerDown = false;
 		let moving = false;
-/*
-		document.addEventListener('pointerdown', (event) => {
-
-			if ( this.paused || !this.touch ) return;
-
-		    pointerDown = true;
-
-		    if (event.target !== jumpButton) {
-		        pointerOneSide(event);
-		        moving = true;
-		    }
-
-		});
-
-		document.addEventListener('pointerup', (event) => {
-
-			if ( this.paused || !this.touch ) return;
-
-			const player = this.game.player;
-
-		    pointerDown = false;
-
-		    if (event.target === jumpButton) {
-		        
-		        player.jumping = false;
-		        return; // Prevent stopping movement when releasing the jump button
-		    
-		    }
-
-		    moving = false;
-		    player.movingLeft = false;
-		    player.movingRight = false;
-		    player.goDown = false;
-
-		});
-
-		document.addEventListener('pointermove', (event) => {
-		    
-			if ( this.paused || !this.touch ) return;
-
-		    if (pointerDown && moving) pointerOneSide(event);
-		
-		});*/
 
 		const openPauseMenuButton = document.getElementById('open-pause-menu-button');
-
-		const pointerOneSide = (event) => {
-
-			if ( event.target === openPauseMenuButton ) {
-				return;
-			}
-
-			const player = this.game.player;
-		    const width = document.body.clientWidth;
-		    const pointerX = event.clientX;
-
-		    if (pointerX < (width - 64) / 2) {
-		
-		        player.movingRight = true;
-		        player.movingLeft = false;
-		
-		    } else if (pointerX > (width + 64) / 2) {
-		
-		        player.movingLeft = true;
-		        player.movingRight = false;
-		
-		    }
-		
-		}
 
 		// Handle Jump Button Separately
 		jumpButton.addEventListener('pointerdown', () => {
 		
 			if ( this.paused || !this.touch ) return;
 
+			jumpButton.classList.add('pressed');
+
 			const player = this.game.player;
 
 		    player.jumping = true;
+
 		
 		});
 
 		jumpButton.addEventListener('pointerenter', () => {
 		
 			if ( this.paused || !this.touch ) return;
+
+			jumpButton.classList.add('pressed');
 			
 			const player = this.game.player;
 
@@ -261,6 +203,8 @@ export class Controls {
 			
 			if ( this.paused || !this.touch ) return;
 
+			jumpButton.classList.remove('pressed');
+
 			const player = this.game.player;
 
 		    player.jumping = false;
@@ -270,6 +214,8 @@ export class Controls {
 		jumpButton.addEventListener('pointerout', () => {
 		
 			if ( this.paused || !this.touch ) return;
+
+			jumpButton.classList.remove('pressed');
 
 			const player = this.game.player;
 

@@ -96,7 +96,7 @@ export class Physics {
 					*/
 
 					// Optional: separate slightly to prevent sticking
-					const separation = 0.001; // small push away
+					const separation = 0.0005; // small push away
 
 					// Get angular difference between entities k and j
 					let deltaR = dynamic.getR(k) - dynamic.getR(j);

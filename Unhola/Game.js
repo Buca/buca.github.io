@@ -13,6 +13,7 @@ import { Sound } from './Systems/Sound.js';
 import { Menu } from './Systems/Menu.js';
 import { Generator } from './Systems/Generator.js';
 import { Controls } from './Systems/Controls.js';
+import { Settings } from './Systems/Settings.js';
 
 import { XORShift } from 'https://cdn.jsdelivr.net/npm/random-seedable@1.0.8/+esm';
 
@@ -20,12 +21,22 @@ import { Player } from './Entities/Player.js';
 import { Enemy } from './Entities/Enemy.js';
 import { Goal } from './Entities/Goal.js';
 
+class State {
+
+	static fromJSON( state ) {};
+
+	constructor( game ) {};
+
+	toJSON() {};
+
+};
+
 export class Game {
 
-	constructor({ version = "1.1.0", seed = 62832, gravity = -0.053, radius = { min: 4, max: 20 } }) {
+	constructor({ version = "1.2.0", seed = 62832, gravity = -0.053, radius = { min: 20, max: 55 } }) {
 
 		this.version = version;
-		this.compatability = "^1.1.0";
+		this.compatability = "^1.2.0";
 
 		this.seed = seed;
 
@@ -46,12 +57,12 @@ export class Game {
 
 		});
 
-		this.numOfPoints = 20;
+		this.numOfPoints = 2;
 
 		// Components
 		this.entity = new Entity();
 		this.dynamic = new Dynamic( this.radius.center );
-		this.fixed = new Fixed();
+		this.fixed = new Fixed( this.radius.center );
 
 		// Systems
 		this.events = new EventTarget();
@@ -62,10 +73,15 @@ export class Game {
 		this.menu = new Menu( this );
 		this.generator = new Generator( this ); //TODO: change name to generator
 		this.controls = new Controls( this );
+		this.settings = new Settings( this );
 
 		// Entities
 		this.enemies = [];
-		this.player = undefined; 
+		this.player = new Player({ game: this, controls: true }); 
+
+		this.entities = {
+			platform: []
+		};
 
 		// Game properties
 		this.started = false;
@@ -89,20 +105,42 @@ export class Game {
 		    
 		        accumulatedTime += delta;
 
-		        while (accumulatedTime >= this.FIXED_DT) {
+		        const max = 2*this.FIXED_DT;
+		        let amount = 0;
+
+		        while (accumulatedTime >= this.FIXED_DT/* && amount <= max */) {
 
 		            this.physics.update( this.FIXED_DT );
-		            accumulatedTime -= this.FIXED_DT;
-		        
+		            accumulatedTime -= this.FIXED_DT; //Math.min( accumulatedTime - this.FIXED_DT, 2*this.FIXED_DT );
+		        	//amount += this.FIXED_DT;
+
 		        }
 
 		        this.graphics.update( delta );
 		    
 		    }
 
+		    
+		    if (!this.started) {
+
+		    	this.graphics.update( delta );
+		    
+		    }
+		    
+
 		};
 
 		update();
+
+		document.addEventListener('visibilitychange', () => {
+			
+			if ( document.visibilityState === 'hidden' ) {
+			
+				if( this.started && !this.paused ) this.pause();
+			
+			}
+
+		});
 
 	};
 
@@ -169,7 +207,11 @@ export class Game {
 			.getElementById('ingame-loader')
 			.classList.remove('hidden');
 
-			setTimeout( () => {
+			//setTimeout( () => {
+
+			for ( const platform of this.entities.platform ) platform.dispose();
+			this.entities.platform.length = [];
+
 
 				this.seed = game.seed;
 				this.level = game.level;
@@ -179,8 +221,17 @@ export class Game {
 			
 				this.generator.create( this.level );
 
-				this.goal.r = game.goal.r;
-				this.goal.y = game.goal.y;
+				if ( !this.goal ) {
+
+					this.goal = new Goal({
+
+						game: this,
+						r: this.win.r,
+						y: this.win.y
+
+					});
+
+				} else this.goal.reset();
 
 				this.player.r = game.player.r;
 				this.player.y = game.player.y;
@@ -202,9 +253,9 @@ export class Game {
 				.getElementById('ingame-loader')
 				.classList.add('hidden');
 				
-				this.start();
+				//this.start();
 
-			}, 0 );
+			//}, 0 );
 
 		}
 
@@ -217,10 +268,16 @@ export class Game {
 			.classList.remove('hidden');
 		
 
-		setTimeout( () => {
+		//setTimeout( () => {
 
 			this.graphics.reset();
 			this.fixed.reset();
+		
+			for ( const platform of this.entities.platform ) platform.dispose();
+			this.entities.platform.length = [];
+
+			this.level = level;
+
 			this.generator.create( level );
 
 			if ( !this.player ) {
@@ -271,34 +328,46 @@ export class Game {
 			.getElementById('ingame-loader')
 			.classList.add('hidden');
 		
-		}, 0 );
+		//}, 0 );
+
+	};
+
+	clear() {
+
+		for ( const platform of this.entities.platform ) platform.dispose();
+		this.entities.platform.length = [];
+
+		while ( this.enemies.length > 0 ) this.enemies[ 0 ].dispose();
 
 	};
 
 	async requestWakeLock() {
-        if ('wakeLock' in navigator) {
-            try {
-                this.wakeLock = await navigator.wakeLock.request('screen');
-                console.log('Wake lock is active');
-                
-                // Re-acquire wake lock if it gets released (e.g., if the user switches tabs)
-                this.wakeLock.addEventListener('release', () => {
-                    console.log('Wake lock released');
-                    this.wakeLock = null;
-                });
-            } catch (err) {
-                console.error('Failed to acquire wake lock:', err);
-            }
+        
+        if ( 'wakeLock' in navigator ) {
+
+			this.wakeLock = await navigator.wakeLock.request('screen');
+
+			// Re-acquire wake lock if it gets released (e.g., if the user switches tabs)
+			this.wakeLock.addEventListener('release', () => {
+	
+				this.wakeLock = null;
+	
+			});
+
         }
+
     };
 
     releaseWakeLock() {
-        if (this.wakeLock) {
+
+        if ( this.wakeLock ) {
+            
             this.wakeLock.release().then(() => {
-                console.log('Wake lock released manually');
                 this.wakeLock = null;
             });
+        
         }
+
     };
 
     async start() {
