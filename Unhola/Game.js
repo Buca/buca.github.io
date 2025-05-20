@@ -33,7 +33,7 @@ class State {
 
 export class Game {
 
-	constructor({ version = "1.2.0", seed = 62832, gravity = -0.053, radius = { min: 20, max: 55 } }) {
+	constructor({ version = "1.2.1", seed = 62832, gravity = -0.053, radius = { min: 20, max: 55 } }) {
 
 		this.version = version;
 		this.compatability = "^1.2.0";
