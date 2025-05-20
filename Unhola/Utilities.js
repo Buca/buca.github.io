@@ -6,6 +6,19 @@ export const hypot = Math.hypot;
 export const min = Math.min;
 export const max = Math.max;
 
+export function preloadImage( url ) {
+    
+    return new Promise((resolve, reject) => {
+
+        const img = new Image();
+        img.src = url;
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        
+    });
+
+};
+
 export function clamp( value, min, max ) {
 
 	return Math.max( min, Math.min( max, value ) );

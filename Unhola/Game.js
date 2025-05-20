@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-import { isVersionCompatible } from './Utilities.js';
+import { isVersionCompatible, preloadImage } from './Utilities.js';
 
 import { Dynamic } from './Components/Dynamic.js';
 import { Fixed } from './Components/Fixed.js';
@@ -33,7 +33,7 @@ class State {
 
 export class Game {
 
-	constructor({ version = "1.2.1", seed = 62832, gravity = -0.053, radius = { min: 20, max: 55 } }) {
+	constructor({ version = "1.2.2", seed = 62832, gravity = -0.053, radius = { min: 20, max: 55 } }) {
 
 		this.version = version;
 		this.compatability = "^1.2.0";
@@ -165,6 +165,8 @@ export class Game {
 		]);
 
 		await this.graphics.load();
+
+		await preloadImage('../logo.png');
 
 		this.events.dispatchEvent(new Event('loaded'));
 
