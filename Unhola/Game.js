@@ -166,7 +166,7 @@ export class Game {
 
 		await this.graphics.load();
 
-		await preloadImage('../logo.png');
+		await preloadImage('./logo.png');
 
 		this.events.dispatchEvent(new Event('loaded'));
 
