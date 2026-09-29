@@ -14,12 +14,15 @@ import { Menu } from './Systems/Menu.js';
 import { Generator } from './Systems/Generator.js';
 import { Controls } from './Systems/Controls.js';
 import { Settings } from './Systems/Settings.js';
+import { GameMessages } from './Systems/GameMessages.js';
+import { Inventory } from './Systems/Inventory.js';
 
 import { XORShift } from 'https://cdn.jsdelivr.net/npm/random-seedable@1.0.8/+esm';
 
 import { Player } from './Entities/Player.js';
 import { Enemy } from './Entities/Enemy.js';
 import { Goal } from './Entities/Goal.js';
+import { Item } from './Entities/Item.js';
 
 class State {
 
@@ -72,6 +75,8 @@ export class Game {
 
 		this.menu = new Menu( this );
 		this.generator = new Generator( this ); //TODO: change name to generator
+		this.messages = new GameMessages( this );
+		this.inventory = new Inventory( this );
 		this.controls = new Controls( this );
 		this.settings = new Settings( this );
 
@@ -82,6 +87,7 @@ export class Game {
 		this.entities = {
 			platform: []
 		};
+		this.items = [];
 
 		// Game properties
 		this.started = false;
@@ -181,6 +187,8 @@ export class Game {
 			"level": this.level,
 			"player": this.player.toJSON(),
 			"goal": this.goal.toJSON(),
+			"inventory": this.inventory.toJSON(),
+			"items": this.items.filter( ( item ) => !item.held && !item.disposed ).map( ( item ) => item.toJSON() ),
 			"enemies": []
 
 		};
@@ -213,6 +221,7 @@ export class Game {
 
 			for ( const platform of this.entities.platform ) platform.dispose();
 			this.entities.platform.length = [];
+			this.clearItems();
 
 
 				this.seed = game.seed;
@@ -222,6 +231,13 @@ export class Game {
 				this.fixed.reset();
 			
 				this.generator.create( this.level );
+				if ( game.inventory || game.items ) {
+
+					this.clearItems();
+					for ( const item of game.items ?? [] ) Item.fromJSON( this, item );
+					this.inventory.fromJSON( game.inventory, ( itemData ) => Item.fromJSON( this, itemData ) );
+
+				}
 
 				if ( !this.goal ) {
 
@@ -277,6 +293,7 @@ export class Game {
 		
 			for ( const platform of this.entities.platform ) platform.dispose();
 			this.entities.platform.length = [];
+			this.clearItems();
 
 			this.level = level;
 
@@ -340,6 +357,14 @@ export class Game {
 		this.entities.platform.length = [];
 
 		while ( this.enemies.length > 0 ) this.enemies[ 0 ].dispose();
+		this.clearItems();
+
+	};
+
+	clearItems() {
+
+		this.inventory?.reset();
+		while ( this.items?.length > 0 ) this.items[ 0 ].dispose();
 
 	};
 
@@ -376,18 +401,21 @@ export class Game {
         this.started = true;
         this.paused = false;
         this.events.dispatchEvent(new Event('start'));
+        this.inventory?.show();
         await this.requestWakeLock();
     };
 
     async resume() {
         this.paused = false;
         this.events.dispatchEvent(new Event('resume'));
+        this.inventory?.show();
         await this.requestWakeLock();
     };
 
     pause() {
         this.paused = true;
         this.events.dispatchEvent(new Event('pause'));
+        this.inventory?.hide();
         this.releaseWakeLock();
     };
 
@@ -395,6 +423,7 @@ export class Game {
         this.paused = true;
         this.started = false;
         this.events.dispatchEvent(new Event('quit'));
+        this.inventory?.hide();
         this.releaseWakeLock();
     };
 

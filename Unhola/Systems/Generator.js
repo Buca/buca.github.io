@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { XORShift } from 'https://cdn.jsdelivr.net/npm/random-seedable@1.0.8/+esm';
 import { PI, random, DRNG, combineSeeds } from '../Utilities.js';
 import { Platform } from '../Entities/Platform.js';
+import { Item } from '../Entities/Item.js';
 
 export class Generator {
 
@@ -59,6 +60,7 @@ export class Generator {
 
 		this.spawn = {};
 		this.spawn.enemies = [];
+		this.spawn.items = [];
 
 		for ( let i = 0; i < numberOfPlatforms - 1; i ++ ) {
 
@@ -110,6 +112,23 @@ export class Generator {
 
 			});
 
+			if ( i > 0 && i < 5 ) {
+
+				const itemNames = [ 'Root Seed', 'Mooncap', 'Stone Pin', 'Glow Husk' ];
+				const itemColors = [ 0x8ed07c, 0xc989ff, 0xc2b28a, 0x5cd7d2 ];
+				const itemIndex = ( i - 1 ) % itemNames.length;
+				const item = new Item({
+					game: this.game,
+					r: (r0 + r1) / 2 + random.float( -0.0025, 0.0025 ),
+					y: y0 + height * 0.5 + 0.38,
+					name: itemNames[ itemIndex ],
+					type: itemNames[ itemIndex ].toLowerCase().replaceAll( ' ', '-' ),
+					color: itemColors[ itemIndex ]
+				});
+				this.spawn.items.push( item );
+
+			}
+
 			new Platform({
 
 				game: this.game, 
@@ -158,6 +177,28 @@ export class Generator {
 
 				const maxY = this.game.fixed.getMaxY( index );
 				this.game.win = { r: (r0 + r1)/2, y: maxY };
+
+			}
+
+		}
+
+		if ( this.game.spawn ) {
+
+			const dummyItems = [
+				{ name: 'Dummy Root', type: 'dummy-root', color: 0xd35bff, rOffset: -0.005, yOffset: -0.35 },
+				{ name: 'Dummy Stone', type: 'dummy-stone', color: 0xf1dfba, rOffset: 0.0, yOffset: -0.15 },
+				{ name: 'Dummy Seed', type: 'dummy-seed', color: 0x8ed07c, rOffset: 0.005, yOffset: 0.05 }
+			];
+			for ( const data of dummyItems ) {
+
+				new Item({
+					game: this.game,
+					r: this.game.spawn.r + data.rOffset,
+					y: this.game.spawn.y + data.yOffset,
+					name: data.name,
+					type: data.type,
+					color: data.color
+				});
 
 			}
 

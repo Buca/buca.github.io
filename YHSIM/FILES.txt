@@ -1,0 +1,16 @@
+/mnt/data/yhteiskuntasimulaattori-vite/FILES.txt
+/mnt/data/yhteiskuntasimulaattori-vite/README.md
+/mnt/data/yhteiskuntasimulaattori-vite/index.html
+/mnt/data/yhteiskuntasimulaattori-vite/package.json
+/mnt/data/yhteiskuntasimulaattori-vite/src/App.tsx
+/mnt/data/yhteiskuntasimulaattori-vite/src/components/MetricCard.tsx
+/mnt/data/yhteiskuntasimulaattori-vite/src/components/SourceList.tsx
+/mnt/data/yhteiskuntasimulaattori-vite/src/data/baseline.ts
+/mnt/data/yhteiskuntasimulaattori-vite/src/engine/simulate.ts
+/mnt/data/yhteiskuntasimulaattori-vite/src/main.tsx
+/mnt/data/yhteiskuntasimulaattori-vite/src/styles.css
+/mnt/data/yhteiskuntasimulaattori-vite/src/types.ts
+/mnt/data/yhteiskuntasimulaattori-vite/tsconfig.app.json
+/mnt/data/yhteiskuntasimulaattori-vite/tsconfig.json
+/mnt/data/yhteiskuntasimulaattori-vite/tsconfig.node.json
+/mnt/data/yhteiskuntasimulaattori-vite/vite.config.ts

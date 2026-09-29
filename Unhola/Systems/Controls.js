@@ -70,6 +70,8 @@ export class Controls {
 			const player = this.game.player;
 
 			if ( !this.paused ) {
+
+				if ( event.repeat && ( code === 'KeyE' || code === 'KeyQ' || code === 'KeyI' || code.startsWith( 'Digit' ) ) ) return;
 				
 				if ( code === 'KeyA' ) player.movingRight = 1;
 				if ( code === 'KeyD' ) player.movingLeft = 1;
@@ -80,6 +82,12 @@ export class Controls {
 
 				}
 				if ( code === 'KeyS' ) player.goDown = true;
+				if ( code === 'KeyE' ) this.game.inventory.pickupNearest();
+				if ( code === 'KeyQ' ) this.game.inventory.dropSelectedPrimary();
+				if ( code === 'KeyI' ) this.game.inventory.toggleExpanded();
+				if ( code === 'Digit1' ) this.game.inventory.setSelectedPrimary( 0 );
+				if ( code === 'Digit2' ) this.game.inventory.setSelectedPrimary( 1 );
+				if ( code === 'Digit3' ) this.game.inventory.setSelectedPrimary( 2 );
 			
 			}
 
