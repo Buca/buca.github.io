@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { baselineMetrics, benefits, populationPresets, sources } from './data/baseline'
+import { baselineMeta, baselineMetrics, benefits, populationPresets, sources } from './data/baseline'
 import { createDefaultScenario, simulateScenario } from './engine/simulate'
 import type { BenefitTreatment, EvidenceLevel } from './types'
 import { MetricCard } from './components/MetricCard'
@@ -42,7 +42,7 @@ export default function App() {
     <div className="app-shell">
       <header className="hero">
         <div className="hero-copy">
-          <span className="kicker">Suomi · avoin prototyyppi v0.1</span>
+          <span className="kicker">Suomi · avoin prototyyppi v0.2</span>
           <h1>Yhteiskuntasimulaattori</h1>
           <p>
             Kokeile perustuloskenaariota niin, että jokainen numero kertoo mistä se tulee — ja epävarmat kohdat jäävät näkyvästi epävarmoiksi.
@@ -51,7 +51,7 @@ export default function App() {
         <div className="hero-badge">
           <span>Baseline</span>
           <strong>2025</strong>
-          <small>Tilastokeskus + Kela</small>
+          <small>versionoitu snapshot</small>
         </div>
       </header>
 
@@ -236,9 +236,9 @@ export default function App() {
         <main className="baseline-view">
           <div className="section-heading wide-heading">
             <div>
-              <span className="eyebrow">Baseline FI-2025 / 18.9.2026</span>
+              <span className="eyebrow">Baseline {baselineMeta.baselineId}</span>
               <h2>Suomen nykytila</h2>
-              <p>Vuoden 2025 kansantalouden tilinpito on vielä ennakkotietoa. Arvot säilyttävät lähde- ja versiokontekstin.</p>
+              <p>Vuoden 2025 kansantalouden tilinpito on vielä ennakkotietoa. Väestöpresetit on johdettu vuoden 2025 11rd-taulukosta, ja kaikki appin data luetaan generoidusta baseline-snapshotista.</p>
             </div>
           </div>
           <div className="metrics-grid">
@@ -258,7 +258,7 @@ export default function App() {
             <div>
               <span className="eyebrow">Lähderekisteri</span>
               <h2>Mistä data tulee?</h2>
-              <p>Prototyyppi käyttää paikallista snapshotia. Tuotantoversiossa lähteet ingestataan versionoiduiksi baselineiksi, ei haeta sliderin liikkeellä suorana viranomaisrajapinnasta.</p>
+              <p>Appi käyttää versionoitua paikallista snapshotia. `npm run data:update` hakee StatFin-populaatiodatan, validoi sen ja rakentaa uuden baseline-JSONin; selain ei hae viranomaisrajapintaa sliderin liikkeellä.</p>
             </div>
           </div>
           <div className="source-cards">

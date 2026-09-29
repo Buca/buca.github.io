@@ -1,10 +1,16 @@
 {
   "name": "yhteiskuntasimulaattori",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "data:ingest:population": "node scripts/ingest-statfin-population.mjs",
+    "data:build": "node scripts/build-baseline.mjs",
+    "data:validate": "node scripts/validate-data.mjs",
+    "data:update": "npm run data:ingest:population && npm run data:build && npm run data:validate",
+    "test:data": "node --test scripts/tests/pxweb.test.mjs",
+    "prebuild": "npm run data:validate && npm run test:data",
     "build": "tsc -b && vite build",
     "preview": "vite preview"
   },

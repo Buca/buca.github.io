@@ -1,5 +1,19 @@
 export type EvidenceLevel = 'accounting' | 'simulation' | 'research' | 'provisional'
 
+
+export type BaselineMeta = {
+  baselineId: string
+  baselineYear: number
+  nationalAccountsRelease: string
+  populationRelease: string
+  populationTable: string
+  populationReferencePeriod: string
+  inputHashes: {
+    curatedSha256: string
+    populationSnapshotSha256: string
+  }
+}
+
 export type Source = {
   id: string
   organisation: string

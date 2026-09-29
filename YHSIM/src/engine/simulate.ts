@@ -4,7 +4,7 @@ import type { Scenario, SimulationResult } from '../types'
 export const createDefaultScenario = (): Scenario => ({
   monthlyAmountEur: 800,
   taxable: true,
-  populationPresetId: '18-64-reference',
+  populationPresetId: '18-64-2025',
   customPopulation: 1_000_000,
   benefitTreatments: Object.fromEntries(benefits.map((benefit) => [benefit.id, benefit.defaultTreatment])),
 })
